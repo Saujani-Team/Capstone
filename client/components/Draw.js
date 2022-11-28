@@ -1,15 +1,20 @@
 import React from "react";
 import { io } from "socket.io-client";
 
+var socket = io.connect("http://localhost:8080");
+
+if (process.env.NODE_ENV !== "development") {
+  socket = io.connect("https://draw-your-face-off.onrender.com/draw");
+}
+
 class Draw extends React.Component {
   timeout;
-  socket = io.connect("http://localhost:8080");
-
   ctx;
   isDrawing = false;
 
   constructor(props) {
     super(props);
+    this.socket = socket;
     this.socket.on("canvasData", function (data) {
       var root = this;
       var interval = setInterval(function () {
