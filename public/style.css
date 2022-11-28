@@ -19,3 +19,13 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+#sketch {
+  height: 100%;
+  width: 100%;
+}
+#canvas {
+  height: 100%;
+  width: 100%;
+  border-style: solid;
+  border-color: black;
+}
