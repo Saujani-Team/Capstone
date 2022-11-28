@@ -1,4 +1,4 @@
-# FS-App-Template
+# Draw Your Face Off
 
 ## Setup
 
