@@ -9,8 +9,8 @@ module.exports = db.define("drawing", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  type: {
-    type: DataTypes.STRING,
+  status: {
+    type: DataTypes.ENUM("live, saved, archived"),
     defaultValue: "live",
   },
 });
