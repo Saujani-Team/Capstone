@@ -10,7 +10,7 @@ module.exports = db.define("drawing", {
     allowNull: false,
   },
   status: {
-    type: DataTypes.ENUM("live, saved, archived"),
+    type: DataTypes.ENUM("live", "saved", "archived"),
     defaultValue: "live",
   },
 });
