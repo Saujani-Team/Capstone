@@ -21,6 +21,7 @@ async function seed() {
       firstName: "Ilana",
       lastName: "Bye",
       email: "ilana@gmail.com",
+      isAdmin: true,
     }),
     User.create({
       username: "michelle",
@@ -28,6 +29,7 @@ async function seed() {
       firstName: "Michelle",
       lastName: "Mullane",
       email: "michelle@gmail.com",
+      isAdmin: true,
     }),
     User.create({
       username: "allie",
@@ -35,6 +37,7 @@ async function seed() {
       firstName: "Allie",
       lastName: "Wang",
       email: "allie@gmail.com",
+      isAdmin: true,
     }),
     User.create({
       username: "jett",
