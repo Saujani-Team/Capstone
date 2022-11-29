@@ -40,6 +40,15 @@ class Draw extends React.Component {
     if (prevProps.size !== this.props.size) {
       this.ctx.lineWidth = this.props.size;
     }
+
+    if (prevProps.tool !== this.props.tool) {
+      if (this.props.tool === "eraser") {
+        this.ctx.globalCompositeOperation = "destination-out";
+      } else {
+        this.ctx.globalCompositeOperation = "source-over";
+      }
+    }
+    console.log(this.props.tool);
   }
   drawOnCanvas() {
     var canvas = document.querySelector("#canvas");
