@@ -1,17 +1,36 @@
-const router = require('express').Router()
-const { models: { User }} = require('../db')
-module.exports = router
+const router = require("express").Router();
+const { requireToken, isAdmin } = require("./gatekeeping");
+const {
+  models: { User },
+} = require("../db");
+module.exports = router;
 
-router.get('/', async (req, res, next) => {
+//GET /users/
+//NEED TO ADD isAdmin *****************************
+//NEED TO ADD REQUIRETOKEN *****************************
+router.get("/", requireToken, async (req, res, next) => {
   try {
     const users = await User.findAll({
-      // explicitly select only the id and username fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
-      attributes: ['id', 'username']
-    })
-    res.json(users)
+      attributes: ["id", "username"],
+    });
+    res.json(users);
   } catch (err) {
-    next(err)
+    next(err);
   }
-})
+});
+
+//GET /users/:userId
+//NEED TO ADD REQUIRETOKEN *****************************
+router.get("/:userId", requireToken, async (req, res, next) => {
+  try {
+    // if (req.user.id !== +req.params.userId) {
+    //   return res.status(403).send("You do not have access.");
+    // }
+    const user = await User.findByPk(req.params.userId, {
+      include: [{ all: true, nested: true }],
+    });
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+});
