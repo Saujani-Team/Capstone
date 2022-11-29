@@ -37,9 +37,22 @@ class Draw extends React.Component {
   componentDidMount() {
     this.drawOnCanvas();
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.color !== this.props.color) {
+      this.ctx.strokeStyle = this.props.color;
+    }
+
+    if (prevProps.size !== this.props.size) {
+      this.ctx.lineWidth = this.props.size;
+    }
+    // console.log("prev color: ", prevProps.color);
+    // console.log("new color: ", this.props.color);
+  }
   drawOnCanvas() {
     var canvas = document.querySelector("#canvas");
-    var ctx = canvas.getContext("2d");
+    this.ctx = canvas.getContext("2d");
+    var ctx = this.ctx;
 
     var sketch = document.querySelector("#sketch");
     var sketch_style = getComputedStyle(sketch);
@@ -63,10 +76,10 @@ class Draw extends React.Component {
     );
 
     /* Drawing on Paint App */
-    ctx.lineWidth = 5;
+    ctx.lineWidth = this.props.size;
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
-    ctx.strokeStyle = "blue";
+    ctx.strokeStyle = this.props.color;
 
     canvas.addEventListener(
       "mousedown",
@@ -102,7 +115,6 @@ class Draw extends React.Component {
   render() {
     return (
       <div id="sketch">
-        <h1>Draw your face off!!!</h1>
         <canvas id="canvas"></canvas>
       </div>
     );
