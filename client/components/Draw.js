@@ -1,17 +1,11 @@
 import React from "react";
 import { io } from "socket.io-client";
-
-// var socket = io.connect("http://localhost:8080");
-
-// if (process.env.NODE_ENV !== "development") {
-//   socket = io.connect("https://draw-your-face-off.onrender.com");
-// }
-
 class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
   socket = io.connect("https://draw-your-face-off.onrender.com");
+  // socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
