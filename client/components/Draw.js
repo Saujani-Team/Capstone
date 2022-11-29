@@ -1,20 +1,20 @@
 import React from "react";
 import { io } from "socket.io-client";
 
-var socket = io.connect("http://localhost:8080");
+// var socket = io.connect("http://localhost:8080");
 
-if (process.env.NODE_ENV !== "development") {
-  socket = io.connect("https://draw-your-face-off.onrender.com/draw");
-}
+// if (process.env.NODE_ENV !== "development") {
+//   socket = io.connect("https://draw-your-face-off.onrender.com");
+// }
 
 class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
+  socket = io.connect("https://draw-your-face-off.onrender.com");
 
   constructor(props) {
     super(props);
-    this.socket = socket;
     this.socket.on("canvasData", function (data) {
       var root = this;
       var interval = setInterval(function () {
@@ -46,8 +46,6 @@ class Draw extends React.Component {
     if (prevProps.size !== this.props.size) {
       this.ctx.lineWidth = this.props.size;
     }
-    // console.log("prev color: ", prevProps.color);
-    // console.log("new color: ", this.props.color);
   }
   drawOnCanvas() {
     var canvas = document.querySelector("#canvas");
