@@ -8,7 +8,7 @@ class Draw extends React.Component {
   ctx;
   isDrawing = false;
   socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  //socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -84,8 +84,6 @@ class Draw extends React.Component {
       "mousedown",
       function (e) {
         canvas.addEventListener("mousemove", onPaint, false);
-        if (hasInput) return;
-        addText(e);
       },
 
       false
@@ -98,6 +96,11 @@ class Draw extends React.Component {
       },
       false
     );
+
+    canvas.addEventListener("click", function (e) {
+      if (hasInput) return;
+      addText(e);
+    });
 
     var root = this;
     var onPaint = function () {
@@ -113,18 +116,7 @@ class Draw extends React.Component {
         ctx.closePath();
         ctx.stroke();
       }
-
-      // emit canvas data every second
-      if (root.timeout != undefined) clearTimeout(root.timeout);
-
-      root.timeout = setTimeout(function () {
-        var base64ImageData = canvas.toDataURL("img/png");
-        root.socket.emit("canvasData", base64ImageData);
-        root.socket.emit("sendcanvas", {
-          image: base64ImageData,
-          room: window.location.pathname,
-        });
-      }, 1000);
+      socketemit();
     };
 
     // handler for input box
@@ -147,10 +139,13 @@ class Draw extends React.Component {
       ctx.textAlign = "left";
       ctx.font = inputFont;
       ctx.fillText(txt, x - 4, y - 4);
+
+      socketemit();
     }
     var addText = function (e) {
       if (root.props.tool !== "text") return;
       var input = document.createElement("input");
+      input.type = "text";
       input.style.position = "fixed";
       input.style.top = e.clientY - 4 + "px";
       input.style.left = e.clientX - 4 + "px";
@@ -159,6 +154,20 @@ class Draw extends React.Component {
       input.focus();
       hasInput = true;
     };
+
+    function socketemit() {
+      // emit canvas data every second
+      if (root.timeout != undefined) clearTimeout(root.timeout);
+
+      root.timeout = setTimeout(function () {
+        var base64ImageData = canvas.toDataURL("img/png");
+        //root.socket.emit("canvasData", base64ImageData);
+        root.socket.emit("sendcanvas", {
+          image: base64ImageData,
+          room: window.location.pathname,
+        });
+      }, 1000);
+    }
   }
 
   save() {
