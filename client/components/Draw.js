@@ -1,5 +1,5 @@
 import React from "react";
-import { io } from "socket.io-client";
+import io from "socket.io-client";
 class Draw extends React.Component {
   timeout;
   ctx;
@@ -9,6 +9,7 @@ class Draw extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.socket.on("canvasData", function (data) {
       var root = this;
       var interval = setInterval(function () {
@@ -26,6 +27,7 @@ class Draw extends React.Component {
         image.src = data;
       }, 200);
     });
+    this.socket.emit("joinroom", { room: window.location.pathname });
   }
 
   componentDidMount() {
@@ -48,7 +50,6 @@ class Draw extends React.Component {
         this.ctx.globalCompositeOperation = "source-over";
       }
     }
-    console.log(this.props.tool);
   }
   drawOnCanvas() {
     var canvas = document.querySelector("#canvas");
@@ -110,6 +111,10 @@ class Draw extends React.Component {
       root.timeout = setTimeout(function () {
         var base64ImageData = canvas.toDataURL("img/png");
         root.socket.emit("canvasData", base64ImageData);
+        root.socket.emit("sendcanvas", {
+          image: base64ImageData,
+          room: window.location.pathname,
+        });
       }, 1000);
     };
   }

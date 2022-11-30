@@ -7,7 +7,6 @@ module.exports = db.define("drawing", {
   },
   imageUrl: {
     type: DataTypes.TEXT,
-    allowNull: false,
   },
   status: {
     type: DataTypes.ENUM("live", "saved", "archived"),

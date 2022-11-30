@@ -1,9 +1,12 @@
 const router = require("express").Router();
+
 const { requireToken, isAdmin } = require("./gatekeeping");
+
 const {
   models: { User },
 } = require("../db");
 module.exports = router;
+
 
 //GET /users/
 //NEED TO ADD isAdmin *****************************
@@ -34,3 +37,4 @@ router.get("/:userId", requireToken, async (req, res, next) => {
     next(error);
   }
 });
+
