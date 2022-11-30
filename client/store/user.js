@@ -13,7 +13,6 @@ export const fetchUser = (userId) => async (dispatch) => {
     const { data: user } = await axios.get(`/api/users/${userId}`, {
       headers: { authorization: token },
     });
-    console.log("USER in fetchUser", user);
     dispatch(setUser(user));
   } catch (error) {
     throw error;
