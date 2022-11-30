@@ -18,9 +18,16 @@ const init = async () => {
     //let connections = [];
     io.on("connection", (socket) => {
       //connections.push(socket);
-      console.log("New WS connection...");
-      socket.on("canvasData", (data) => {
-        socket.broadcast.emit("canvasData", data);
+      console.log(`New WS connection...${socket.id}`);
+
+      socket.on("joinroom", function (data) {
+        console.log("user joined room", data);
+        socket.join(data.room);
+      });
+
+      socket.on("sendcanvas", (data) => {
+        console.log("sendcanvas data", data);
+        socket.to(data.room).emit("canvasData", data.image);
       });
 
       socket.on("disconnect", () => {

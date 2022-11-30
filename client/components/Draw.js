@@ -4,11 +4,12 @@ class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
+    console.log(window.location.pathname);
     this.socket.on("canvasData", function (data) {
       var root = this;
       var interval = setInterval(function () {
@@ -24,8 +25,13 @@ class Draw extends React.Component {
           root.isDrawing = false;
         };
         image.src = data;
+        this.socket.emit("sendcanvas", {
+          image,
+          room: window.location.pathname,
+        });
       }, 200);
     });
+    this.socket.emit("joinroom", { room: window.location.pathname });
   }
 
   componentDidMount() {
@@ -110,6 +116,10 @@ class Draw extends React.Component {
       root.timeout = setTimeout(function () {
         var base64ImageData = canvas.toDataURL("img/png");
         root.socket.emit("canvasData", base64ImageData);
+        root.socket.emit("sendcanvas", {
+          image: base64ImageData,
+          room: window.location.pathname,
+        });
       }, 1000);
     };
   }

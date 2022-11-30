@@ -77,42 +77,42 @@ async function seed() {
     Drawing.create({
       userId: 1,
       imageUrl: `https://cdn.pixabay.com/photo/2020/12/25/08/18/hand-drawing-5858840_1280.png`,
-      type: "live",
+      status: "live",
     }),
     Drawing.create({
       userId: 2,
       imageUrl: `https://cdn.pixabay.com/photo/2020/12/25/08/18/hand-drawing-5858840_1280.png`,
-      type: "live",
+      status: "live",
     }),
     Drawing.create({
       userId: 3,
       imageUrl: `https://cdn.pixabay.com/photo/2020/12/25/08/18/hand-drawing-5858840_1280.png`,
-      type: "live",
+      status: "live",
     }),
     Drawing.create({
       userId: 1,
       imageUrl: `https://i.pinimg.com/originals/7e/41/aa/7e41aaf541d1ce7372b5a781b5d75a76.jpg`,
-      type: "saved",
+      status: "saved",
     }),
     Drawing.create({
       userId: 1,
       imageUrl: `https://png.pngtree.com/png-clipart/20190223/ourlarge/pngtree-cute-doodles-png-image_693502.jpg`,
-      type: "saved",
+      status: "saved",
     }),
     Drawing.create({
       userId: 4,
       imageUrl: `https://img.freepik.com/free-vector/abstract-scribble-icons-hand-drawn-doodle-coloring_179234-225.jpg?w=2000`,
-      type: "live",
+      status: "live",
     }),
     Drawing.create({
       userId: 5,
       imageUrl: `https://i.ytimg.com/vi/zXr-K7wrzSE/maxresdefault.jpg`,
-      type: "saved",
+      status: "saved",
     }),
     Drawing.create({
       userId: 6,
       imageUrl: `https://media.istockphoto.com/id/1083584082/vector/social-media-doodle-internet-website-doodles-social-network-communication-and-online-web.jpg?s=1024x1024&w=is&k=20&c=o2xwtHbU7-ok4Mu3HTNDqapaa5tQGKPO9iCyySx8UkM=`,
-      type: "saved",
+      status: "saved",
     }),
   ]);
 

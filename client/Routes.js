@@ -5,8 +5,8 @@ import { Login, Signup } from "./components/AuthForm";
 import Home from "./components/Home";
 import { me } from "./store";
 import Draw from "./components/Draw";
-
 import Container from "./components/Container";
+import CreateDrawing from "./components/CreateDrawing";
 
 /**
  * COMPONENT
@@ -31,7 +31,8 @@ class Routes extends Component {
             <Route path="/" exact component={Login} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
-            <Route path="/draw" component={Container} />
+            <Route exact path="/draw" component={CreateDrawing} />
+            <Route path="/draw/:drawingId" component={Container} />
           </Switch>
         )}
       </div>
