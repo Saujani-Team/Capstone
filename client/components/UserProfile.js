@@ -12,7 +12,6 @@ export class UserProfile extends React.Component {
   }
   render() {
     const user = this.props.user;
-    console.log("this.props", this.props.user.drawings);
     const userId = user.id || 0;
     const firstName = user.firstName || "";
     const lastName = user.lastName || "";
@@ -57,7 +56,6 @@ export class UserProfile extends React.Component {
 }
 
 const mapState = (state) => {
-  console.log("state in maapstate", state);
   return {
     user: state.user,
   };
