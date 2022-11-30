@@ -42,14 +42,6 @@ class Draw extends React.Component {
     if (prevProps.size !== this.props.size) {
       this.ctx.lineWidth = this.props.size;
     }
-
-    if (prevProps.tool !== this.props.tool) {
-      if (this.props.tool === "eraser") {
-        this.ctx.globalCompositeOperation = "destination-out";
-      } else {
-        this.ctx.globalCompositeOperation = "source-over";
-      }
-    }
     console.log(this.props.tool);
   }
   drawOnCanvas() {
@@ -105,6 +97,13 @@ class Draw extends React.Component {
 
     var root = this;
     var onPaint = function () {
+      if (root.props.tool === "eraser") {
+        // ctx.globalCompositeOperation = "destination-out";
+        ctx.strokeStyle = "white";
+      }
+      // else {
+      //   ctx.globalCompositeOperation = "source-over";
+      // }
       if (root.props.tool === "brush" || root.props.tool === "eraser") {
         ctx.beginPath();
         ctx.moveTo(last_mouse.x, last_mouse.y);
