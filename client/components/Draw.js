@@ -7,8 +7,8 @@ class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  // socket = io.connect("https://draw-your-face-off.onrender.com");
-  socket = io.connect("http://localhost:8080");
+  socket = io.connect("https://draw-your-face-off.onrender.com");
+  //socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -161,7 +161,7 @@ class Draw extends React.Component {
 
       root.timeout = setTimeout(function () {
         var base64ImageData = canvas.toDataURL("img/png");
-        root.socket.emit("canvasData", base64ImageData);
+        //root.socket.emit("canvasData", base64ImageData);
         root.socket.emit("sendcanvas", {
           image: base64ImageData,
           room: window.location.pathname,
