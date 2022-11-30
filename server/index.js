@@ -21,12 +21,10 @@ const init = async () => {
       console.log(`New WS connection...${socket.id}`);
 
       socket.on("joinroom", function (data) {
-        console.log("user joined room", data);
         socket.join(data.room);
       });
 
       socket.on("sendcanvas", (data) => {
-        console.log("sendcanvas data", data);
         socket.to(data.room).emit("canvasData", data.image);
       });
 
