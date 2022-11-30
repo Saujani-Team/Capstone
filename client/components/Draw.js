@@ -1,11 +1,14 @@
 import React from "react";
 import io from "socket.io-client";
+import { connect } from "react-redux";
+import { updateDrawing } from "../store/drawings";
+import auth from "../store/auth";
 class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -168,9 +171,27 @@ class Draw extends React.Component {
     };
   }
 
+  save() {
+    let imageDataUrl = canvas.toDataURL("img/png");
+    let currentDrawing = {
+      id: this.props.drawing.id,
+      userId: this.props.auth.id,
+      imageUrl: imageDataUrl,
+      status: "saved",
+    };
+    this.props.updateDrawing(currentDrawing);
+  }
+
   render() {
     return (
       <div id="sketch">
+        {this.props.isLoggedIn ? (
+          <div className="save-container">
+            <button type="button" onClick={this.save.bind(this)}>
+              Save Drawing
+            </button>
+          </div>
+        ) : null}
         <canvas
           id="canvas"
           width={window.innerWidth}
@@ -181,4 +202,18 @@ class Draw extends React.Component {
   }
 }
 
-export default Draw;
+const mapState = (state) => {
+  return {
+    isLoggedIn: !!state.auth.id,
+    auth: state.auth,
+    drawing: state.drawing,
+  };
+};
+
+const mapDispatch = (dispatch) => {
+  return {
+    updateDrawing: (drawing) => dispatch(updateDrawing(drawing)),
+  };
+};
+
+export default connect(mapState, mapDispatch)(Draw);
