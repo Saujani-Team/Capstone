@@ -8,8 +8,6 @@ const {
 module.exports = router;
 
 //GET /users/
-//NEED TO ADD isAdmin *****************************
-//NEED TO ADD REQUIRETOKEN *****************************
 router.get("/", requireToken, async (req, res, next) => {
   try {
     const users = await User.findAll({
@@ -22,7 +20,6 @@ router.get("/", requireToken, async (req, res, next) => {
 });
 
 //GET /users/:userId
-//NEED TO ADD REQUIRETOKEN *****************************
 router.get("/:userId", requireToken, async (req, res, next) => {
   try {
     if (req.user.id !== +req.params.userId) {
