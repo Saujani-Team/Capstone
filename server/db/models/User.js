@@ -17,18 +17,25 @@ const User = db.define("user", {
   },
   firstName: {
     type: Sequelize.STRING,
-    allowNull: false,
+    // allowNull: false,
   },
   lastName: {
     type: Sequelize.STRING,
-    allowNull: false,
+    // allowNull: false,
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false,
+    // allowNull: false,
     validate: {
       isEmail: true,
     },
+  },
+  token: {
+    type: Sequelize.TEXT,
+  },
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
   },
 });
 
@@ -56,7 +63,9 @@ User.authenticate = async function ({ username, password }) {
     error.status = 401;
     throw error;
   }
-  return user.generateToken();
+  const token = await user.generateToken();
+  await user.update({ token: token });
+  return token;
 };
 
 User.findByToken = async function (token) {
