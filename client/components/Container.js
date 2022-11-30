@@ -37,7 +37,6 @@ class Container extends React.Component {
   }
 
   render() {
-    console.log("render props", this.props);
     return (
       <div className="container">
         <div className="tools-section">

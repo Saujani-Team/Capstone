@@ -1,14 +1,14 @@
 import React from "react";
 import io from "socket.io-client";
 import { connect } from "react-redux";
-import { updateDrawing } from "../store/drawings";
+import { getDrawing, updateDrawing } from "../store/drawings";
 import auth from "../store/auth";
 class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  // socket = io.connect("https://draw-your-face-off.onrender.com");
-  socket = io.connect("http://localhost:8080");
+  socket = io.connect("https://draw-your-face-off.onrender.com");
+  // socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -45,7 +45,6 @@ class Draw extends React.Component {
     if (prevProps.size !== this.props.size) {
       this.ctx.lineWidth = this.props.size;
     }
-    console.log(this.props.tool);
   }
   drawOnCanvas() {
     var canvas = document.querySelector("#canvas");
@@ -143,7 +142,6 @@ class Draw extends React.Component {
     }
 
     function handleBlur() {
-      console.log("handling blur");
       ctx.font = "20px Arial";
       ctx.beginPath();
       ctx.moveTo(last_mouse.x, last_mouse.y);
@@ -153,8 +151,6 @@ class Draw extends React.Component {
 
     var addText = function (e) {
       if (root.props.tool === "text") {
-        //console.log(textarea);
-
         let textarea = document.createElement("textarea");
         textarea.className = "info";
         textarea.addEventListener("mousedown", mouseDownOnTextarea);
@@ -172,9 +168,11 @@ class Draw extends React.Component {
   }
 
   save() {
+    let drawingId = parseInt(window.location.pathname.slice(6));
+    this.props.getDrawing(drawingId);
     let imageDataUrl = canvas.toDataURL("img/png");
     let currentDrawing = {
-      id: this.props.drawing.id,
+      id: drawingId,
       userId: this.props.auth.id,
       imageUrl: imageDataUrl,
       status: "saved",
@@ -212,6 +210,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
+    getDrawing: (id) => dispatch(getDrawing(id)),
     updateDrawing: (drawing) => dispatch(updateDrawing(drawing)),
   };
 };
