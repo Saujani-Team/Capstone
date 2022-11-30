@@ -4,8 +4,8 @@ class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -50,11 +50,13 @@ class Draw extends React.Component {
         this.ctx.globalCompositeOperation = "source-over";
       }
     }
+    console.log(this.props.tool);
   }
   drawOnCanvas() {
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
+    // var textarea = null;
 
     var sketch = document.querySelector("#sketch");
     var sketch_style = getComputedStyle(sketch);
@@ -87,7 +89,9 @@ class Draw extends React.Component {
       "mousedown",
       function (e) {
         canvas.addEventListener("mousemove", onPaint, false);
+        addText(e);
       },
+
       false
     );
 
@@ -98,14 +102,17 @@ class Draw extends React.Component {
       },
       false
     );
+
     var root = this;
     var onPaint = function () {
-      ctx.beginPath();
-      ctx.moveTo(last_mouse.x, last_mouse.y);
-      ctx.lineTo(mouse.x, mouse.y);
-      ctx.closePath();
-      ctx.stroke();
-
+      if (root.props.tool === "brush" || root.props.tool === "eraser") {
+        ctx.beginPath();
+        ctx.moveTo(last_mouse.x, last_mouse.y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.closePath();
+        ctx.stroke();
+      }
+      //the below still runs for all tools
       if (root.timeout != undefined) clearTimeout(root.timeout);
 
       root.timeout = setTimeout(function () {
@@ -117,11 +124,59 @@ class Draw extends React.Component {
         });
       }, 1000);
     };
+
+    function mouseDownOnTextarea(e) {
+      var x = textarea.offsetLeft - e.clientX,
+        y = textarea.offsetTop - e.clientY;
+      function drag(e) {
+        textarea.style.left = e.clientX + x + "px";
+        textarea.style.top = e.clientY + y + "px";
+      }
+      function stopDrag() {
+        document.removeEventListener("mousemove", drag);
+        document.removeEventListener("mouseup", stopDrag);
+      }
+      document.addEventListener("mousemove", drag);
+      document.addEventListener("mouseup", stopDrag);
+    }
+
+    function handleBlur() {
+      console.log("handling blur");
+      ctx.font = "20px Arial";
+      ctx.beginPath();
+      ctx.moveTo(last_mouse.x, last_mouse.y);
+      ctx.fillText("Hello world", mouse.x, mouse.y);
+      ctx.closePath();
+    }
+
+    var addText = function (e) {
+      if (root.props.tool === "text") {
+        //console.log(textarea);
+
+        let textarea = document.createElement("textarea");
+        textarea.className = "info";
+        textarea.addEventListener("mousedown", mouseDownOnTextarea);
+        document.body.appendChild(textarea);
+
+        // var x = e.clientX - canvas.offsetLeft,
+        //   y = e.clientY - canvas.offsetTop;
+        textarea.value = "";
+        textarea.style.top = e.clientY + "px";
+        textarea.style.left = e.clientX + "px";
+        textarea.focus();
+        textarea.addEventListener("blur", handleBlur);
+      }
+    };
   }
+
   render() {
     return (
       <div id="sketch">
-        <canvas id="canvas"></canvas>
+        <canvas
+          id="canvas"
+          width={window.innerWidth}
+          height={window.innerHeight}
+        ></canvas>
       </div>
     );
   }

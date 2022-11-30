@@ -22,13 +22,18 @@ class Container extends React.Component {
   changeSize(params) {
     this.setState({
       size: params.target.value,
-      tool: "brush",
     });
   }
 
   erase() {
     this.setState({
       tool: "eraser",
+    });
+  }
+
+  text() {
+    this.setState({
+      tool: "text",
     });
   }
 
@@ -46,7 +51,7 @@ class Container extends React.Component {
           </div>
 
           <div className="brushsize-container">
-            Select Brush Size : &nbsp;
+            Select Brush/Eraser Size : &nbsp;
             <select
               value={this.state.size}
               onChange={this.changeSize.bind(this)}
@@ -61,9 +66,13 @@ class Container extends React.Component {
           </div>
 
           <div className="eraser-container">
-            Select Eraser Tool:
             <button type="button" onClick={this.erase.bind(this)}>
               Eraser
+            </button>
+          </div>
+          <div className="text-container">
+            <button type="button" onClick={this.text.bind(this)}>
+              Add Text
             </button>
           </div>
         </div>
