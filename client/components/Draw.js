@@ -50,7 +50,8 @@ class Draw extends React.Component {
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
-    // var textarea = null;
+    var hasInput = false;
+    var inputFont = "14px sans-serif";
 
     var sketch = document.querySelector("#sketch");
     var sketch_style = getComputedStyle(sketch);
@@ -83,6 +84,7 @@ class Draw extends React.Component {
       "mousedown",
       function (e) {
         canvas.addEventListener("mousemove", onPaint, false);
+        if (hasInput) return;
         addText(e);
       },
 
@@ -103,9 +105,7 @@ class Draw extends React.Component {
         // ctx.globalCompositeOperation = "destination-out";
         ctx.strokeStyle = "white";
       }
-      // else {
-      //   ctx.globalCompositeOperation = "source-over";
-      // }
+
       if (root.props.tool === "brush" || root.props.tool === "eraser") {
         ctx.beginPath();
         ctx.moveTo(last_mouse.x, last_mouse.y);
@@ -113,7 +113,8 @@ class Draw extends React.Component {
         ctx.closePath();
         ctx.stroke();
       }
-      //the below still runs for all tools
+
+      // emit canvas data every second
       if (root.timeout != undefined) clearTimeout(root.timeout);
 
       root.timeout = setTimeout(function () {
@@ -126,44 +127,37 @@ class Draw extends React.Component {
       }, 1000);
     };
 
-    function mouseDownOnTextarea(e) {
-      var x = textarea.offsetLeft - e.clientX,
-        y = textarea.offsetTop - e.clientY;
-      function drag(e) {
-        textarea.style.left = e.clientX + x + "px";
-        textarea.style.top = e.clientY + y + "px";
+    // handler for input box
+    function handleEnter(e) {
+      var keyCode = e.keyCode;
+      if (keyCode === 13) {
+        drawText(
+          this.value,
+          parseInt(this.style.left, 10),
+          parseInt(this.style.top, 10) - canvas.getBoundingClientRect().top
+        );
+        sketch.removeChild(this);
+        hasInput = false;
       }
-      function stopDrag() {
-        document.removeEventListener("mousemove", drag);
-        document.removeEventListener("mouseup", stopDrag);
-      }
-      document.addEventListener("mousemove", drag);
-      document.addEventListener("mouseup", stopDrag);
     }
 
-    function handleBlur() {
-      ctx.font = "20px Arial";
-      ctx.beginPath();
-      ctx.moveTo(last_mouse.x, last_mouse.y);
-      ctx.fillText("Hello world", mouse.x, mouse.y);
-      ctx.closePath();
+    // draw the text onto canvas
+    function drawText(txt, x, y) {
+      ctx.textBaseline = "top";
+      ctx.textAlign = "left";
+      ctx.font = inputFont;
+      ctx.fillText(txt, x - 4, y - 4);
     }
-
     var addText = function (e) {
-      if (root.props.tool === "text") {
-        let textarea = document.createElement("textarea");
-        textarea.className = "info";
-        textarea.addEventListener("mousedown", mouseDownOnTextarea);
-        document.body.appendChild(textarea);
-
-        // var x = e.clientX - canvas.offsetLeft,
-        //   y = e.clientY - canvas.offsetTop;
-        textarea.value = "";
-        textarea.style.top = e.clientY + "px";
-        textarea.style.left = e.clientX + "px";
-        textarea.focus();
-        textarea.addEventListener("blur", handleBlur);
-      }
+      if (root.props.tool !== "text") return;
+      var input = document.createElement("input");
+      input.style.position = "fixed";
+      input.style.top = e.clientY - 4 + "px";
+      input.style.left = e.clientX - 4 + "px";
+      input.onkeydown = handleEnter;
+      sketch.appendChild(input);
+      input.focus();
+      hasInput = true;
     };
   }
 

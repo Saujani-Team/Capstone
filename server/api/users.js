@@ -7,10 +7,7 @@ const {
 } = require("../db");
 module.exports = router;
 
-
 //GET /users/
-//NEED TO ADD isAdmin *****************************
-//NEED TO ADD REQUIRETOKEN *****************************
 router.get("/", requireToken, async (req, res, next) => {
   try {
     const users = await User.findAll({
@@ -23,12 +20,11 @@ router.get("/", requireToken, async (req, res, next) => {
 });
 
 //GET /users/:userId
-//NEED TO ADD REQUIRETOKEN *****************************
 router.get("/:userId", requireToken, async (req, res, next) => {
   try {
-    // if (req.user.id !== +req.params.userId) {
-    //   return res.status(403).send("You do not have access.");
-    // }
+    if (req.user.id !== +req.params.userId) {
+      return res.status(403).send("You do not have access.");
+    }
     const user = await User.findByPk(req.params.userId, {
       include: [{ all: true, nested: true }],
     });
@@ -37,4 +33,3 @@ router.get("/:userId", requireToken, async (req, res, next) => {
     next(error);
   }
 });
-
