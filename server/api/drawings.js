@@ -36,4 +36,16 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+// PUT api/drawings
+// update a drawing when a logged-in user saves a drawing
+router.put("/:drawingId", async (req, res, next) => {
+  try {
+    const drawing = await Drawing.findByPk(req.params.drawingId);
+    let updatedDrawing = await drawing.update(req.body);
+    res.send(updatedDrawing);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

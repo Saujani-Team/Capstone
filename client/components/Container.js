@@ -1,6 +1,5 @@
 import React from "react";
 import Draw from "./Draw";
-
 class Container extends React.Component {
   constructor(props) {
     super(props);
@@ -76,7 +75,6 @@ class Container extends React.Component {
             </button>
           </div>
         </div>
-
         <div className="board-container">
           <Draw
             color={this.state.color}

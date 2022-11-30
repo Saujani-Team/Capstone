@@ -1,5 +1,8 @@
 import React from "react";
 import io from "socket.io-client";
+import { connect } from "react-redux";
+import { getDrawing, updateDrawing } from "../store/drawings";
+import auth from "../store/auth";
 class Draw extends React.Component {
   timeout;
   ctx;
@@ -141,16 +144,13 @@ class Draw extends React.Component {
     }
     var addText = function (e) {
       if (root.props.tool !== "text") return;
-
       var input = document.createElement("input");
       input.type = "text";
       input.style.position = "fixed";
       input.style.top = e.clientY - 4 + "px";
       input.style.left = e.clientX - 4 + "px";
       input.onkeydown = handleEnter;
-
       sketch.appendChild(input);
-
       input.focus();
       hasInput = true;
     };
@@ -170,9 +170,29 @@ class Draw extends React.Component {
     }
   }
 
+  save() {
+    let drawingId = parseInt(window.location.pathname.slice(6));
+    this.props.getDrawing(drawingId);
+    let imageDataUrl = canvas.toDataURL("img/png");
+    let currentDrawing = {
+      id: drawingId,
+      userId: this.props.auth.id,
+      imageUrl: imageDataUrl,
+      status: "saved",
+    };
+    this.props.updateDrawing(currentDrawing);
+  }
+
   render() {
     return (
       <div id="sketch">
+        {this.props.isLoggedIn ? (
+          <div className="save-container">
+            <button type="button" onClick={this.save.bind(this)}>
+              Save Drawing
+            </button>
+          </div>
+        ) : null}
         <canvas
           id="canvas"
           width={window.innerWidth}
@@ -183,4 +203,19 @@ class Draw extends React.Component {
   }
 }
 
-export default Draw;
+const mapState = (state) => {
+  return {
+    isLoggedIn: !!state.auth.id,
+    auth: state.auth,
+    drawing: state.drawing,
+  };
+};
+
+const mapDispatch = (dispatch) => {
+  return {
+    getDrawing: (id) => dispatch(getDrawing(id)),
+    updateDrawing: (drawing) => dispatch(updateDrawing(drawing)),
+  };
+};
+
+export default connect(mapState, mapDispatch)(Draw);
