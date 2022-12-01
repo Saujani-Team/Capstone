@@ -38,7 +38,21 @@ export class UserProfile extends React.Component {
             return (
               <div key={drawing.id} className="list">
                 <div key={drawing.id}>
-                  <img width="300" height="250" src={drawing.imageUrl} />
+                  <Link to={`/draw/${drawing.uuid}`}>
+                    <img width="300" height="250" src={drawing.imageUrl} />
+                    <button type="button">Edit</button>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      let link = document.createElement("a");
+                      link.download = "my-drawing.png";
+                      link.href = drawing.imageUrl;
+                      link.click();
+                    }}
+                  >
+                    Download
+                  </button>
                 </div>
               </div>
             );
