@@ -189,16 +189,17 @@ class Draw extends React.Component {
   }
 
   save() {
-    let drawingId = parseInt(window.location.pathname.slice(6));
-    this.props.getDrawing(drawingId);
+    let drawingUUID = window.location.pathname.slice(6);
     let imageDataUrl = canvas.toDataURL("img/png");
-    let currentDrawing = {
-      id: drawingId,
-      userId: this.props.auth.id,
-      imageUrl: imageDataUrl,
-      status: "saved",
-    };
-    this.props.updateDrawing(currentDrawing);
+    this.props.getDrawing(drawingUUID).then(() => {
+      let currentDrawing = {
+        id: this.props.drawing.id,
+        userId: this.props.auth.id,
+        imageUrl: imageDataUrl,
+        status: "saved",
+      };
+      this.props.updateDrawing(currentDrawing);
+    });
   }
 
   getLink() {
@@ -247,7 +248,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getDrawing: (id) => dispatch(getDrawing(id)),
+    getDrawing: (uuid) => dispatch(getDrawing(uuid)),
     updateDrawing: (drawing) => dispatch(updateDrawing(drawing)),
   };
 };

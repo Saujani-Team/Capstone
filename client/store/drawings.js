@@ -29,10 +29,10 @@ export const _updateDrawing = (drawing) => {
 };
 
 // THUNKS
-export const getDrawing = (id) => {
+export const getDrawing = (uuid) => {
   return async (dispatch) => {
     try {
-      const { data: drawing } = await axios.get(`/api/drawings/${id}`);
+      const { data: drawing } = await axios.get(`/api/drawings/${uuid}`);
       dispatch(_getDrawing(drawing));
     } catch (error) {
       console.error(error);
@@ -45,7 +45,7 @@ export const createDrawing = () => {
     try {
       const { data: newDrawing } = await axios.post(`/api/drawings`);
       dispatch(_createDrawing(newDrawing));
-      history.push(`/draw/${newDrawing.id}`);
+      history.push(`/draw/${newDrawing.uuid}`);
     } catch (error) {
       console.error(error);
     }
