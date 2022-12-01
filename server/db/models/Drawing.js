@@ -2,6 +2,9 @@ const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../db");
 
 module.exports = db.define("drawing", {
+  uuid: {
+    type: DataTypes.TEXT,
+  },
   userId: {
     type: DataTypes.INTEGER,
   },

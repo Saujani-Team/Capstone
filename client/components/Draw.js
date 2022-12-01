@@ -189,16 +189,28 @@ class Draw extends React.Component {
   }
 
   save() {
-    let drawingId = parseInt(window.location.pathname.slice(6));
-    this.props.getDrawing(drawingId);
+    let drawingUUID = window.location.pathname.slice(6);
     let imageDataUrl = canvas.toDataURL("img/png");
-    let currentDrawing = {
-      id: drawingId,
-      userId: this.props.auth.id,
-      imageUrl: imageDataUrl,
-      status: "saved",
-    };
-    this.props.updateDrawing(currentDrawing);
+    this.props.getDrawing(drawingUUID).then(() => {
+      let currentDrawing = {
+        id: this.props.drawing.id,
+        userId: this.props.auth.id,
+        imageUrl: imageDataUrl,
+        status: "saved",
+      };
+      this.props.updateDrawing(currentDrawing);
+    });
+  }
+
+  getLink() {
+    let link = window.location.href;
+    navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+      if (result.state === "granted" || result.state === "prompt") {
+        window.navigator.clipboard.writeText(link).then(() => {
+          window.alert(`Invite link copied link to clipboard ✅: ${link}`);
+        });
+      }
+    });
   }
 
   render() {
@@ -211,6 +223,11 @@ class Draw extends React.Component {
             </button>
           </div>
         ) : null}
+        <div className="collaboration-link-container">
+          <button type="button" onClick={this.getLink.bind(this)}>
+            Generate Link 🖇️
+          </button>
+        </div>
         <canvas
           id="canvas"
           width={window.innerWidth}
@@ -231,7 +248,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getDrawing: (id) => dispatch(getDrawing(id)),
+    getDrawing: (uuid) => dispatch(getDrawing(uuid)),
     updateDrawing: (drawing) => dispatch(updateDrawing(drawing)),
   };
 };
