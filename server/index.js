@@ -15,21 +15,32 @@ const init = async () => {
       await db.sync();
     }
 
-    //let connections = [];
+    let connections = [];
+    let history = [];
     io.on("connection", (socket) => {
-      //connections.push(socket);
+      connections.push(socket);
       console.log(`New WS connection...${socket.id}`);
 
-      socket.on("joinroom", function (data) {
+      socket.on("joinroom", function (data, ack) {
+        console.log(`${socket.id} joined ${data.room}`);
         socket.join(data.room);
+        ack({ history }); //send drawings history
       });
 
       socket.on("sendcanvas", (data) => {
-        socket.to(data.room).emit("canvasData", data.image);
+        //store drawings history
+        history.push(data);
+        //send data to other connections
+        connections.map((con) => {
+          if (con.id !== socket.id) {
+            socket.to(data.room).emit("canvasData", data.image);
+          }
+        });
       });
 
       socket.on("disconnect", () => {
-        console.log("user disconnected");
+        connections = connections.filter((con) => con.id !== socket.id);
+        console.log(`user disconnected...${socket.id}`);
       });
     });
     // start listening (and create a 'server' object representing our server)

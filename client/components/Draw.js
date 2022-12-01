@@ -30,7 +30,25 @@ class Draw extends React.Component {
         image.src = data;
       }, 200);
     });
-    this.socket.emit("joinroom", { room: window.location.pathname });
+
+    this.socket.emit(
+      "joinroom",
+      { room: window.location.pathname },
+      //load drawings history
+      function (ack) {
+        for (let i = 0; i < ack.history.length; i++) {
+          if (ack.history[i].room === window.location.pathname) {
+            var image = new Image();
+            var canvas = document.querySelector("#canvas");
+            var ctx = canvas.getContext("2d");
+            image.onload = function () {
+              ctx.drawImage(image, 0, 0);
+            };
+            image.src = ack.history[i].image;
+          }
+        }
+      }
+    );
   }
 
   componentDidMount() {
