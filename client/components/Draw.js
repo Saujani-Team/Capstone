@@ -7,8 +7,8 @@ class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  //socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -183,6 +183,17 @@ class Draw extends React.Component {
     this.props.updateDrawing(currentDrawing);
   }
 
+  getLink() {
+    let link = window.location.href;
+    navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+      if (result.state === "granted" || result.state === "prompt") {
+        window.navigator.clipboard.writeText(link).then(() => {
+          window.alert(`Invite link copied link to clipboard ✅: ${link}`);
+        });
+      }
+    });
+  }
+
   render() {
     return (
       <div id="sketch">
@@ -193,6 +204,11 @@ class Draw extends React.Component {
             </button>
           </div>
         ) : null}
+        <div className="collaboration-link-container">
+          <button type="button" onClick={this.getLink.bind(this)}>
+            Generate Link 🖇️
+          </button>
+        </div>
         <canvas
           id="canvas"
           width={window.innerWidth}
