@@ -75,7 +75,6 @@ export const updateDrawing = (drawing) => {
 };
 
 export const deleteDrawing = (drawing) => {
-  console.log("delete thunk drawing", drawing);
   return async (dispatch) => {
     try {
       const { data: deletedDrawing } = await axios.delete(

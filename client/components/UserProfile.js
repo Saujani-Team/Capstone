@@ -68,13 +68,11 @@ export class UserProfile extends React.Component {
                               const response = await fetch(drawing.imageUrl);
                               let blob = await response.blob();
                               blob = blob.slice(0, blob.size, "image/png");
-                              console.log("blob", blob);
                               await navigator.clipboard.write([
                                 new ClipboardItem({
                                   [blob.type]: blob,
                                 }),
                               ]);
-                              console.log("Image copied.");
                               window.alert("Image copied to clipboard ✅");
                             } catch (err) {
                               console.error(err.name, err.message);
