@@ -52,7 +52,7 @@ class Draw extends React.Component {
   }
 
   componentDidMount() {
-    this.drawOnCanvas();
+    this.draw();
   }
 
   componentDidUpdate(prevProps) {
@@ -64,127 +64,144 @@ class Draw extends React.Component {
       this.ctx.lineWidth = this.props.size;
     }
   }
-  drawOnCanvas() {
+
+  draw() {
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
     var hasInput = false;
     var inputFont = "14px sans-serif";
+    var root = this;
 
     var sketch = document.querySelector("#sketch");
     var sketch_style = getComputedStyle(sketch);
     canvas.width = parseInt(sketch_style.getPropertyValue("width"));
     canvas.height = parseInt(sketch_style.getPropertyValue("height"));
+    var W = canvas.width,
+      H = canvas.height;
 
-    var mouse = { x: 0, y: 0 };
-    var last_mouse = { x: 0, y: 0 };
+    window.addEventListener("resize", resizeCanvas, false);
 
-    /* Mouse Capturing Work */
-    canvas.addEventListener(
-      "mousemove",
-      function (e) {
-        last_mouse.x = mouse.x;
-        last_mouse.y = mouse.y;
-
-        mouse.x = e.pageX - this.offsetLeft;
-        mouse.y = e.pageY - this.offsetTop;
-      },
-      false
-    );
-
-    /* Drawing on Paint App */
-    ctx.lineWidth = this.props.size;
-    ctx.lineJoin = "round";
-    ctx.lineCap = "round";
-    ctx.strokeStyle = this.props.color;
-
-    canvas.addEventListener(
-      "mousedown",
-      function (e) {
-        canvas.addEventListener("mousemove", onPaint, false);
-      },
-
-      false
-    );
-
-    canvas.addEventListener(
-      "mouseup",
-      function () {
-        canvas.removeEventListener("mousemove", onPaint, false);
-      },
-      false
-    );
-
-    canvas.addEventListener("click", function (e) {
-      if (hasInput) return;
-      addText(e);
-    });
-
-    var root = this;
-    var onPaint = function () {
-      if (root.props.tool === "eraser") {
-        // ctx.globalCompositeOperation = "destination-out";
-        ctx.strokeStyle = "white";
-      }
-
-      if (root.props.tool === "brush" || root.props.tool === "eraser") {
-        ctx.beginPath();
-        ctx.moveTo(last_mouse.x, last_mouse.y);
-        ctx.lineTo(mouse.x, mouse.y);
-        ctx.closePath();
-        ctx.stroke();
-      }
-      socketemit();
-    };
-
-    // handler for input box
-    function handleEnter(e) {
-      var keyCode = e.keyCode;
-      if (keyCode === 13) {
-        drawText(
-          this.value,
-          parseInt(this.style.left, 10),
-          parseInt(this.style.top, 10) - canvas.getBoundingClientRect().top
-        );
-        sketch.removeChild(this);
-        hasInput = false;
-      }
+    function resizeCanvas() {
+      let temp = ctx.getImageData(0, 0, W, H);
+      canvas.width = parseInt(sketch_style.getPropertyValue("width"));
+      canvas.height = parseInt(sketch_style.getPropertyValue("height"));
+      ctx.putImageData(temp, 0, 0);
+      drawOnCanvas();
     }
+    resizeCanvas();
 
-    // draw the text onto canvas
-    function drawText(txt, x, y) {
-      ctx.textBaseline = "top";
-      ctx.textAlign = "left";
-      ctx.font = inputFont;
-      ctx.fillText(txt, x - 4, y - 4);
+    function drawOnCanvas() {
+      var mouse = { x: 0, y: 0 };
+      var last_mouse = { x: 0, y: 0 };
 
-      socketemit();
-    }
-    var addText = function (e) {
-      if (root.props.tool !== "text") return;
-      var input = document.createElement("input");
-      input.type = "text";
-      input.style.position = "fixed";
-      input.style.top = e.clientY - 4 + "px";
-      input.style.left = e.clientX - 4 + "px";
-      input.onkeydown = handleEnter;
-      sketch.appendChild(input);
-      input.focus();
-      hasInput = true;
-    };
+      /* Mouse Capturing Work */
+      canvas.addEventListener(
+        "mousemove",
+        function (e) {
+          last_mouse.x = mouse.x;
+          last_mouse.y = mouse.y;
 
-    function socketemit() {
-      // emit canvas data every second
-      if (root.timeout != undefined) clearTimeout(root.timeout);
+          mouse.x = e.pageX - this.offsetLeft;
+          mouse.y = e.pageY - this.offsetTop;
+        },
+        false
+      );
 
-      root.timeout = setTimeout(function () {
-        var base64ImageData = canvas.toDataURL("img/png");
-        //root.socket.emit("canvasData", base64ImageData);
-        root.socket.emit("sendcanvas", {
-          image: base64ImageData,
-          room: window.location.pathname,
-        });
-      }, 1000);
+      /* Drawing on Paint App */
+      ctx.lineWidth = root.props.size;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.strokeStyle = root.props.color;
+
+      canvas.addEventListener(
+        "mousedown",
+        function (e) {
+          canvas.addEventListener("mousemove", onPaint, false);
+        },
+
+        false
+      );
+
+      canvas.addEventListener(
+        "mouseup",
+        function () {
+          canvas.removeEventListener("mousemove", onPaint, false);
+        },
+        false
+      );
+
+      canvas.addEventListener("click", function (e) {
+        if (hasInput) return;
+        addText(e);
+      });
+
+      // var root = this;
+      var onPaint = function () {
+        if (root.props.tool === "eraser") {
+          // ctx.globalCompositeOperation = "destination-out";
+          ctx.strokeStyle = "white";
+        }
+
+        if (root.props.tool === "brush" || root.props.tool === "eraser") {
+          ctx.beginPath();
+          ctx.moveTo(last_mouse.x, last_mouse.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.closePath();
+          ctx.stroke();
+        }
+        socketemit();
+      };
+
+      // handler for input box
+      function handleEnter(e) {
+        var keyCode = e.keyCode;
+        if (keyCode === 13) {
+          drawText(
+            this.value,
+            parseInt(this.style.left, 10),
+            parseInt(this.style.top, 10) - canvas.getBoundingClientRect().top
+          );
+          sketch.removeChild(this);
+          hasInput = false;
+        }
+      }
+
+      // draw the text onto canvas
+      function drawText(txt, x, y) {
+        ctx.textBaseline = "top";
+        ctx.textAlign = "left";
+        ctx.font = inputFont;
+        ctx.fillText(txt, x - 4, y - 4);
+
+        socketemit();
+      }
+      var addText = function (e) {
+        if (root.props.tool !== "text") return;
+        var input = document.createElement("input");
+        input.type = "text";
+        input.style.position = "fixed";
+        input.style.top = e.clientY - 4 + "px";
+        input.style.left = e.clientX - 4 + "px";
+        input.onkeydown = handleEnter;
+        sketch.appendChild(input);
+        input.focus();
+        hasInput = true;
+      };
+
+      function socketemit() {
+        // emit canvas data every second
+        if (root.timeout != undefined) clearTimeout(root.timeout);
+
+        root.timeout = setTimeout(function () {
+          var base64ImageData = canvas.toDataURL("img/png");
+          //root.socket.emit("canvasData", base64ImageData);
+          root.socket.emit("sendcanvas", {
+            image: base64ImageData,
+            room: window.location.pathname,
+          });
+        }, 1000);
+      }
     }
   }
 
