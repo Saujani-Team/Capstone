@@ -3,12 +3,13 @@ import io from "socket.io-client";
 import { connect } from "react-redux";
 import { getDrawing, updateDrawing } from "../store/drawings";
 import auth from "../store/auth";
+
 class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -59,17 +60,19 @@ class Draw extends React.Component {
     if (prevProps.color !== this.props.color) {
       this.ctx.strokeStyle = this.props.color;
     }
-
     if (prevProps.size !== this.props.size) {
       this.ctx.lineWidth = this.props.size;
     }
+    if (prevProps.shape !== this.props.shape) {
+      console.log(this.props.shape);
+    }
+    console.log("this.props.tool:", this.props.tool);
   }
 
   draw() {
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
-
     var hasInput = false;
     var inputFont = "14px sans-serif";
     var root = this;
@@ -80,27 +83,16 @@ class Draw extends React.Component {
     canvas.height = parseInt(sketch_style.getPropertyValue("height"));
     var W = canvas.width,
       H = canvas.height;
-    // set default background color of white
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     window.addEventListener("resize", resizeCanvas, false);
 
     function resizeCanvas() {
-      //store current drawings
       let temp = ctx.getImageData(0, 0, W, H);
-      //resize
       canvas.width = parseInt(sketch_style.getPropertyValue("width"));
       canvas.height = parseInt(sketch_style.getPropertyValue("height"));
-      // set default background color of white
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      //put previous drawings back
       ctx.putImageData(temp, 0, 0);
-
       drawOnCanvas();
     }
-
     resizeCanvas();
 
     function drawOnCanvas() {
@@ -131,7 +123,6 @@ class Draw extends React.Component {
         function (e) {
           canvas.addEventListener("mousemove", onPaint, false);
         },
-
         false
       );
 
@@ -162,6 +153,7 @@ class Draw extends React.Component {
           ctx.closePath();
           ctx.stroke();
         }
+
         socketemit();
       };
 
@@ -184,7 +176,6 @@ class Draw extends React.Component {
         ctx.textBaseline = "top";
         ctx.textAlign = "left";
         ctx.font = inputFont;
-        ctx.fillStyle = root.props.color;
         ctx.fillText(txt, x - 4, y - 4);
 
         socketemit();
@@ -218,8 +209,7 @@ class Draw extends React.Component {
     }
   }
 
-  save(evt) {
-    evt.preventDefault();
+  save() {
     let drawingUUID = window.location.pathname.slice(6);
     let imageDataUrl = canvas.toDataURL("img/png");
     this.props.getDrawing(drawingUUID).then(() => {

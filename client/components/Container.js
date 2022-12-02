@@ -9,6 +9,7 @@ class Container extends React.Component {
       color: "#000000",
       size: "5",
       tool: "brush",
+      shape: "line",
     };
   }
 
@@ -25,6 +26,13 @@ class Container extends React.Component {
     });
   }
 
+  changeShape(params) {
+    this.setState({
+      shape: params.target.value,
+      tool: "shape",
+    });
+  }
+
   erase() {
     this.setState({
       tool: "eraser",
@@ -34,30 +42,6 @@ class Container extends React.Component {
   text() {
     this.setState({
       tool: "text",
-    });
-  }
-
-  line() {
-    this.setState({
-      tool: "line",
-    });
-  }
-
-  rectangle() {
-    this.setState({
-      tool: "rectangle",
-    });
-  }
-
-  circle() {
-    this.setState({
-      tool: "circle",
-    });
-  }
-
-  star() {
-    this.setState({
-      tool: "star",
     });
   }
 
@@ -90,11 +74,17 @@ class Container extends React.Component {
           </div>
           <div className="shape-container">
             Select a Shape:
-            <select name="shape" id="shape">
+            <select
+              name="shape"
+              id="shape"
+              type="shape"
+              value={this.state.shape}
+              onChange={this.changeShape.bind(this)}
+            >
               <option value="line">Line</option>
               <option value="rectangle">Rectangle</option>
               <option value="circle">Circle</option>
-              <option value="star">Star</option>
+              <option value="triangle">Triangle</option>
             </select>
           </div>
           <div className="eraser-container">
@@ -112,6 +102,7 @@ class Container extends React.Component {
           <Draw
             color={this.state.color}
             size={this.state.size}
+            shape={this.state.shape}
             tool={this.state.tool}
           ></Draw>
         </div>
