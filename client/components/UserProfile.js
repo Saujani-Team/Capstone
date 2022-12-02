@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { fetchUser } from "../store/user";
 import { Link } from "react-router-dom";
+import { deleteDrawing } from "../store/drawings";
 
 export class UserProfile extends React.Component {
   constructor(props) {
@@ -38,7 +39,60 @@ export class UserProfile extends React.Component {
             return (
               <div key={drawing.id} className="list">
                 <div key={drawing.id}>
-                  <img width="300" height="250" src={drawing.imageUrl} />
+                  <Link to={`/draw/${drawing.uuid}`}>
+                    <img width="300" height="250" src={drawing.imageUrl} />
+                    <button type="button">Edit</button>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      let link = document.createElement("a");
+                      link.download = "my-drawing.png";
+                      link.href = drawing.imageUrl;
+                      link.click();
+                    }}
+                  >
+                    Download
+                  </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      navigator.permissions
+                        .query({ name: "clipboard-write" })
+                        .then(async (result) => {
+                          if (
+                            result.state == "granted" ||
+                            result.state == "prompt"
+                          ) {
+                            try {
+                              const response = await fetch(drawing.imageUrl);
+                              let blob = await response.blob();
+                              blob = blob.slice(0, blob.size, "image/png");
+                              await navigator.clipboard.write([
+                                new ClipboardItem({
+                                  [blob.type]: blob,
+                                }),
+                              ]);
+                              window.alert("Image copied to clipboard ✅");
+                            } catch (err) {
+                              console.error(err.name, err.message);
+                            }
+                          }
+                        });
+                    }}
+                  >
+                    Copy
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      this.props.deleteDrawing(drawing).then(() => {
+                        this.props.loadUser(this.props.match.params.userId);
+                      });
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             );
@@ -63,6 +117,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => ({
   loadUser: (userId) => dispatch(fetchUser(userId)),
+  deleteDrawing: (drawing) => dispatch(deleteDrawing(drawing)),
 });
 
 export default connect(mapState, mapDispatch)(UserProfile);
