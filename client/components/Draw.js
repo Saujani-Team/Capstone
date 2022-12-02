@@ -69,6 +69,7 @@ class Draw extends React.Component {
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
+
     var hasInput = false;
     var inputFont = "14px sans-serif";
     var root = this;
@@ -79,16 +80,27 @@ class Draw extends React.Component {
     canvas.height = parseInt(sketch_style.getPropertyValue("height"));
     var W = canvas.width,
       H = canvas.height;
+    // set default background color of white
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     window.addEventListener("resize", resizeCanvas, false);
 
     function resizeCanvas() {
+      //store current drawings
       let temp = ctx.getImageData(0, 0, W, H);
+      //resize
       canvas.width = parseInt(sketch_style.getPropertyValue("width"));
       canvas.height = parseInt(sketch_style.getPropertyValue("height"));
+      // set default background color of white
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      //put previous drawings back
       ctx.putImageData(temp, 0, 0);
+
       drawOnCanvas();
     }
+
     resizeCanvas();
 
     function drawOnCanvas() {
@@ -172,6 +184,7 @@ class Draw extends React.Component {
         ctx.textBaseline = "top";
         ctx.textAlign = "left";
         ctx.font = inputFont;
+        ctx.fillStyle = root.props.color;
         ctx.fillText(txt, x - 4, y - 4);
 
         socketemit();
@@ -205,7 +218,8 @@ class Draw extends React.Component {
     }
   }
 
-  save() {
+  save(evt) {
+    evt.preventDefault();
     let drawingUUID = window.location.pathname.slice(6);
     let imageDataUrl = canvas.toDataURL("img/png");
     this.props.getDrawing(drawingUUID).then(() => {
