@@ -56,6 +56,37 @@ export class UserProfile extends React.Component {
                   </button>
                   <button
                     type="button"
+                    onClick={async () => {
+                      navigator.permissions
+                        .query({ name: "clipboard-write" })
+                        .then(async (result) => {
+                          if (
+                            result.state == "granted" ||
+                            result.state == "prompt"
+                          ) {
+                            try {
+                              const response = await fetch(drawing.imageUrl);
+                              let blob = await response.blob();
+                              blob = blob.slice(0, blob.size, "image/png");
+                              console.log("blob", blob);
+                              await navigator.clipboard.write([
+                                new ClipboardItem({
+                                  [blob.type]: blob,
+                                }),
+                              ]);
+                              console.log("Image copied.");
+                              window.alert("Image copied to clipboard ✅");
+                            } catch (err) {
+                              console.error(err.name, err.message);
+                            }
+                          }
+                        });
+                    }}
+                  >
+                    Copy
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => {
                       this.props.deleteDrawing(drawing).then(() => {
                         this.props.loadUser(this.props.match.params.userId);
