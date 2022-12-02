@@ -30,7 +30,7 @@ router.get("/:drawingUUID", async (req, res, next) => {
 
 // POST api/drawings
 // creates a new drawing for a user that is not logged in
-http: router.post("/", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     let newUUID = uuid();
     const drawing = await Drawing.create({ uuid: newUUID });
@@ -40,13 +40,25 @@ http: router.post("/", async (req, res, next) => {
   }
 });
 
-// PUT api/drawings
+// PUT api/drawings/:drawingId
 // update a drawing when a logged-in user saves a drawing
 router.put("/:drawingId", async (req, res, next) => {
   try {
     const drawing = await Drawing.findByPk(req.params.drawingId);
     let updatedDrawing = await drawing.update(req.body);
     res.send(updatedDrawing);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// DELETE api/drawings/:drawingId
+// delete a drawing from a user's profile
+router.delete("/:drawingId", async (req, res, next) => {
+  try {
+    const drawing = await Drawing.findByPk(req.params.drawingId);
+    drawing.destroy();
+    res.send(drawing);
   } catch (error) {
     next(error);
   }

@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { fetchUser } from "../store/user";
 import { Link } from "react-router-dom";
+import { deleteDrawing } from "../store/drawings";
 
 export class UserProfile extends React.Component {
   constructor(props) {
@@ -53,6 +54,16 @@ export class UserProfile extends React.Component {
                   >
                     Download
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      this.props.deleteDrawing(drawing).then(() => {
+                        this.props.loadUser(this.props.match.params.userId);
+                      });
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             );
@@ -77,6 +88,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => ({
   loadUser: (userId) => dispatch(fetchUser(userId)),
+  deleteDrawing: (drawing) => dispatch(deleteDrawing(drawing)),
 });
 
 export default connect(mapState, mapDispatch)(UserProfile);
