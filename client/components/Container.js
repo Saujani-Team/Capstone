@@ -1,5 +1,6 @@
 import React from "react";
 import Draw from "./Draw";
+import DrawFabric from "./DrawFabric";
 
 class Container extends React.Component {
   constructor(props) {
@@ -114,6 +115,7 @@ class Container extends React.Component {
             size={this.state.size}
             tool={this.state.tool}
           ></Draw>
+          {/* <DrawFabric /> */}
         </div>
       </div>
     );

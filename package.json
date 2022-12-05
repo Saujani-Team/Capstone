@@ -25,6 +25,7 @@
     "bcrypt": "^5.0.0",
     "compression": "^1.7.3",
     "express": "^4.16.4",
+    "fabric": "^5.2.4",
     "history": "^4.9.0",
     "http": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",

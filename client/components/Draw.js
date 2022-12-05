@@ -2,13 +2,16 @@ import React from "react";
 import io from "socket.io-client";
 import { connect } from "react-redux";
 import { getDrawing, updateDrawing } from "../store/drawings";
+// import styles from "../public/style.css";
 import auth from "../store/auth";
+import { fabric } from "fabric";
+
 class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -49,10 +52,17 @@ class Draw extends React.Component {
         }
       }
     );
+    this.refs = {
+      canvas: {},
+    }; //******************************************************* */
+    this.renderRect = this.renderRect.bind(this);
+    this.canvas = new fabric.Canvas("canvas");
   }
 
   componentDidMount() {
     this.draw();
+    console.log("this.refs", this.refs);
+    this.renderRect();
   }
 
   componentDidUpdate(prevProps) {
@@ -63,6 +73,19 @@ class Draw extends React.Component {
     if (prevProps.size !== this.props.size) {
       this.ctx.lineWidth = this.props.size;
     }
+  }
+
+  renderRect() {
+    // create a rectangle object
+    var rect = new fabric.Rect({
+      left: 100,
+      top: 100,
+      fill: "red",
+      width: 20,
+      height: 20,
+    });
+    // "add" rectangle onto canvas
+    this.canvas.add(rect);
   }
 
   draw() {
@@ -85,6 +108,15 @@ class Draw extends React.Component {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     window.addEventListener("resize", resizeCanvas, false);
+
+    // //******************************************************* */
+    var rect = new fabric.Rect({
+      left: 100,
+      top: 100,
+      fill: "red",
+      width: 20,
+      height: 20,
+    }); //******************************************************* */
 
     function resizeCanvas() {
       //store current drawings
@@ -254,6 +286,7 @@ class Draw extends React.Component {
             </button>
           </div>
         ) : null}
+        <button onClick={this.renderRect}>Rectangle</button>
         <div className="collaboration-link-container">
           <button type="button" onClick={this.getLink.bind(this)}>
             Generate Link 🖇️
