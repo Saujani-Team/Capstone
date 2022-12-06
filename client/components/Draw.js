@@ -2,7 +2,10 @@ import React from "react";
 import io from "socket.io-client";
 import { connect } from "react-redux";
 import { getDrawing, updateDrawing } from "../store/drawings";
+import { Stage, Layer, Rect, Text, Circle, Line } from "react-konva";
 import auth from "../store/auth";
+import Konva from "./Konva";
+
 class Draw extends React.Component {
   timeout;
   ctx;
@@ -24,7 +27,6 @@ class Draw extends React.Component {
         var ctx = canvas.getContext("2d");
         image.onload = function () {
           ctx.drawImage(image, 0, 0);
-
           root.isDrawing = false;
         };
         image.src = data;
@@ -113,6 +115,13 @@ class Draw extends React.Component {
         function (e) {
           last_mouse.x = mouse.x;
           last_mouse.y = mouse.y;
+          canvas.addEventListener(
+            "mousedown",
+            function (e) {
+              canvas.addEventListener("mousemove", onPaint, false);
+            },
+            false
+          );
 
           mouse.x = e.pageX - this.offsetLeft;
           mouse.y = e.pageY - this.offsetTop;
@@ -131,7 +140,6 @@ class Draw extends React.Component {
         function (e) {
           canvas.addEventListener("mousemove", onPaint, false);
         },
-
         false
       );
 

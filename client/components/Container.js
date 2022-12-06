@@ -1,5 +1,6 @@
 import React from "react";
 import Draw from "./Draw";
+import Konva from "./Konva";
 
 class Container extends React.Component {
   constructor(props) {
@@ -62,6 +63,7 @@ class Container extends React.Component {
   }
 
   render() {
+    // console.log(Konva);
     return (
       <div className="container">
         <div className="tools-section">
@@ -109,6 +111,7 @@ class Container extends React.Component {
           </div>
         </div>
         <div className="board-container">
+          <Konva />
           <Draw
             color={this.state.color}
             size={this.state.size}
