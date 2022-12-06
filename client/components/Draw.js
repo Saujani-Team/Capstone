@@ -16,6 +16,7 @@ class Draw extends React.Component {
 
   constructor(props) {
     super(props);
+    let s = this.steps;
 
     this.socket.on("canvasData", function (data) {
       var root = this;
@@ -30,10 +31,10 @@ class Draw extends React.Component {
           ctx.drawImage(image, 0, 0);
 
           root.isDrawing = false;
+          s.push(canvas.toDataURL());
+          console.log(s);
         };
         image.src = data;
-
-        root.steps.push(canvas.toDataURL());
       }, 200);
     });
 
@@ -50,14 +51,15 @@ class Draw extends React.Component {
 
             image.onload = function () {
               ctx.drawImage(image, 0, 0);
+
+              while (s.length > 0) {
+                s.pop();
+              }
+              s.push(canvas.toDataURL());
             };
             image.src = ack.history[i].image;
           }
         }
-        //start with new steps array
-        // this.steps = [];
-        // this.steps.push(canvas.toDataURL()); //put the previous drawings into the steps array as one step
-        // console.log("in ack ", this.steps);
       }
     );
   }
@@ -67,6 +69,7 @@ class Draw extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    console.log("compoenent did updates");
     if (prevProps.color !== this.props.color) {
       this.ctx.strokeStyle = this.props.color;
     }
@@ -77,6 +80,7 @@ class Draw extends React.Component {
   }
 
   draw() {
+    console.log("draw");
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
@@ -92,7 +96,7 @@ class Draw extends React.Component {
     var W = canvas.width,
       H = canvas.height;
     // set default background color of white
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "blue";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     root.steps.push(canvas.toDataURL());
@@ -106,19 +110,22 @@ class Draw extends React.Component {
       canvas.width = parseInt(sketch_style.getPropertyValue("width"));
       canvas.height = parseInt(sketch_style.getPropertyValue("height"));
       // set default background color of white
-      ctx.fillStyle = "white";
+      ctx.fillStyle = "blue";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       //put previous drawings back
       ctx.putImageData(temp, 0, 0);
 
-      drawOnCanvas();
+      ctx.lineWidth = root.props.size;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.strokeStyle = root.props.color;
     }
 
     resizeCanvas();
 
-    function drawOnCanvas() {
-      //root.steps.push(canvas.toDataURL());
+    initListeners();
 
+    function initListeners() {
       var mouse = { x: 0, y: 0 };
       var last_mouse = { x: 0, y: 0 };
 
@@ -279,6 +286,11 @@ class Draw extends React.Component {
       temp.onload = function () {
         ctx.drawImage(temp, 0, 0);
       };
+      window.localStorage.setItem("liveDrawing", canvas.toDataURL());
+      window.localStorage.setItem(
+        "liveDrawingUUID",
+        window.location.pathname.slice(6)
+      );
     }
 
     // emit canvas data every second

@@ -37,29 +37,29 @@ class Container extends React.Component {
     });
   }
 
-  line() {
-    this.setState({
-      tool: "line",
-    });
-  }
+  // line() {
+  //   this.setState({
+  //     tool: "line",
+  //   });
+  // }
 
-  rectangle() {
-    this.setState({
-      tool: "rectangle",
-    });
-  }
+  // rectangle() {
+  //   this.setState({
+  //     tool: "rectangle",
+  //   });
+  // }
 
-  circle() {
-    this.setState({
-      tool: "circle",
-    });
-  }
+  // circle() {
+  //   this.setState({
+  //     tool: "circle",
+  //   });
+  // }
 
-  star() {
-    this.setState({
-      tool: "star",
-    });
-  }
+  // star() {
+  //   this.setState({
+  //     tool: "star",
+  //   });
+  // }
 
   render() {
     return (
@@ -97,7 +97,7 @@ class Container extends React.Component {
               <option> 30 </option>
             </select> */}
           </div>
-          <div className="shape-container">
+          {/* <div className="shape-container">
             Select a Shape:
             <select name="shape" id="shape">
               <option value="line">Line</option>
@@ -105,7 +105,7 @@ class Container extends React.Component {
               <option value="circle">Circle</option>
               <option value="star">Star</option>
             </select>
-          </div>
+          </div> */}
           <div className="eraser-container">
             <button type="button" onClick={this.erase.bind(this)}>
               Eraser
