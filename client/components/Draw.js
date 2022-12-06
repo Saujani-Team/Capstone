@@ -213,6 +213,11 @@ class Draw extends React.Component {
             image: base64ImageData,
             room: window.location.pathname,
           });
+          window.localStorage.setItem("liveDrawing", base64ImageData);
+          window.localStorage.setItem(
+            "liveDrawingUUID",
+            window.location.pathname.slice(6)
+          );
         }, 1000);
       }
     }
