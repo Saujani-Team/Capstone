@@ -76,7 +76,16 @@ class Container extends React.Component {
 
           <div className="brushsize-container">
             Select Brush/Eraser Size : &nbsp;
-            <select
+            <input
+              id="size"
+              type="range"
+              min="1"
+              max="30"
+              step="1"
+              value={this.state.size}
+              onChange={this.changeSize.bind(this)}
+            ></input>
+            {/* <select
               value={this.state.size}
               onChange={this.changeSize.bind(this)}
             >
@@ -86,7 +95,7 @@ class Container extends React.Component {
               <option> 20 </option>
               <option> 25 </option>
               <option> 30 </option>
-            </select>
+            </select> */}
           </div>
           <div className="shape-container">
             Select a Shape:

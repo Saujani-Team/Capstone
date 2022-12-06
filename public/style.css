@@ -61,3 +61,10 @@ form div {
   align-items: flex-start;
   margin-top: 2em;
 }
+
+.save-container{
+display: inline;
+}
+.collaboration-link-container{
+display: inline;
+}

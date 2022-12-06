@@ -2,13 +2,17 @@ import React from "react";
 import io from "socket.io-client";
 import { connect } from "react-redux";
 import { getDrawing, updateDrawing } from "../store/drawings";
-import auth from "../store/auth";
+
 class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
+
+  //set up something to keep track of drawing steps
+  //needed for undo and redo
+  steps = [];
 
   constructor(props) {
     super(props);
@@ -28,6 +32,8 @@ class Draw extends React.Component {
           root.isDrawing = false;
         };
         image.src = data;
+
+        root.steps.push(canvas.toDataURL());
       }, 200);
     });
 
@@ -36,17 +42,22 @@ class Draw extends React.Component {
       { room: window.location.pathname },
       //load drawings history
       function (ack) {
+        var canvas = document.querySelector("#canvas");
+        var ctx = canvas.getContext("2d");
         for (let i = 0; i < ack.history.length; i++) {
           if (ack.history[i].room === window.location.pathname) {
             var image = new Image();
-            var canvas = document.querySelector("#canvas");
-            var ctx = canvas.getContext("2d");
+
             image.onload = function () {
               ctx.drawImage(image, 0, 0);
             };
             image.src = ack.history[i].image;
           }
         }
+        //start with new steps array
+        // this.steps = [];
+        // this.steps.push(canvas.toDataURL()); //put the previous drawings into the steps array as one step
+        // console.log("in ack ", this.steps);
       }
     );
   }
@@ -84,6 +95,8 @@ class Draw extends React.Component {
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    root.steps.push(canvas.toDataURL());
+
     window.addEventListener("resize", resizeCanvas, false);
 
     function resizeCanvas() {
@@ -104,6 +117,8 @@ class Draw extends React.Component {
     resizeCanvas();
 
     function drawOnCanvas() {
+      //root.steps.push(canvas.toDataURL());
+
       var mouse = { x: 0, y: 0 };
       var last_mouse = { x: 0, y: 0 };
 
@@ -139,6 +154,9 @@ class Draw extends React.Component {
         "mouseup",
         function () {
           canvas.removeEventListener("mousemove", onPaint, false);
+
+          root.steps.push(canvas.toDataURL());
+          console.log(root.steps);
         },
         false
       );
@@ -249,13 +267,40 @@ class Draw extends React.Component {
     });
   }
 
+  undo() {
+    const temp = new Image();
+    var canvas = document.querySelector("#canvas");
+    var ctx = canvas.getContext("2d");
+    //make sure the steps array is not going to empty after the pop
+    if (this.steps.length > 1) {
+      this.steps.pop();
+      console.log("in undo: ", this.steps);
+      temp.src = this.steps[this.steps.length - 1];
+      temp.onload = function () {
+        ctx.drawImage(temp, 0, 0);
+      };
+    }
+
+    // emit canvas data every second
+    if (this.timeout != undefined) clearTimeout(this.timeout);
+
+    var socket = this.socket;
+    this.timeout = setTimeout(function () {
+      var base64ImageData = canvas.toDataURL("img/png");
+      socket.emit("sendcanvas", {
+        image: base64ImageData,
+        room: window.location.pathname,
+      });
+    }, 1000);
+  }
+
   render() {
     return (
       <div id="sketch">
         {this.props.isLoggedIn ? (
           <div className="save-container">
             <button type="button" onClick={this.save.bind(this)}>
-              Save Drawing
+              Save Drawing 🖼
             </button>
           </div>
         ) : null}
@@ -264,6 +309,12 @@ class Draw extends React.Component {
             Generate Link 🖇️
           </button>
         </div>
+        <br />
+        <button type="button" onClick={this.undo.bind(this)}>
+          Undo
+        </button>
+        &nbsp;&nbsp;&nbsp;
+        <button>Redo</button>
         <canvas
           id="canvas"
           width={window.innerWidth}
