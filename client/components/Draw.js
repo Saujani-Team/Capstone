@@ -7,8 +7,8 @@ class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -213,6 +213,11 @@ class Draw extends React.Component {
             image: base64ImageData,
             room: window.location.pathname,
           });
+          window.localStorage.setItem("liveDrawing", base64ImageData);
+          window.localStorage.setItem(
+            "liveDrawingUUID",
+            window.location.pathname.slice(6)
+          );
         }, 1000);
       }
     }
