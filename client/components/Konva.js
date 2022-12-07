@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import { createRoot } from "react-dom/client";
 import { Stage, Layer, Rect, Text, Circle, Line } from "react-konva";
 // import Draw from "./Draw";
@@ -7,6 +7,12 @@ const Konva = () => {
   const [tool, setTool] = React.useState("pen");
   const [lines, setLines] = React.useState([]);
   const isDrawing = React.useRef(false);
+  const [elements, setElements] = React.useState([]);
+
+  //   useEffect(() => {
+  //     const rect = new Konva.Rect(10, 10, 100, 100);
+  //     const line = new Konva.Line(10, 10, 110, 110);
+  //   });
 
   const handleMouseDown = (e) => {
     isDrawing.current = true;
@@ -73,17 +79,7 @@ const Konva = () => {
             shadowBlur={10}
           />
           <Circle x={200} y={100} radius={50} fill="green" />
-          <Line
-            x={20}
-            y={200}
-            points={[0, 0, 100, 0, 100, 100]}
-            tension={0.5}
-            closed
-            stroke="black"
-            fillLinearGradientStartPoint={{ x: -50, y: -50 }}
-            fillLinearGradientEndPoint={{ x: 50, y: 50 }}
-            fillLinearGradientColorStops={[0, "red", 1, "yellow"]}
-          />
+
           {lines.map((line, i) => (
             <Line
               key={i}

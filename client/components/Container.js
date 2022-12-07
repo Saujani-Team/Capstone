@@ -112,11 +112,11 @@ class Container extends React.Component {
         </div>
         <div className="board-container">
           <Konva />
-          <Draw
+          {/* <Draw
             color={this.state.color}
             size={this.state.size}
             tool={this.state.tool}
-          ></Draw>
+          ></Draw> */}
         </div>
       </div>
     );

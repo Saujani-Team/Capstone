@@ -10,8 +10,8 @@ class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -104,6 +104,14 @@ class Draw extends React.Component {
     }
 
     resizeCanvas();
+    // ****************************************************************
+    function startDrawingRect(event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    function drawRect(event) {}
+
+    function stopDrwingRect() {}
 
     function drawOnCanvas() {
       var mouse = { x: 0, y: 0 };
