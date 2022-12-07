@@ -49,18 +49,6 @@ class Container extends React.Component {
     });
   }
 
-  circle() {
-    this.setState({
-      tool: "circle",
-    });
-  }
-
-  star() {
-    this.setState({
-      tool: "star",
-    });
-  }
-
   render() {
     return (
       <div className="container">
@@ -88,14 +76,15 @@ class Container extends React.Component {
               <option> 30 </option>
             </select>
           </div>
-          <div className="shape-container">
-            Select a Shape:
-            <select name="shape" id="shape">
-              <option value="line">Line</option>
-              <option value="rectangle">Rectangle</option>
-              <option value="circle">Circle</option>
-              <option value="star">Star</option>
-            </select>
+          <div className="line-container">
+            <button type="button" onClick={this.line.bind(this)}>
+              Line
+            </button>
+          </div>
+          <div className="rectangle-container">
+            <button type="button" onClick={this.rectangle.bind(this)}>
+              Rectangle
+            </button>
           </div>
           <div className="eraser-container">
             <button type="button" onClick={this.erase.bind(this)}>

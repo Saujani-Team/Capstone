@@ -7,8 +7,8 @@ class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -126,27 +126,62 @@ class Draw extends React.Component {
       ctx.lineCap = "round";
       ctx.strokeStyle = root.props.color;
 
-      canvas.addEventListener(
-        "mousedown",
-        function (e) {
-          canvas.addEventListener("mousemove", onPaint, false);
-        },
+      // canvas.addEventListener(
+      //   "mousedown",
+      //   function (e) {
+      //     canvas.addEventListener("mousemove", onPaint, false);
+      //   },
 
-        false
-      );
+      //   false
+      // );
 
-      canvas.addEventListener(
-        "mouseup",
-        function () {
-          canvas.removeEventListener("mousemove", onPaint, false);
-        },
-        false
-      );
+      // canvas.addEventListener(
+      //   "mouseup",
+      //   function () {
+      //     canvas.removeEventListener("mousemove", onPaint, false);
+      //   },
+      //   false
+      // );
 
       canvas.addEventListener("click", function (e) {
         if (hasInput) return;
         addText(e);
       });
+
+      var drawLine = function () {
+        if (root.props.tool === "line") {
+          // ctx.beginPath();
+          ctx.moveTo(last_mouse.x, last_mouse.y);
+          // ctx.moveTo(100, 100);
+          ctx.lineTo(mouse.x, mouse.y);
+          console.log("MOUSE", mouse);
+          console.log("MOUSE.X", mouse.x);
+
+          ctx.lineTo(mouse.x, mouse.y);
+          // ctx.lineTo(last_mouse.x, last_mouse.y);
+          console.log("LAST_MOUSE", last_mouse);
+          // ctx.lineTo(300, 150);
+          ctx.closePath();
+          ctx.stroke();
+        }
+      };
+      // drawLine LISTENERS
+      canvas.addEventListener(
+        "mousedown",
+        // function (e) {
+        //   canvas.addEventListener("mousemove", drawLine, false);
+        // },
+        drawLine
+        // false
+      );
+
+      canvas.addEventListener(
+        "mouseup",
+        function () {
+          canvas.removeEventListener("mousemove", drawLine, false);
+        },
+        false
+      );
 
       // var root = this;
       var onPaint = function () {
