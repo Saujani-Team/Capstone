@@ -50,20 +50,7 @@ class Container extends React.Component {
     });
   }
 
-  circle() {
-    this.setState({
-      tool: "circle",
-    });
-  }
-
-  star() {
-    this.setState({
-      tool: "star",
-    });
-  }
-
   render() {
-    // console.log(Konva);
     return (
       <div className="container">
         <div className="tools-section">
@@ -75,7 +62,6 @@ class Container extends React.Component {
               onChange={this.changeColor.bind(this)}
             />
           </div>
-
           <div className="brushsize-container">
             Select Brush/Eraser Size : &nbsp;
             <select
@@ -89,15 +75,23 @@ class Container extends React.Component {
               <option> 25 </option>
               <option> 30 </option>
             </select>
-          </div>
-          <div className="shape-container">
+          </div>{" "}
+          {/* <div className="shape-container">
             Select a Shape:
             <select name="shape" id="shape">
               <option value="line">Line</option>
               <option value="rectangle">Rectangle</option>
-              <option value="circle">Circle</option>
-              <option value="star">Star</option>
             </select>
+          </div> */}
+          <div className="line-container">
+            <button type="button" onClick={this.line.bind(this)}>
+              Line
+            </button>
+          </div>
+          <div className="rectangle-container">
+            <button type="button" onClick={this.rectangle.bind(this)}>
+              Rectangle
+            </button>
           </div>
           <div className="eraser-container">
             <button type="button" onClick={this.erase.bind(this)}>
@@ -111,12 +105,12 @@ class Container extends React.Component {
           </div>
         </div>
         <div className="board-container">
-          <Konva />
-          {/* <Draw
+          {/* <Konva /> */}
+          <Draw
             color={this.state.color}
             size={this.state.size}
             tool={this.state.tool}
-          ></Draw> */}
+          ></Draw>
         </div>
       </div>
     );

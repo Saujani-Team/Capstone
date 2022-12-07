@@ -104,18 +104,11 @@ class Draw extends React.Component {
     }
 
     resizeCanvas();
-    // ****************************************************************
-    function startDrawingRect(event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    function drawRect(event) {}
-
-    function stopDrwingRect() {}
 
     function drawOnCanvas() {
       var mouse = { x: 0, y: 0 };
       var last_mouse = { x: 0, y: 0 };
+      var existingLines = [];
 
       /* Mouse Capturing Work */
       canvas.addEventListener(
@@ -166,6 +159,7 @@ class Draw extends React.Component {
 
       // var root = this;
       var onPaint = function () {
+        console.log("ROOT.PROPS.TOOL", root.props.tool);
         if (root.props.tool === "eraser") {
           // ctx.globalCompositeOperation = "destination-out";
           ctx.strokeStyle = "white";
@@ -176,6 +170,18 @@ class Draw extends React.Component {
           ctx.moveTo(last_mouse.x, last_mouse.y);
           ctx.lineTo(mouse.x, mouse.y);
           ctx.closePath();
+          ctx.stroke();
+        }
+        if (root.props.tool === "line") {
+          ctx.beginPath();
+          ctx.moveTo(last_mouse.x, last_mouse.y);
+          console.log("MOUSE", mouse);
+          // ctx.moveTo(0, 0);
+          // ctx.lineTo(mouse.x, mouse.y);
+
+          // ctx.lineTo(last_mouse.x - mouse.x, last_mouse.y - mouse.y);
+          console.log("LAST_MOUSE", last_mouse);
+          ctx.lineTo(300, 150);
           ctx.stroke();
         }
         socketemit();
@@ -266,6 +272,7 @@ class Draw extends React.Component {
   }
 
   render() {
+    // console.log("THIS.PROPS", this.props);
     return (
       <div id="sketch">
         {this.props.isLoggedIn ? (
