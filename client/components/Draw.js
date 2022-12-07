@@ -7,8 +7,8 @@ class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   constructor(props) {
     super(props);
@@ -66,6 +66,7 @@ class Draw extends React.Component {
   }
 
   draw() {
+    // add local storage
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
@@ -85,6 +86,39 @@ class Draw extends React.Component {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     window.addEventListener("resize", resizeCanvas, false);
+
+    // Set up group drawings on local storage:
+    var imageData = canvas.toDataURL("img/png");
+    let uuid = window.location.pathname.slice(6);
+    this.props.getDrawing(uuid).then(() => {
+      if (this.props.drawing.group) {
+        let storedGroupDrawings = JSON.parse(
+          window.localStorage.getItem("groupDrawings")
+        );
+        if (storedGroupDrawings) {
+          let matchingDrawing = storedGroupDrawings.find(
+            (element) => element.uuid === uuid
+          );
+          if (matchingDrawing) {
+            // this group drawing is already set on local storage
+          } else {
+            // "add this group drawing to local storage without modifying current group drawings array on local storage"
+            let drawingsArray = [...storedGroupDrawings, { uuid, imageData }];
+            window.localStorage.setItem(
+              "groupDrawings",
+              JSON.stringify(drawingsArray)
+            );
+          }
+        } else {
+          // add group drawings object to local storage
+          let drawingsArray = [{ uuid, imageData }];
+          window.localStorage.setItem(
+            "groupDrawings",
+            JSON.stringify(drawingsArray)
+          );
+        }
+      }
+    });
 
     function resizeCanvas() {
       //store current drawings
@@ -213,11 +247,53 @@ class Draw extends React.Component {
             image: base64ImageData,
             room: window.location.pathname,
           });
+
+          // Update local storage for single user:
           window.localStorage.setItem("liveDrawing", base64ImageData);
           window.localStorage.setItem(
             "liveDrawingUUID",
             window.location.pathname.slice(6)
           );
+
+          // Update local storage for group drawings:
+          // let uuid = window.location.pathname.slice(6);
+          // let storedDrawing = window.localStorage.getItem("liveDrawing");
+          // let storedUUID = window.localStorage.getItem("liveDrawingUUID");
+          // if (storedDrawing) {
+          //   if (storedUUID === uuid) {
+          //     window.localStorage.setItem("liveDrawing", base64ImageData);
+          //     window.localStorage.setItem("liveDrawingUUID", uuid);
+          //   } else {
+          //     let groupDrawings = window.localStorage.getItem("groupDrawings");
+          //     if (groupDrawings) {
+          //       // add to group drawings object
+          //       window.localStorage.setItem(
+          //         "groupDrawing",
+          //         JSON.stringify(
+          //           JSON.stringify([
+          //             ...groupDrawings,
+          //             { uuid, base64ImageData },
+          //           ])
+          //         )
+          //       );
+          //     } else {
+          //       // add group drawings object to local storage
+          //       window.localStorage.setItem(
+          //         "groupDrawings",
+          //         JSON.stringify({
+          //           uuid,
+          //           base64ImageData,
+          //         })
+          //       );
+          //     }
+          //   }
+          // }
+          // else {
+          //   window.localStorage.setItem("liveDrawing", base64ImageData);
+          //   window.localStorage.setItem("liveDrawingUUID", uuid);
+          // }
+
+          // );
         }, 1000);
       }
     }
@@ -250,6 +326,7 @@ class Draw extends React.Component {
   }
 
   render() {
+    // console.log("render props", this.props);
     return (
       <div id="sketch">
         {this.props.isLoggedIn ? (
