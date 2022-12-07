@@ -104,18 +104,20 @@ class Draw extends React.Component {
     resizeCanvas();
 
     function drawOnCanvas() {
-      var mouse = { x: 0, y: 0 };
-      var last_mouse = { x: 0, y: 0 };
+      let mouse = { x: 0, y: 0 };
+      let last_mouse = { x: 0, y: 0 };
+      let mousedown = false;
 
       /* Mouse Capturing Work */
       canvas.addEventListener(
         "mousemove",
         function (e) {
-          last_mouse.x = mouse.x;
-          last_mouse.y = mouse.y;
+          // last_mouse.x = mouse.x;
+          // last_mouse.y = mouse.y;
 
           mouse.x = e.pageX - this.offsetLeft;
           mouse.y = e.pageY - this.offsetTop;
+          drawLine();
         },
         false
       );
@@ -126,14 +128,51 @@ class Draw extends React.Component {
       ctx.lineCap = "round";
       ctx.strokeStyle = root.props.color;
 
-      // canvas.addEventListener(
-      //   "mousedown",
-      //   function (e) {
-      //     canvas.addEventListener("mousemove", onPaint, false);
-      //   },
+      canvas.addEventListener(
+        "mousedown",
+        function (e) {
+          //     canvas.addEventListener("mousemove", onPaint, false);
+          /* Mouse Capturing Work */
+          canvas.addEventListener(
+            "mousemove",
+            function (e) {
+              // last_mouse.x = mouse.x;
+              // last_mouse.y = mouse.y;
 
-      //   false
-      // );
+              mouse.x = e.pageX - this.offsetLeft;
+              mouse.y = e.pageY - this.offsetTop;
+              drawLine();
+            },
+            false
+          );
+
+          canvas.addEventListener(
+            "mousedown",
+            function (e) {
+              //canvas.addEventListener("mousemove", onPaint, false);
+              last_mouse.x = e.pageX - this.offsetLeft;
+              last_mouse.y = e.pageY - this.offsetTop;
+              mousedown = true;
+            },
+
+            false
+          );
+
+          canvas.addEventListener(
+            "mouseup",
+            function () {
+              //canvas.removeEventListener("mousemove", onPaint, false);
+
+              mousedown = false;
+              // root.steps.push(canvas.toDataURL());
+              // console.log(root.steps);
+            },
+            false
+          );
+        },
+
+        false
+      );
 
       // canvas.addEventListener(
       //   "mouseup",
@@ -150,38 +189,18 @@ class Draw extends React.Component {
 
       var drawLine = function () {
         if (root.props.tool === "line") {
-          // ctx.beginPath();
-          ctx.moveTo(last_mouse.x, last_mouse.y);
-          // ctx.moveTo(100, 100);
-          ctx.lineTo(mouse.x, mouse.y);
-          console.log("MOUSE", mouse);
-          console.log("MOUSE.X", mouse.x);
-
-          ctx.lineTo(mouse.x, mouse.y);
-          // ctx.lineTo(last_mouse.x, last_mouse.y);
-          console.log("LAST_MOUSE", last_mouse);
-          // ctx.lineTo(300, 150);
-          ctx.closePath();
-          ctx.stroke();
+          if (mousedown) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(last_mouse.x, last_mouse.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 10;
+            ctx.lineJoin = ctx.lineCap = "round";
+            ctx.stroke();
+          }
         }
       };
-      // drawLine LISTENERS
-      canvas.addEventListener(
-        "mousedown",
-        // function (e) {
-        //   canvas.addEventListener("mousemove", drawLine, false);
-        // },
-        drawLine
-        // false
-      );
-
-      canvas.addEventListener(
-        "mouseup",
-        function () {
-          canvas.removeEventListener("mousemove", drawLine, false);
-        },
-        false
-      );
 
       // var root = this;
       var onPaint = function () {
