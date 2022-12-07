@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { v4: uuid } = require("uuid");
 const {
   models: { Drawing },
 } = require("../db");
@@ -14,11 +15,13 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// GET api/drawings/:drawingId
-// gets a specified drawing based on id
-router.get("/:drawingId", async (req, res, next) => {
+// GET api/drawings/:drawingUUID
+// gets a specified drawing based on uuid
+router.get("/:drawingUUID", async (req, res, next) => {
   try {
-    const drawing = await Drawing.findByPk(req.params.drawingId);
+    const drawing = await Drawing.findOne({
+      where: { uuid: req.params.drawingUUID },
+    });
     res.send(drawing);
   } catch (error) {
     next(error);
@@ -29,8 +32,33 @@ router.get("/:drawingId", async (req, res, next) => {
 // creates a new drawing for a user that is not logged in
 router.post("/", async (req, res, next) => {
   try {
-    const drawing = await Drawing.create();
+    let newUUID = uuid();
+    const drawing = await Drawing.create({ uuid: newUUID });
     res.status(201).send(drawing);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// PUT api/drawings/:drawingId
+// update a drawing when a logged-in user saves a drawing
+router.put("/:drawingId", async (req, res, next) => {
+  try {
+    const drawing = await Drawing.findByPk(req.params.drawingId);
+    let updatedDrawing = await drawing.update(req.body);
+    res.send(updatedDrawing);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// DELETE api/drawings/:drawingId
+// delete a drawing from a user's profile
+router.delete("/:drawingId", async (req, res, next) => {
+  try {
+    const drawing = await Drawing.findByPk(req.params.drawingId);
+    drawing.destroy();
+    res.send(drawing);
   } catch (error) {
     next(error);
   }

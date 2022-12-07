@@ -6,33 +6,31 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
-const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
-  <Navbar bg="light" expand="lg">
-    <Container>
-      <Navbar.Brand>Draw Your Face Off</Navbar.Brand>
-      <Nav className="me-auto">
-        {isLoggedIn ? (
-          <div>
-            {/* The navbar will show these links after you log in */}
-            <Nav.Link href="/home">Home</Nav.Link>
-            <Nav.Link href="/draw">Draw</Nav.Link>
-            <Nav.Link href={`/users/${auth.id}`}>My Profile</Nav.Link>
-            <a href="#" onClick={handleClick}>
-              Logout
-            </a>
-          </div>
-        ) : (
-          <div>
-            {/* The navbar will show these links before you log in */}
-            <Nav.Link href="/login">Login</Nav.Link>
-            <Nav.Link href="/signup">Sign Up</Nav.Link>
-            <Nav.Link href="/draw">Draw</Nav.Link>
-          </div>
-        )}
-      </Nav>
-      <hr />
-    </Container>
-  </Navbar>
+const Navbar = ({ handleClick, isLoggedIn, auth }) => (
+  <div>
+    <h1>Draw Your Face Off</h1>
+    <nav>
+      {isLoggedIn ? (
+        <div>
+          {/* The navbar will show these links after you log in */}
+          <Link to="/home">Home</Link>
+          <Link to="/draw">Draw</Link>
+          <Link to={`/users/${auth.id}`}>My Profile</Link>
+          <a href="#" onClick={handleClick}>
+            Logout
+          </a>
+        </div>
+      ) : (
+        <div>
+          {/* The navbar will show these links before you log in */}
+          <Link to="/login">Login</Link>
+          <Link to="/signup">Sign Up</Link>
+          <Link to="/draw">Draw</Link>
+        </div>
+      )}
+    </nav>
+    <hr />
+  </div>
 );
 
 /**

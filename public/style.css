@@ -30,7 +30,7 @@ form div {
   border-color: black;
 }
 
-.container{
+.container {
   height: 100%;
   width: 100%;
 }
@@ -44,14 +44,20 @@ form div {
   display: inline;
   margin-left: 12px;
 }
-.eraser-container{
+.eraser-container {
   display: inline;
   margin-left: 12px;
 }
-.text-container{
+.text-container {
   display: inline;
   margin-left: 12px;
 }
 .tools-section {
   text-align: center;
+}
+
+.continue-drawing-container {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 2em;
 }
