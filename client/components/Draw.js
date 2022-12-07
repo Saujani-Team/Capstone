@@ -96,7 +96,7 @@ class Draw extends React.Component {
     var W = canvas.width,
       H = canvas.height;
     // set default background color of white
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     root.steps.push(canvas.toDataURL());
@@ -110,7 +110,7 @@ class Draw extends React.Component {
       canvas.width = parseInt(sketch_style.getPropertyValue("width"));
       canvas.height = parseInt(sketch_style.getPropertyValue("height"));
       // set default background color of white
-      ctx.fillStyle = "blue";
+      ctx.fillStyle = "white";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       //put previous drawings back
       ctx.putImageData(temp, 0, 0);
