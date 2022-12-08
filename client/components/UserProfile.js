@@ -11,10 +11,12 @@ export class UserProfile extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {};
   }
   componentDidMount() {
     this.props.loadUser(this.props.match.params.userId);
   }
+
   render() {
     const user = this.props.user;
     const userId = user.id || 0;
@@ -122,49 +124,17 @@ export class UserProfile extends React.Component {
             {drawings
               .filter((drawing) => drawing.group)
               .map((drawing) => {
-                let imageData = "";
-                this.socket.emit(
-                  "joinroom",
-                  { room: drawing.uuid },
-                  // load drawings history
-                  function (ack) {
-                    for (let i = 0; i < ack.history.length; i++) {
-                      if (ack.history[i].room === window.location.pathname) {
-                        var image = new Image();
-                        var canvas = document.querySelector("#canvas");
-                        var ctx = canvas.getContext("2d");
-                        image.onload = function () {
-                          ctx.drawImage(image, 0, 0);
-                        };
-                        image.src = ack.history[i].image;
-                      }
-                    }
-                    console.log("this is ack", ack);
-                    imageData = ack.history[0].image;
-                    // console.log("image data", imageData);
-                  }
-                );
-                this.socket.on("canvasData", function (data) {
-                  var root = this;
-                  var interval = setInterval(function () {
-                    if (root.isDrawing) return;
-                    root.isDrawing = true;
-                    clearInterval(interval);
-                    var image = new Image();
-                    var canvas = document.querySelector("#canvas");
-                    var ctx = canvas.getContext("2d");
-                    image.onload = function () {
-                      ctx.drawImage(image, 0, 0);
-
-                      root.isDrawing = false;
-                    };
-                    image.src = data;
-                  }, 200);
+                this.socket.emit("leaderJoinRoom", {
+                  room: `/draw/${drawing.uuid}`,
                 });
-                console.log(">>>>>>>>>>>>>>>>>>>>>>imagedata:", imageData);
+                this.socket.on("canvasData", function (data) {
+                  console.log("THIS IS THE DATA!", data);
+                  this.setState({ data });
+                  console.log("this is state", this.state);
+                });
                 return (
                   <div key={drawing.id}>
-                    <img width="300" height="250" src={imageData} />
+                    <img width="300" height="250" src="" />
                     <button
                       onClick={async () => {
                         navigator.permissions

@@ -27,6 +27,11 @@ const init = async () => {
         ack({ history }); //send drawings history
       });
 
+      socket.on("leaderJoinRoom", function (data) {
+        console.log(`${socket.id} joined ${data.room}`);
+        socket.join(data.room);
+      });
+
       socket.on("sendcanvas", (data) => {
         //store drawings history
         history.push(data);
@@ -34,6 +39,7 @@ const init = async () => {
         connections.map((con) => {
           if (con.id !== socket.id) {
             socket.to(data.room).emit("canvasData", data.image);
+            console.log("sending cavas data");
           }
         });
       });
