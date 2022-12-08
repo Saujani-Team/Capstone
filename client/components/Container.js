@@ -15,7 +15,6 @@ class Container extends React.Component {
   changeColor(params) {
     this.setState({
       color: params.target.value,
-      tool: "brush",
     });
   }
 
@@ -34,6 +33,11 @@ class Container extends React.Component {
   text() {
     this.setState({
       tool: "text",
+    });
+  }
+  paint() {
+    this.setState({
+      tool: "brush",
     });
   }
 
@@ -66,7 +70,7 @@ class Container extends React.Component {
       <div className="container">
         <div className="tools-section">
           <div className="color-picker-container">
-            Select Brush Color : &nbsp;
+            Color : &nbsp;
             <input
               type="color"
               value={this.state.color}
@@ -75,37 +79,51 @@ class Container extends React.Component {
           </div>
 
           <div className="brushsize-container">
-            Select Brush/Eraser Size : &nbsp;
-            <select
+            Size : &nbsp;
+            <input
+              id="size"
+              type="range"
+              min="1"
+              max="50"
+              step="5"
               value={this.state.size}
               onChange={this.changeSize.bind(this)}
-            >
-              <option> 5 </option>
-              <option> 10 </option>
-              <option> 15 </option>
-              <option> 20 </option>
-              <option> 25 </option>
-              <option> 30 </option>
-            </select>
+            ></input>
+            <div className="btn-container">
+              <button type="button" onClick={this.paint.bind(this)}>
+                Paint
+              </button>
+            </div>
           </div>
-          <div className="shape-container">
-            Select a Shape:
-            <select name="shape" id="shape">
-              <option value="line">Line</option>
-              <option value="rectangle">Rectangle</option>
-              <option value="circle">Circle</option>
-              <option value="star">Star</option>
-            </select>
-          </div>
-          <div className="eraser-container">
+          <div className="btn-container">
             <button type="button" onClick={this.erase.bind(this)}>
               Eraser
             </button>
           </div>
-          <div className="text-container">
+          <div className="btn-container">
             <button type="button" onClick={this.text.bind(this)}>
               Add Text
             </button>
+            <div className="btn-container">
+              <button type="button" onClick={this.line.bind(this)}>
+                Line
+              </button>
+            </div>
+            <div className="btn-container">
+              <button type="button" onClick={this.circle.bind(this)}>
+                Circle
+              </button>
+            </div>
+            <div className="btn-container">
+              <button type="button" onClick={this.rectangle.bind(this)}>
+                Rectangle
+              </button>
+            </div>
+            <div className="btn-container">
+              <button type="button" onClick={this.star.bind(this)}>
+                Star!
+              </button>
+            </div>
           </div>
         </div>
         <div className="board-container">

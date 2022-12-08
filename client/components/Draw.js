@@ -2,7 +2,7 @@ import React from "react";
 import io from "socket.io-client";
 import { connect } from "react-redux";
 import { getDrawing, updateDrawing } from "../store/drawings";
-import auth from "../store/auth";
+
 class Draw extends React.Component {
   timeout;
   ctx;
@@ -10,8 +10,13 @@ class Draw extends React.Component {
   socket = io.connect("https://draw-your-face-off.onrender.com");
   // socket = io.connect("http://localhost:8080");
 
+  //set up something to keep track of drawing steps
+  //needed for undo and redo
+  steps = [];
+
   constructor(props) {
     super(props);
+    let s = this.steps;
 
     this.socket.on("canvasData", function (data) {
       var root = this;
@@ -26,6 +31,7 @@ class Draw extends React.Component {
           ctx.drawImage(image, 0, 0);
 
           root.isDrawing = false;
+          s.push(canvas.toDataURL());
         };
         image.src = data;
       }, 200);
@@ -36,13 +42,19 @@ class Draw extends React.Component {
       { room: window.location.pathname },
       //load drawings history
       function (ack) {
+        var canvas = document.querySelector("#canvas");
+        var ctx = canvas.getContext("2d");
         for (let i = 0; i < ack.history.length; i++) {
           if (ack.history[i].room === window.location.pathname) {
             var image = new Image();
-            var canvas = document.querySelector("#canvas");
-            var ctx = canvas.getContext("2d");
+
             image.onload = function () {
               ctx.drawImage(image, 0, 0);
+
+              while (s.length > 0) {
+                s.pop();
+              }
+              s.push(canvas.toDataURL());
             };
             image.src = ack.history[i].image;
           }
@@ -84,6 +96,8 @@ class Draw extends React.Component {
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    root.steps.push(canvas.toDataURL());
+
     window.addEventListener("resize", resizeCanvas, false);
 
     function resizeCanvas() {
@@ -98,16 +112,30 @@ class Draw extends React.Component {
       //put previous drawings back
       ctx.putImageData(temp, 0, 0);
 
-      drawOnCanvas();
+      ctx.lineWidth = root.props.size;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.strokeStyle = root.props.color;
     }
 
     resizeCanvas();
 
-    function drawOnCanvas() {
-      var mouse = { x: 0, y: 0 };
-      var last_mouse = { x: 0, y: 0 };
+    initListeners();
+
+    function initListeners() {
+      let mouse = { x: 0, y: 0 };
+      let last_mouse = { x: 0, y: 0 };
+      let last_mouse2 = { x: 0, y: 0 }; //for drawing straight shapes
+      let mousedown = false; //for drawing straight shapes
+
+      //brush/line styles
+      ctx.lineWidth = root.props.size;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.strokeStyle = root.props.color;
 
       /* Mouse Capturing Work */
+      // mouse move
       canvas.addEventListener(
         "mousemove",
         function (e) {
@@ -119,39 +147,99 @@ class Draw extends React.Component {
         },
         false
       );
-
-      /* Drawing on Paint App */
-      ctx.lineWidth = root.props.size;
-      ctx.lineJoin = "round";
-      ctx.lineCap = "round";
-      ctx.strokeStyle = root.props.color;
-
+      //mouse down
       canvas.addEventListener(
         "mousedown",
         function (e) {
+          //e.preventDefault();
           canvas.addEventListener("mousemove", onPaint, false);
+          last_mouse2.x = e.pageX - this.offsetLeft;
+          last_mouse2.y = e.pageY - this.offsetTop;
+          mousedown = true;
+          canvas.classList.add("mouseDown");
         },
 
         false
       );
-
+      //mouse up
       canvas.addEventListener(
         "mouseup",
         function () {
+          drawShapes();
           canvas.removeEventListener("mousemove", onPaint, false);
+
+          mousedown = false;
+          root.steps.push(canvas.toDataURL());
+          canvas.classList.remove("mouseDown");
         },
         false
       );
-
+      // single click
       canvas.addEventListener("click", function (e) {
         if (hasInput) return;
         addText(e);
       });
 
-      // var root = this;
+      //draw shapes
+      var drawShapes = function () {
+        if (root.props.tool === "line" && mousedown) {
+          ctx.beginPath();
+          ctx.moveTo(last_mouse2.x, last_mouse2.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+
+        if (root.props.tool === "circle" && mousedown) {
+          ctx.beginPath();
+          let centerX = last_mouse2.x;
+          let centerY = last_mouse2.y;
+          let radius = Math.abs(mouse.x - last_mouse2.x) * 1.25;
+          ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+          ctx.stroke();
+        }
+
+        if (root.props.tool === "rectangle" && mousedown) {
+          ctx.beginPath();
+          ctx.rect(
+            last_mouse2.x,
+            last_mouse2.y,
+            Math.abs(mouse.x - last_mouse2.x),
+            Math.abs(mouse.y - last_mouse2.y)
+          );
+          ctx.stroke();
+        }
+
+        if (root.props.tool === "star" && mousedown) {
+          ctx.beginPath();
+          let centerX = last_mouse2.x;
+          let centerY = last_mouse2.y;
+          let radius = Math.abs(mouse.x - last_mouse2.x) * 1.25;
+          let N = 5;
+          ctx.moveTo(centerX + radius, centerY);
+          for (var i = 1; i <= N * 2; i++) {
+            if (i % 2 == 0) {
+              var theta = (i * (Math.PI * 2)) / (N * 2);
+              var x = centerX + radius * Math.cos(theta);
+              var y = centerY + radius * Math.sin(theta);
+            } else {
+              var theta = (i * (Math.PI * 2)) / (N * 2);
+              var x = centerX + (radius / 2) * Math.cos(theta);
+              var y = centerY + (radius / 2) * Math.sin(theta);
+            }
+
+            ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.stroke();
+          ctx.fillStyle = ctx.strokeStyle;
+          ctx.fill();
+        }
+
+        socketemit();
+      };
+
       var onPaint = function () {
         if (root.props.tool === "eraser") {
-          // ctx.globalCompositeOperation = "destination-out";
           ctx.strokeStyle = "white";
         }
 
@@ -208,7 +296,7 @@ class Draw extends React.Component {
 
         root.timeout = setTimeout(function () {
           var base64ImageData = canvas.toDataURL("img/png");
-          //root.socket.emit("canvasData", base64ImageData);
+
           root.socket.emit("sendcanvas", {
             image: base64ImageData,
             room: window.location.pathname,
@@ -249,13 +337,45 @@ class Draw extends React.Component {
     });
   }
 
+  undo() {
+    const temp = new Image();
+    var canvas = document.querySelector("#canvas");
+    var ctx = canvas.getContext("2d");
+    //make sure the steps array is not going to empty after the pop
+    if (this.steps.length > 1) {
+      this.steps.pop();
+
+      temp.src = this.steps[this.steps.length - 1];
+      temp.onload = function () {
+        ctx.drawImage(temp, 0, 0);
+      };
+      window.localStorage.setItem("liveDrawing", canvas.toDataURL());
+      window.localStorage.setItem(
+        "liveDrawingUUID",
+        window.location.pathname.slice(6)
+      );
+    }
+
+    // emit canvas data every second
+    if (this.timeout != undefined) clearTimeout(this.timeout);
+
+    var socket = this.socket;
+    this.timeout = setTimeout(function () {
+      var base64ImageData = canvas.toDataURL("img/png");
+      socket.emit("sendcanvas", {
+        image: base64ImageData,
+        room: window.location.pathname,
+      });
+    }, 1000);
+  }
+
   render() {
     return (
       <div id="sketch">
         {this.props.isLoggedIn ? (
           <div className="save-container">
             <button type="button" onClick={this.save.bind(this)}>
-              Save Drawing
+              Save Drawing 🖼
             </button>
           </div>
         ) : null}
@@ -264,6 +384,12 @@ class Draw extends React.Component {
             Generate Link 🖇️
           </button>
         </div>
+        <br />
+
+        <button type="button" onClick={this.undo.bind(this)}>
+          Undo
+        </button>
+
         <canvas
           id="canvas"
           width={window.innerWidth}
