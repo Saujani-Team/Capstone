@@ -170,6 +170,7 @@ class Draw extends React.Component {
         "mouseup",
         function () {
           drawLine();
+          drawCircle();
           canvas.removeEventListener("mousemove", onPaint, false);
 
           mousedown = false;
@@ -190,6 +191,17 @@ class Draw extends React.Component {
           ctx.beginPath();
           ctx.moveTo(last_mouse2.x, last_mouse2.y);
           ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+      };
+
+      var drawCircle = function () {
+        if (root.props.tool === "circle" && mousedown) {
+          ctx.beginPath();
+          let centerX = last_mouse2.x;
+          let centerY = last_mouse2.y;
+          let radius = Math.abs(mouse.x - last_mouse2.x) * 1.15;
+          ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
           ctx.stroke();
         }
       };

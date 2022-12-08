@@ -53,11 +53,11 @@ class Container extends React.Component {
   //   });
   // }
 
-  // circle() {
-  //   this.setState({
-  //     tool: "circle",
-  //   });
-  // }
+  circle() {
+    this.setState({
+      tool: "circle",
+    });
+  }
 
   // star() {
   //   this.setState({
@@ -94,11 +94,6 @@ class Container extends React.Component {
                 Paint
               </button>
             </div> */}
-            <div className="btn-container">
-              <button type="button" onClick={this.line.bind(this)}>
-                Line
-              </button>
-            </div>
           </div>
           <div className="btn-container">
             <button type="button" onClick={this.erase.bind(this)}>
@@ -109,6 +104,16 @@ class Container extends React.Component {
             <button type="button" onClick={this.text.bind(this)}>
               Add Text
             </button>
+            <div className="btn-container">
+              <button type="button" onClick={this.line.bind(this)}>
+                Line
+              </button>
+            </div>
+            <div className="btn-container">
+              <button type="button" onClick={this.circle.bind(this)}>
+                Circle
+              </button>
+            </div>
           </div>
         </div>
         <div className="board-container">
