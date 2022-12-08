@@ -15,7 +15,6 @@ class Container extends React.Component {
   changeColor(params) {
     this.setState({
       color: params.target.value,
-      tool: "brush",
     });
   }
 
@@ -36,22 +35,23 @@ class Container extends React.Component {
       tool: "text",
     });
   }
-  // paint() {
-  //   this.setState({
-  //     tool: "brush",
-  //   });
-  // }
+  paint() {
+    this.setState({
+      tool: "brush",
+    });
+  }
+
   line() {
     this.setState({
       tool: "line",
     });
   }
 
-  // rectangle() {
-  //   this.setState({
-  //     tool: "rectangle",
-  //   });
-  // }
+  rectangle() {
+    this.setState({
+      tool: "rectangle",
+    });
+  }
 
   circle() {
     this.setState({
@@ -59,11 +59,11 @@ class Container extends React.Component {
     });
   }
 
-  // star() {
-  //   this.setState({
-  //     tool: "star",
-  //   });
-  // }
+  star() {
+    this.setState({
+      tool: "star",
+    });
+  }
 
   render() {
     return (
@@ -89,11 +89,11 @@ class Container extends React.Component {
               value={this.state.size}
               onChange={this.changeSize.bind(this)}
             ></input>
-            {/* <div className="btn-container">
+            <div className="btn-container">
               <button type="button" onClick={this.paint.bind(this)}>
                 Paint
               </button>
-            </div> */}
+            </div>
           </div>
           <div className="btn-container">
             <button type="button" onClick={this.erase.bind(this)}>
@@ -112,6 +112,16 @@ class Container extends React.Component {
             <div className="btn-container">
               <button type="button" onClick={this.circle.bind(this)}>
                 Circle
+              </button>
+            </div>
+            <div className="btn-container">
+              <button type="button" onClick={this.rectangle.bind(this)}>
+                Rectangle
+              </button>
+            </div>
+            <div className="btn-container">
+              <button type="button" onClick={this.star.bind(this)}>
+                Star!
               </button>
             </div>
           </div>

@@ -77,6 +77,14 @@ class Draw extends React.Component {
     if (prevProps.size !== this.props.size) {
       this.ctx.lineWidth = this.props.size;
     }
+    // if (prevProps.tool !== this.props.tool) {
+    //   if (this.props.tool === "eraser") {
+    //     this.ctx.globalCompositeOperation = "destination-out";
+    //   } else {
+    //     this.ctx.globalCompositeOperation = "source-over";
+    //   }
+    // }
+    // console.log(this.props.tool);
   }
 
   draw() {
@@ -128,8 +136,8 @@ class Draw extends React.Component {
     function initListeners() {
       let mouse = { x: 0, y: 0 };
       let last_mouse = { x: 0, y: 0 };
-      let last_mouse2 = { x: 0, y: 0 }; //for drawing straight lines
-      let mousedown = false; //for drawing straight lines
+      let last_mouse2 = { x: 0, y: 0 }; //for drawing straight shapes
+      let mousedown = false; //for drawing straight shapes
 
       //brush/line styles
       ctx.lineWidth = root.props.size;
@@ -147,7 +155,6 @@ class Draw extends React.Component {
 
           mouse.x = e.pageX - this.offsetLeft;
           mouse.y = e.pageY - this.offsetTop;
-          //drawLine();
         },
         false
       );
@@ -169,8 +176,7 @@ class Draw extends React.Component {
       canvas.addEventListener(
         "mouseup",
         function () {
-          drawLine();
-          drawCircle();
+          drawShapes();
           canvas.removeEventListener("mousemove", onPaint, false);
 
           mousedown = false;
@@ -186,24 +192,62 @@ class Draw extends React.Component {
         addText(e);
       });
 
-      var drawLine = function () {
+      //draw shapes
+      var drawShapes = function () {
         if (root.props.tool === "line" && mousedown) {
           ctx.beginPath();
           ctx.moveTo(last_mouse2.x, last_mouse2.y);
           ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
         }
-      };
 
-      var drawCircle = function () {
         if (root.props.tool === "circle" && mousedown) {
           ctx.beginPath();
           let centerX = last_mouse2.x;
           let centerY = last_mouse2.y;
-          let radius = Math.abs(mouse.x - last_mouse2.x) * 1.15;
+          let radius = Math.abs(mouse.x - last_mouse2.x) * 1.25;
           ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
           ctx.stroke();
         }
+
+        if (root.props.tool === "rectangle" && mousedown) {
+          ctx.beginPath();
+          ctx.rect(
+            last_mouse2.x,
+            last_mouse2.y,
+            Math.abs(mouse.x - last_mouse2.x),
+            Math.abs(mouse.y - last_mouse2.y)
+          );
+          ctx.stroke();
+        }
+
+        if (root.props.tool === "star" && mousedown) {
+          ctx.beginPath();
+          let centerX = last_mouse2.x;
+          let centerY = last_mouse2.y;
+          let radius = Math.abs(mouse.x - last_mouse2.x) * 1.25;
+          let N = 5;
+          ctx.moveTo(centerX + radius, centerY);
+          for (var i = 1; i <= N * 2; i++) {
+            if (i % 2 == 0) {
+              var theta = (i * (Math.PI * 2)) / (N * 2);
+              var x = centerX + radius * Math.cos(theta);
+              var y = centerY + radius * Math.sin(theta);
+            } else {
+              var theta = (i * (Math.PI * 2)) / (N * 2);
+              var x = centerX + (radius / 2) * Math.cos(theta);
+              var y = centerY + (radius / 2) * Math.sin(theta);
+            }
+
+            ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.stroke();
+          ctx.fillStyle = ctx.strokeStyle;
+          ctx.fill();
+        }
+
+        socketemit();
       };
 
       var onPaint = function () {
