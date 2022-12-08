@@ -7,8 +7,8 @@ class Draw extends React.Component {
   timeout;
   ctx;
   isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   //set up something to keep track of drawing steps
   //needed for undo and redo
@@ -32,7 +32,6 @@ class Draw extends React.Component {
 
           root.isDrawing = false;
           s.push(canvas.toDataURL());
-          //console.log(s);
         };
         image.src = data;
       }, 200);
@@ -69,7 +68,6 @@ class Draw extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    //console.log("compoenent did updates");
     if (prevProps.color !== this.props.color) {
       this.ctx.strokeStyle = this.props.color;
     }
@@ -77,18 +75,9 @@ class Draw extends React.Component {
     if (prevProps.size !== this.props.size) {
       this.ctx.lineWidth = this.props.size;
     }
-    // if (prevProps.tool !== this.props.tool) {
-    //   if (this.props.tool === "eraser") {
-    //     this.ctx.globalCompositeOperation = "destination-out";
-    //   } else {
-    //     this.ctx.globalCompositeOperation = "source-over";
-    //   }
-    // }
-    // console.log(this.props.tool);
   }
 
   draw() {
-    //console.log("draw");
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
@@ -182,7 +171,6 @@ class Draw extends React.Component {
           mousedown = false;
           root.steps.push(canvas.toDataURL());
           canvas.classList.remove("mouseDown");
-          //console.log(root.steps);
         },
         false
       );
@@ -252,7 +240,6 @@ class Draw extends React.Component {
 
       var onPaint = function () {
         if (root.props.tool === "eraser") {
-          // ctx.globalCompositeOperation = "destination-out";
           ctx.strokeStyle = "white";
         }
 
@@ -309,7 +296,7 @@ class Draw extends React.Component {
 
         root.timeout = setTimeout(function () {
           var base64ImageData = canvas.toDataURL("img/png");
-          //root.socket.emit("canvasData", base64ImageData);
+
           root.socket.emit("sendcanvas", {
             image: base64ImageData,
             room: window.location.pathname,
@@ -357,7 +344,7 @@ class Draw extends React.Component {
     //make sure the steps array is not going to empty after the pop
     if (this.steps.length > 1) {
       this.steps.pop();
-      //console.log("in undo: ", this.steps);
+
       temp.src = this.steps[this.steps.length - 1];
       temp.onload = function () {
         ctx.drawImage(temp, 0, 0);
