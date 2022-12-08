@@ -2,6 +2,7 @@ import React from "react";
 import io from "socket.io-client";
 import { connect } from "react-redux";
 import { getDrawing, updateDrawing } from "../store/drawings";
+import auth from "../store/auth";
 
 class Draw extends React.Component {
   timeout;
