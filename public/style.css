@@ -44,11 +44,7 @@ form div {
   display: inline;
   margin-left: 12px;
 }
-.eraser-container {
-  display: inline;
-  margin-left: 12px;
-}
-.text-container {
+.btn-container {
   display: inline;
   margin-left: 12px;
 }

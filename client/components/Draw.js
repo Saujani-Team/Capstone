@@ -126,10 +126,19 @@ class Draw extends React.Component {
     initListeners();
 
     function initListeners() {
-      var mouse = { x: 0, y: 0 };
-      var last_mouse = { x: 0, y: 0 };
+      let mouse = { x: 0, y: 0 };
+      let last_mouse = { x: 0, y: 0 };
+      let last_mouse2 = { x: 0, y: 0 }; //for drawing straight lines
+      let mousedown = false; //for drawing straight lines
+
+      //brush/line styles
+      ctx.lineWidth = root.props.size;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.strokeStyle = root.props.color;
 
       /* Mouse Capturing Work */
+      // mouse move
       canvas.addEventListener(
         "mousemove",
         function (e) {
@@ -138,42 +147,50 @@ class Draw extends React.Component {
 
           mouse.x = e.pageX - this.offsetLeft;
           mouse.y = e.pageY - this.offsetTop;
+          //drawLine();
         },
         false
       );
-
-      /* Drawing on Paint App */
-      ctx.lineWidth = root.props.size;
-      ctx.lineJoin = "round";
-      ctx.lineCap = "round";
-      ctx.strokeStyle = root.props.color;
-
+      //mouse down
       canvas.addEventListener(
         "mousedown",
         function (e) {
           canvas.addEventListener("mousemove", onPaint, false);
+          last_mouse2.x = e.pageX - this.offsetLeft;
+          last_mouse2.y = e.pageY - this.offsetTop;
+          mousedown = true;
         },
 
         false
       );
-
+      //mouse up
       canvas.addEventListener(
         "mouseup",
         function () {
+          drawLine();
           canvas.removeEventListener("mousemove", onPaint, false);
 
+          mousedown = false;
           root.steps.push(canvas.toDataURL());
           console.log(root.steps);
         },
         false
       );
-
+      // single click
       canvas.addEventListener("click", function (e) {
         if (hasInput) return;
         addText(e);
       });
 
-      // var root = this;
+      var drawLine = function () {
+        if (root.props.tool === "line" && mousedown) {
+          ctx.beginPath();
+          ctx.moveTo(last_mouse2.x, last_mouse2.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+      };
+
       var onPaint = function () {
         if (root.props.tool === "eraser") {
           // ctx.globalCompositeOperation = "destination-out";
@@ -322,11 +339,11 @@ class Draw extends React.Component {
           </button>
         </div>
         <br />
+
         <button type="button" onClick={this.undo.bind(this)}>
           Undo
         </button>
-        &nbsp;&nbsp;&nbsp;
-        <button>Redo</button>
+
         <canvas
           id="canvas"
           width={window.innerWidth}
