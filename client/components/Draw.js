@@ -32,7 +32,7 @@ class Draw extends React.Component {
 
           root.isDrawing = false;
           s.push(canvas.toDataURL());
-          console.log(s);
+          //console.log(s);
         };
         image.src = data;
       }, 200);
@@ -69,7 +69,7 @@ class Draw extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("compoenent did updates");
+    //console.log("compoenent did updates");
     if (prevProps.color !== this.props.color) {
       this.ctx.strokeStyle = this.props.color;
     }
@@ -80,7 +80,7 @@ class Draw extends React.Component {
   }
 
   draw() {
-    console.log("draw");
+    //console.log("draw");
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
@@ -155,10 +155,12 @@ class Draw extends React.Component {
       canvas.addEventListener(
         "mousedown",
         function (e) {
+          //e.preventDefault();
           canvas.addEventListener("mousemove", onPaint, false);
           last_mouse2.x = e.pageX - this.offsetLeft;
           last_mouse2.y = e.pageY - this.offsetTop;
           mousedown = true;
+          canvas.classList.add("mouseDown");
         },
 
         false
@@ -172,7 +174,8 @@ class Draw extends React.Component {
 
           mousedown = false;
           root.steps.push(canvas.toDataURL());
-          console.log(root.steps);
+          canvas.classList.remove("mouseDown");
+          //console.log(root.steps);
         },
         false
       );
@@ -298,7 +301,7 @@ class Draw extends React.Component {
     //make sure the steps array is not going to empty after the pop
     if (this.steps.length > 1) {
       this.steps.pop();
-      console.log("in undo: ", this.steps);
+      //console.log("in undo: ", this.steps);
       temp.src = this.steps[this.steps.length - 1];
       temp.onload = function () {
         ctx.drawImage(temp, 0, 0);
