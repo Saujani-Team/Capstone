@@ -2,9 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../store";
-// import DYFO from "../../public/DYFO.png";
-
-// const DYFO = require("../../public/DYFO.png");
 
 const Navbar = ({ handleClick, isLoggedIn, auth }) => (
   <div>
