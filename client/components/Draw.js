@@ -310,11 +310,13 @@ class Draw extends React.Component {
         if (keyCode === 13) {
           drawText(
             this.value,
-            parseInt(this.style.left, 10),
+            parseInt(this.style.left, 10) - canvas.getBoundingClientRect().left,
             parseInt(this.style.top, 10) - canvas.getBoundingClientRect().top
           );
           sketch.removeChild(this);
           hasInput = false;
+
+          root.steps.push(canvas.toDataURL());
         }
       }
 
