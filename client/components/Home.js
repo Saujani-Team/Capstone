@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
 
 export const Home = (props) => {
-  console.log("props", props.auth);
   const { firstName } = props;
   const { isLoggedIn } = props;
 
@@ -76,7 +75,6 @@ export const Home = (props) => {
             <img src={"/Welcome.png"} height={40} /> {firstName}!
           </h3>
           <h2>How to Use Draw Your Face Off!</h2>
-          {/* <h3>Start a Drawing!</h3> */}
           <p>
             Click Draw and Start Drawing to open your canvas and start drawing.{" "}
           </p>

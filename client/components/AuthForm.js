@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { authenticate } from "../store";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
 /**
  * COMPONENT
@@ -11,67 +13,110 @@ const AuthForm = (props) => {
   if (name === "login") {
     return (
       <div>
-        <form onSubmit={handleLogin} name="login">
+        <Form onSubmit={handleLogin} name="login">
           <div>
-            <label htmlFor="username">
-              <small>Username</small>
-            </label>
-            <input name="username" type="text" />
+            <Form.Group className="mb-3">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                name="username"
+                type="text"
+                placeholder="Enter Username"
+              />
+            </Form.Group>
           </div>
           <div>
-            <label htmlFor="password">
-              <small>Password</small>
-            </label>
-            <input name="password" type="password" />
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                name="password"
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Group>
           </div>
           <div>
-            <button type="submit">{displayName}</button>
+            <Button variant="secondary" type="submit">
+              {displayName}
+            </Button>
           </div>
           {error && error.response && <div> {error.response.data} </div>}
-        </form>
+        </Form>
       </div>
     );
   } else {
     return (
       <div>
-        <form onSubmit={handleSignup} name="signup">
+        <Form onSubmit={handleSignup} name="signup">
           <div>
-            <label htmlFor="username">
-              <small>Username</small>
-            </label>
-            <input name="username" type="text" />
+            <Form.Group className="mb-3">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                name="username"
+                type="text"
+                placeholder="Enter Username"
+              />
+            </Form.Group>
           </div>
           <div>
-            <label htmlFor="password">
-              <small>Password</small>
-            </label>
-            <input name="password" type="password" />
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                name="password"
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Group>
           </div>
           <div>
             <div>
-              <label>
+              <Form.Group className="mb-3">
+                <Form.Label>First Name</Form.Label>
+                <Form.Control
+                  name="firstName"
+                  type="text"
+                  placeholder="First Name"
+                />
+              </Form.Group>
+              {/* <label>
                 <small>First Name</small>
               </label>
-              <input name="firstName" type="text" defaultValue="" />
+              <input name="firstName" type="text" defaultValue="" /> */}
             </div>
             <div>
-              <label>
+              <Form.Group className="mb-3">
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  name="lastName"
+                  type="text"
+                  placeholder="Last Name"
+                />
+              </Form.Group>
+              {/* <label>
                 <small>Last Name</small>
               </label>
-              <input name="lastName" type="text" defaultValue="" />
+              <input name="lastName" type="text" defaultValue="" /> */}
             </div>
             <div>
-              <label>
-                <small>Email</small>
-              </label>
-              <input name="email" type="text" defaultValue="" />
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control
+                  name="email"
+                  type="email"
+                  placeholder="Enter email"
+                />
+                <Form.Text className="text-muted">
+                  We'll never share your email with anyone else.
+                </Form.Text>
+              </Form.Group>
             </div>
           </div>
           <div>
-            <button type="submit">{displayName}</button>
+            <Button variant="secondary" type="submit">
+              {displayName}
+            </Button>
           </div>
           {error && error.response && <div> {error.response.data} </div>}
-        </form>
+        </Form>
       </div>
     );
   }
