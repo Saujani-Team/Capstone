@@ -372,15 +372,22 @@ class Draw extends React.Component {
   save(evt) {
     let drawingUUID = window.location.pathname.slice(6);
     let imageDataUrl = canvas.toDataURL("img/png");
-    this.props.getDrawing(drawingUUID).then(() => {
-      let currentDrawing = {
-        id: this.props.drawing.id,
-        userId: this.props.auth.id,
-        imageUrl: imageDataUrl,
-        status: "saved",
-      };
-      this.props.updateDrawing(currentDrawing);
-    });
+    this.props
+      .getDrawing(drawingUUID)
+      .then(() => {
+        let currentDrawing = {
+          id: this.props.drawing.id,
+          userId: this.props.auth.id,
+          imageUrl: imageDataUrl,
+          status: "saved",
+        };
+        this.props.updateDrawing(currentDrawing);
+      })
+      .then(() => {
+        window.alert(
+          "Your drawing🎨 was saved successfully! View this and other saved drawings on your Profile page."
+        );
+      });
   }
 
   getLink() {
