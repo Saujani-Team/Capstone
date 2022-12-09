@@ -363,8 +363,6 @@ class Draw extends React.Component {
           );
         }, 500);
       }
-      document.addEventListener("mousemove", drag);
-      document.addEventListener("mouseup", stopDrag);
     }
   }
 

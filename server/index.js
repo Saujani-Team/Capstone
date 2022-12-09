@@ -57,7 +57,6 @@ const init = async () => {
       });
 
       socket.on("sendMessage", (data) => {
-        console.log("message data", data);
         socket.to(data.room).emit("receiveMessage", data);
       });
 

@@ -31,7 +31,6 @@ router.get("/:drawingUUID", async (req, res, next) => {
 // POST api/drawings
 // creates a new drawing for a user that is not logged in
 router.post("/", async (req, res, next) => {
-  console.log("req.body drawings post", req.body);
   try {
     let newUUID = uuid();
     const drawing = await Drawing.create({
