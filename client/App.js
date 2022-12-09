@@ -1,7 +1,9 @@
-import React from 'react'
+import React from "react";
 
-import Navbar from './components/Navbar'
-import Routes from './Routes'
+import Navbar from "./components/Navbar";
+import Routes from "./Routes";
+
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
   return (
@@ -9,7 +11,7 @@ const App = () => {
       <Navbar />
       <Routes />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
