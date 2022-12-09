@@ -89,41 +89,63 @@ class Container extends React.Component {
               value={this.state.size}
               onChange={this.changeSize.bind(this)}
             ></input>
-            <div className="btn-container">
-              <button type="button" onClick={this.paint.bind(this)}>
-                Paint
-              </button>
-            </div>
           </div>
+
           <div className="btn-container">
-            <button type="button" onClick={this.erase.bind(this)}>
+            <button
+              type="button"
+              className="button-2"
+              autoFocus
+              onClick={this.paint.bind(this)}
+            >
+              Paint
+            </button>
+
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.erase.bind(this)}
+            >
               Eraser
             </button>
-          </div>
-          <div className="btn-container">
-            <button type="button" onClick={this.text.bind(this)}>
+
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.text.bind(this)}
+            >
               Add Text
             </button>
-            <div className="btn-container">
-              <button type="button" onClick={this.line.bind(this)}>
-                Line
-              </button>
-            </div>
-            <div className="btn-container">
-              <button type="button" onClick={this.circle.bind(this)}>
-                Circle
-              </button>
-            </div>
-            <div className="btn-container">
-              <button type="button" onClick={this.rectangle.bind(this)}>
-                Rectangle
-              </button>
-            </div>
-            <div className="btn-container">
-              <button type="button" onClick={this.star.bind(this)}>
-                Star!
-              </button>
-            </div>
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.line.bind(this)}
+            >
+              Line
+            </button>
+
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.circle.bind(this)}
+            >
+              Circle
+            </button>
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.rectangle.bind(this)}
+            >
+              Rectangle
+            </button>
+
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.star.bind(this)}
+            >
+              Star!
+            </button>
           </div>
         </div>
         <div className="board-container">

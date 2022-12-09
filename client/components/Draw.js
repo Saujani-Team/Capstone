@@ -7,9 +7,9 @@ import auth from "../store/auth";
 class Draw extends React.Component {
   timeout;
   ctx;
-  isDrawing = false;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  //isDrawing = false;
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   //set up something to keep track of drawing steps
   //needed for undo and redo
@@ -22,8 +22,8 @@ class Draw extends React.Component {
     this.socket.on("canvasData", function (data) {
       var root = this;
       var interval = setInterval(function () {
-        if (root.isDrawing) return;
-        root.isDrawing = true;
+        //if (root.isDrawing) return;
+        //root.isDrawing = true;
         clearInterval(interval);
         var image = new Image();
         var canvas = document.querySelector("#canvas");
@@ -76,11 +76,41 @@ class Draw extends React.Component {
     if (prevProps.size !== this.props.size) {
       this.ctx.lineWidth = this.props.size;
     }
+    if (prevProps.tool !== this.props.tool) {
+      //some custome cursors for every tool except for text and line
+      if (prevProps.tool === "brush") {
+        document.querySelector("#canvas").classList.remove("brush");
+      }
+      if (prevProps.tool === "eraser") {
+        document.querySelector("#canvas").classList.remove("eraser");
+      }
+      if (
+        prevProps.tool === "rectangle" ||
+        prevProps.tool === "circle" ||
+        prevProps.tool === "star"
+      ) {
+        document.querySelector("#canvas").classList.remove("rainbow");
+      }
+      if (this.props.tool === "eraser") {
+        document.querySelector("#canvas").classList.add("eraser");
+      }
+      if (this.props.tool === "brush") {
+        document.querySelector("#canvas").classList.add("brush");
+      }
+      if (
+        this.props.tool === "rectangle" ||
+        this.props.tool === "circle" ||
+        this.props.tool === "star"
+      ) {
+        document.querySelector("#canvas").classList.add("rainbow");
+      }
+    }
   }
 
   draw() {
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
+    canvas.classList.add("brush"); //default cursor set to paint brush
     var ctx = this.ctx;
 
     var hasInput = false;
@@ -152,7 +182,7 @@ class Draw extends React.Component {
       canvas.addEventListener(
         "mousedown",
         function (e) {
-          //e.preventDefault();
+          e.preventDefault();
           canvas.addEventListener("mousemove", onPaint, false);
           last_mouse2.x = e.pageX - this.offsetLeft;
           last_mouse2.y = e.pageY - this.offsetTop;
@@ -177,6 +207,7 @@ class Draw extends React.Component {
       );
       // single click
       canvas.addEventListener("click", function (e) {
+        e.preventDefault();
         if (hasInput) return;
         addText(e);
       });
@@ -194,7 +225,7 @@ class Draw extends React.Component {
           ctx.beginPath();
           let centerX = last_mouse2.x;
           let centerY = last_mouse2.y;
-          let radius = Math.abs(mouse.x - last_mouse2.x) * 1.25;
+          let radius = Math.abs(mouse.x - last_mouse2.x);
           ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
           ctx.stroke();
         }
@@ -242,6 +273,8 @@ class Draw extends React.Component {
       var onPaint = function () {
         if (root.props.tool === "eraser") {
           ctx.strokeStyle = "white";
+        } else {
+          ctx.strokeStyle = root.props.color;
         }
 
         if (root.props.tool === "brush" || root.props.tool === "eraser") {
@@ -292,7 +325,7 @@ class Draw extends React.Component {
       };
 
       function socketemit() {
-        // emit canvas data every second
+        // emit canvas data every half second
         if (root.timeout != undefined) clearTimeout(root.timeout);
 
         root.timeout = setTimeout(function () {
@@ -307,7 +340,7 @@ class Draw extends React.Component {
             "liveDrawingUUID",
             window.location.pathname.slice(6)
           );
-        }, 1000);
+        }, 500);
       }
     }
   }
@@ -351,13 +384,9 @@ class Draw extends React.Component {
         ctx.drawImage(temp, 0, 0);
       };
       window.localStorage.setItem("liveDrawing", canvas.toDataURL());
-      window.localStorage.setItem(
-        "liveDrawingUUID",
-        window.location.pathname.slice(6)
-      );
     }
 
-    // emit canvas data every second
+    // emit canvas data every half second
     if (this.timeout != undefined) clearTimeout(this.timeout);
 
     var socket = this.socket;
@@ -367,9 +396,31 @@ class Draw extends React.Component {
         image: base64ImageData,
         room: window.location.pathname,
       });
-    }, 1000);
+    }, 500);
   }
+  clear() {
+    var canvas = document.querySelector("#canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    while (this.steps.length > 0) {
+      this.steps.pop();
+    }
+    this.steps.push(canvas.toDataURL());
+    window.localStorage.setItem("liveDrawing", canvas.toDataURL());
+    // emit canvas data every half second
+    if (this.timeout != undefined) clearTimeout(this.timeout);
+
+    var socket = this.socket;
+    this.timeout = setTimeout(function () {
+      var base64ImageData = canvas.toDataURL("img/png");
+      socket.emit("sendcanvas", {
+        image: base64ImageData,
+        room: window.location.pathname,
+      });
+    }, 500);
+  }
   render() {
     return (
       <div id="sketch">
@@ -380,17 +431,20 @@ class Draw extends React.Component {
             </button>
           </div>
         ) : null}
+        <br></br>
         <div className="collaboration-link-container">
           <button type="button" onClick={this.getLink.bind(this)}>
             Generate Link 🖇️
           </button>
         </div>
         <br />
-
         <button type="button" onClick={this.undo.bind(this)}>
           Undo
         </button>
-
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" onClick={this.clear.bind(this)}>
+          Clear Canvas
+        </button>
         <canvas
           id="canvas"
           width={window.innerWidth}
