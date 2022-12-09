@@ -38,7 +38,7 @@ const init = async () => {
         //send data to other connections
         connections.map((con) => {
           if (con.id !== socket.id) {
-            socket.to(data.room).emit("canvasData", data.image);
+            socket.to(data.room).emit("canvasData", data);
             console.log("sending cavas data");
           }
         });

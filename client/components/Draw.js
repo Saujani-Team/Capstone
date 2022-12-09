@@ -27,28 +27,9 @@ class Draw extends React.Component {
 
           root.isDrawing = false;
         };
-        image.src = data;
+        image.src = data.image;
       }, 200);
     });
-
-    this.socket.emit(
-      "joinroom",
-      { room: window.location.pathname },
-      //load drawings history
-      function (ack) {
-        for (let i = 0; i < ack.history.length; i++) {
-          if (ack.history[i].room === window.location.pathname) {
-            var image = new Image();
-            var canvas = document.querySelector("#canvas");
-            var ctx = canvas.getContext("2d");
-            image.onload = function () {
-              ctx.drawImage(image, 0, 0);
-            };
-            image.src = ack.history[i].image;
-          }
-        }
-      }
-    );
 
     this.socket.emit(
       "joinroom",
@@ -72,7 +53,6 @@ class Draw extends React.Component {
 
   componentDidMount() {
     this.draw();
-    this.draw();
   }
 
   componentDidUpdate(prevProps) {
@@ -86,15 +66,12 @@ class Draw extends React.Component {
   }
 
   draw() {
-    // add local storage
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
 
-
     var hasInput = false;
     var inputFont = "14px sans-serif";
-    var root = this;
     var root = this;
 
     var sketch = document.querySelector("#sketch");
@@ -108,39 +85,6 @@ class Draw extends React.Component {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     window.addEventListener("resize", resizeCanvas, false);
-
-    // Set up group drawings on local storage:
-    var imageData = canvas.toDataURL("img/png");
-    let uuid = window.location.pathname.slice(6);
-    this.props.getDrawing(uuid).then(() => {
-      if (this.props.drawing.group) {
-        let storedGroupDrawings = JSON.parse(
-          window.localStorage.getItem("groupDrawings")
-        );
-        if (storedGroupDrawings) {
-          let matchingDrawing = storedGroupDrawings.find(
-            (element) => element.uuid === uuid
-          );
-          if (matchingDrawing) {
-            // this group drawing is already set on local storage
-          } else {
-            // "add this group drawing to local storage without modifying current group drawings array on local storage"
-            let drawingsArray = [...storedGroupDrawings, { uuid, imageData }];
-            window.localStorage.setItem(
-              "groupDrawings",
-              JSON.stringify(drawingsArray)
-            );
-          }
-        } else {
-          // add group drawings object to local storage
-          let drawingsArray = [{ uuid, imageData }];
-          window.localStorage.setItem(
-            "groupDrawings",
-            JSON.stringify(drawingsArray)
-          );
-        }
-      }
-    });
 
     function resizeCanvas() {
       //store current drawings
@@ -162,16 +106,7 @@ class Draw extends React.Component {
     function drawOnCanvas() {
       var mouse = { x: 0, y: 0 };
       var last_mouse = { x: 0, y: 0 };
-    function drawOnCanvas() {
-      var mouse = { x: 0, y: 0 };
-      var last_mouse = { x: 0, y: 0 };
 
-      /* Mouse Capturing Work */
-      canvas.addEventListener(
-        "mousemove",
-        function (e) {
-          last_mouse.x = mouse.x;
-          last_mouse.y = mouse.y;
       /* Mouse Capturing Work */
       canvas.addEventListener(
         "mousemove",
@@ -184,17 +119,7 @@ class Draw extends React.Component {
         },
         false
       );
-          mouse.x = e.pageX - this.offsetLeft;
-          mouse.y = e.pageY - this.offsetTop;
-        },
-        false
-      );
 
-      /* Drawing on Paint App */
-      ctx.lineWidth = root.props.size;
-      ctx.lineJoin = "round";
-      ctx.lineCap = "round";
-      ctx.strokeStyle = root.props.color;
       /* Drawing on Paint App */
       ctx.lineWidth = root.props.size;
       ctx.lineJoin = "round";
@@ -206,14 +131,7 @@ class Draw extends React.Component {
         function (e) {
           canvas.addEventListener("mousemove", onPaint, false);
         },
-      canvas.addEventListener(
-        "mousedown",
-        function (e) {
-          canvas.addEventListener("mousemove", onPaint, false);
-        },
 
-        false
-      );
         false
       );
 
@@ -224,25 +142,7 @@ class Draw extends React.Component {
         },
         false
       );
-      canvas.addEventListener(
-        "mouseup",
-        function () {
-          canvas.removeEventListener("mousemove", onPaint, false);
-        },
-        false
-      );
 
-      canvas.addEventListener("click", function (e) {
-        if (hasInput) return;
-        addText(e);
-      });
-
-      // var root = this;
-      var onPaint = function () {
-        if (root.props.tool === "eraser") {
-          // ctx.globalCompositeOperation = "destination-out";
-          ctx.strokeStyle = "white";
-        }
       canvas.addEventListener("click", function (e) {
         if (hasInput) return;
         addText(e);
@@ -264,29 +164,7 @@ class Draw extends React.Component {
         }
         socketemit();
       };
-        if (root.props.tool === "brush" || root.props.tool === "eraser") {
-          ctx.beginPath();
-          ctx.moveTo(last_mouse.x, last_mouse.y);
-          ctx.lineTo(mouse.x, mouse.y);
-          ctx.closePath();
-          ctx.stroke();
-        }
-        socketemit();
-      };
 
-      // handler for input box
-      function handleEnter(e) {
-        var keyCode = e.keyCode;
-        if (keyCode === 13) {
-          drawText(
-            this.value,
-            parseInt(this.style.left, 10),
-            parseInt(this.style.top, 10) - canvas.getBoundingClientRect().top
-          );
-          sketch.removeChild(this);
-          hasInput = false;
-        }
-      }
       // handler for input box
       function handleEnter(e) {
         var keyCode = e.keyCode;
@@ -335,61 +213,16 @@ class Draw extends React.Component {
             image: base64ImageData,
             room: window.location.pathname,
           });
-
-          // Update local storage for single user:
           window.localStorage.setItem("liveDrawing", base64ImageData);
           window.localStorage.setItem(
             "liveDrawingUUID",
             window.location.pathname.slice(6)
           );
-
-          // Update local storage for group drawings:
-          // let uuid = window.location.pathname.slice(6);
-          // let storedDrawing = window.localStorage.getItem("liveDrawing");
-          // let storedUUID = window.localStorage.getItem("liveDrawingUUID");
-          // if (storedDrawing) {
-          //   if (storedUUID === uuid) {
-          //     window.localStorage.setItem("liveDrawing", base64ImageData);
-          //     window.localStorage.setItem("liveDrawingUUID", uuid);
-          //   } else {
-          //     let groupDrawings = window.localStorage.getItem("groupDrawings");
-          //     if (groupDrawings) {
-          //       // add to group drawings object
-          //       window.localStorage.setItem(
-          //         "groupDrawing",
-          //         JSON.stringify(
-          //           JSON.stringify([
-          //             ...groupDrawings,
-          //             { uuid, base64ImageData },
-          //           ])
-          //         )
-          //       );
-          //     } else {
-          //       // add group drawings object to local storage
-          //       window.localStorage.setItem(
-          //         "groupDrawings",
-          //         JSON.stringify({
-          //           uuid,
-          //           base64ImageData,
-          //         })
-          //       );
-          //     }
-          //   }
-          // }
-          // else {
-          //   window.localStorage.setItem("liveDrawing", base64ImageData);
-          //   window.localStorage.setItem("liveDrawingUUID", uuid);
-          // }
-
-          // );
         }, 1000);
       }
     }
   }
 
-  save(evt) {
-    evt.preventDefault();
-    let drawingUUID = window.location.pathname.slice(6);
   save(evt) {
     evt.preventDefault();
     let drawingUUID = window.location.pathname.slice(6);
@@ -414,30 +247,9 @@ class Draw extends React.Component {
         });
       }
     });
-    this.props.getDrawing(drawingUUID).then(() => {
-      let currentDrawing = {
-        id: this.props.drawing.id,
-        userId: this.props.auth.id,
-        imageUrl: imageDataUrl,
-        status: "saved",
-      };
-      this.props.updateDrawing(currentDrawing);
-    });
-  }
-
-  getLink() {
-    let link = window.location.href;
-    navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-      if (result.state === "granted" || result.state === "prompt") {
-        window.navigator.clipboard.writeText(link).then(() => {
-          window.alert(`Invite link copied link to clipboard ✅: ${link}`);
-        });
-      }
-    });
   }
 
   render() {
-    // console.log("render props", this.props);
     return (
       <div id="sketch">
         {this.props.isLoggedIn ? (
@@ -447,11 +259,6 @@ class Draw extends React.Component {
             </button>
           </div>
         ) : null}
-        <div className="collaboration-link-container">
-          <button type="button" onClick={this.getLink.bind(this)}>
-            Generate Link 🖇️
-          </button>
-        </div>
         <div className="collaboration-link-container">
           <button type="button" onClick={this.getLink.bind(this)}>
             Generate Link 🖇️
@@ -477,7 +284,6 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getDrawing: (uuid) => dispatch(getDrawing(uuid)),
     getDrawing: (uuid) => dispatch(getDrawing(uuid)),
     updateDrawing: (drawing) => dispatch(updateDrawing(drawing)),
   };

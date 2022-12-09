@@ -5,16 +5,42 @@ import { fetchUser } from "../store/user";
 import { Link } from "react-router-dom";
 import { deleteDrawing, createDrawing } from "../store/drawings";
 
-export class UserProfile extends React.Component {
-  // socket = io.connect("https://draw-your-face-off.onrender.com");
-  socket = io.connect("http://localhost:8080");
+// const socket = io.connect("https://draw-your-face-off.onrender.com");
+const socket = io.connect("http://localhost:8080");
+let imageData = {};
 
+export class UserProfile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { image: "" };
+    this.joinRoom.bind(this);
+    this.getData.bind(this);
+    this.setImage.bind(this);
   }
   componentDidMount() {
     this.props.loadUser(this.props.match.params.userId);
+  }
+
+  joinRoom(room) {
+    socket.emit("leaderJoinRoom", {
+      room: room,
+    });
+  }
+
+  setImage(data) {
+    this.setState({ image: data });
+    console.log("THIS IS STATE in setImage", this.state);
+  }
+
+  getData(uuid) {
+    socket.on("canvasData", function (data) {
+      let uuid = data.room.slice(6);
+      imageData[uuid] = data.image;
+      console.log("IMAGE>>>>>>>>>>", imageData);
+    });
+    // setTimeout(() => {
+    //   this.props.loadUser(this.props.match.params.userId);
+    // }, 3000);
   }
 
   render() {
@@ -121,20 +147,32 @@ export class UserProfile extends React.Component {
             >
               Create New Group
             </button>
+            <button
+              onClick={() => {
+                this.props.loadUser(this.props.match.params.userId);
+              }}
+            >
+              Refresh Group Images
+            </button>
             {drawings
               .filter((drawing) => drawing.group)
               .map((drawing) => {
-                this.socket.emit("leaderJoinRoom", {
-                  room: `/draw/${drawing.uuid}`,
-                });
-                this.socket.on("canvasData", function (data) {
-                  console.log("THIS IS THE DATA!", data);
-                  this.setState({ data });
-                  console.log("this is state", this.state);
-                });
+                let room = `/draw/${drawing.uuid}`;
+                this.joinRoom(room);
+                this.getData(drawing.uuid);
+
                 return (
                   <div key={drawing.id}>
-                    <img width="300" height="250" src="" />
+                    {console.log(
+                      "imageData in return",
+                      imageData[drawing.uuid]
+                    )}
+
+                    <img
+                      width="300"
+                      height="250"
+                      src={imageData[drawing.uuid]}
+                    />
                     <button
                       onClick={async () => {
                         navigator.permissions
