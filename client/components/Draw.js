@@ -3,21 +3,24 @@ import io from "socket.io-client";
 import { connect } from "react-redux";
 import { getDrawing, updateDrawing } from "../store/drawings";
 import auth from "../store/auth";
+
 class Draw extends React.Component {
   timeout;
   ctx;
-  isDrawing = false;
   // socket = io.connect("https://draw-your-face-off.onrender.com");
   socket = io.connect("http://localhost:8080");
 
+  //set up something to keep track of drawing steps
+  //needed for undo and redo
+  steps = [];
+
   constructor(props) {
     super(props);
+    let s = this.steps;
 
     this.socket.on("canvasData", function (data) {
       var root = this;
       var interval = setInterval(function () {
-        if (root.isDrawing) return;
-        root.isDrawing = true;
         clearInterval(interval);
         var image = new Image();
         var canvas = document.querySelector("#canvas");
@@ -26,6 +29,7 @@ class Draw extends React.Component {
           ctx.drawImage(image, 0, 0);
 
           root.isDrawing = false;
+          s.push(canvas.toDataURL());
         };
         image.src = data.image;
       }, 200);
@@ -41,16 +45,20 @@ class Draw extends React.Component {
       { room: window.location.pathname },
       //load drawings history
       function (ack) {
-        for (let i = 0; i < ack.history.length; i++) {
-          if (ack.history[i].room === window.location.pathname) {
-            var image = new Image();
-            var canvas = document.querySelector("#canvas");
-            var ctx = canvas.getContext("2d");
-            image.onload = function () {
-              ctx.drawImage(image, 0, 0);
-            };
-            image.src = ack.history[i].image;
-          }
+        var canvas = document.querySelector("#canvas");
+        var ctx = canvas.getContext("2d");
+        if (ack.history.length > 0) {
+          var image = new Image();
+
+          image.onload = function () {
+            ctx.drawImage(image, 0, 0);
+
+            while (s.length > 0) {
+              s.pop();
+            }
+            s.push(canvas.toDataURL());
+          };
+          image.src = ack.history[ack.history.length - 1];
         }
       }
     );
@@ -68,12 +76,52 @@ class Draw extends React.Component {
     if (prevProps.size !== this.props.size) {
       this.ctx.lineWidth = this.props.size;
     }
+    if (prevProps.tool !== this.props.tool) {
+      //some custome cursors for every tool except for text and line
+      if (prevProps.tool === "brush") {
+        document.querySelector("#canvas").classList.remove("brush");
+      }
+      if (prevProps.tool === "eraser") {
+        document.querySelector("#canvas").classList.remove("eraser");
+      }
+      if (
+        prevProps.tool === "rectangle" ||
+        prevProps.tool === "circle" ||
+        prevProps.tool === "star"
+      ) {
+        document.querySelector("#canvas").classList.remove("rainbow");
+      }
+      if (this.props.tool === "eraser") {
+        document.querySelector("#canvas").classList.add("eraser");
+      }
+      if (this.props.tool === "brush") {
+        document.querySelector("#canvas").classList.add("brush");
+      }
+      if (
+        this.props.tool === "rectangle" ||
+        this.props.tool === "circle" ||
+        this.props.tool === "star"
+      ) {
+        document.querySelector("#canvas").classList.add("rainbow");
+      }
+    }
+    var canvas = document.querySelector("#canvas");
+    var ctx = canvas.getContext("2d");
+
+    let temp = new Image();
+    temp.src = this.steps[this.steps.length - 1];
+    temp.onload = function () {
+      ctx.drawImage(temp, 0, 0);
+    };
   }
 
   draw() {
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
     var ctx = this.ctx;
+
+    //default cursor set to paint brush
+    canvas.classList.add("brush");
 
     var hasInput = false;
     var inputFont = "14px sans-serif";
@@ -83,36 +131,55 @@ class Draw extends React.Component {
     var sketch_style = getComputedStyle(sketch);
     canvas.width = parseInt(sketch_style.getPropertyValue("width"));
     canvas.height = parseInt(sketch_style.getPropertyValue("height"));
-    var W = canvas.width,
-      H = canvas.height;
+
     // set default background color of white
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    root.steps.push(canvas.toDataURL());
+
     window.addEventListener("resize", resizeCanvas, false);
 
     function resizeCanvas() {
-      //store current drawings
-      let temp = ctx.getImageData(0, 0, W, H);
-      //resize
-      canvas.width = parseInt(sketch_style.getPropertyValue("width"));
-      canvas.height = parseInt(sketch_style.getPropertyValue("height"));
-      // set default background color of white
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      //put previous drawings back
-      ctx.putImageData(temp, 0, 0);
+      let canvas = document.querySelector("#canvas");
+      let ctx = canvas.getContext("2d");
+      if (ctx.getImageData(0, 0, canvas.width, canvas.height)) {
+        //store current drawings if there is any
+        let temp = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        //resize
+        canvas.width = parseInt(sketch_style.getPropertyValue("width"));
+        canvas.height = parseInt(sketch_style.getPropertyValue("height"));
+        // set default background color of white
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        //put previous drawings back
+        ctx.putImageData(temp, 0, 0);
+      }
 
-      drawOnCanvas();
+      ctx.lineWidth = root.props.size;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.strokeStyle = root.props.color;
     }
 
     resizeCanvas();
 
-    function drawOnCanvas() {
-      var mouse = { x: 0, y: 0 };
-      var last_mouse = { x: 0, y: 0 };
+    initListeners();
+
+    function initListeners() {
+      let mouse = { x: 0, y: 0 };
+      let last_mouse = { x: 0, y: 0 };
+      let last_mouse2 = { x: 0, y: 0 }; //for drawing straight shapes
+      let mousedown = false; //for drawing straight shapes
+
+      //brush/line styles
+      ctx.lineWidth = root.props.size;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.strokeStyle = root.props.color;
 
       /* Mouse Capturing Work */
+      // mouse move
       canvas.addEventListener(
         "mousemove",
         function (e) {
@@ -124,39 +191,110 @@ class Draw extends React.Component {
         },
         false
       );
-
-      /* Drawing on Paint App */
-      ctx.lineWidth = root.props.size;
-      ctx.lineJoin = "round";
-      ctx.lineCap = "round";
-      ctx.strokeStyle = root.props.color;
-
+      //mouse down
       canvas.addEventListener(
         "mousedown",
         function (e) {
+          e.preventDefault();
           canvas.addEventListener("mousemove", onPaint, false);
+          last_mouse2.x = e.pageX - this.offsetLeft;
+          last_mouse2.y = e.pageY - this.offsetTop;
+          mousedown = true;
+          canvas.classList.add("mouseDown");
         },
 
         false
       );
-
+      //mouse up
       canvas.addEventListener(
         "mouseup",
         function () {
+          drawShapes();
           canvas.removeEventListener("mousemove", onPaint, false);
+
+          mousedown = false;
+          root.steps.push(canvas.toDataURL());
+          canvas.classList.remove("mouseDown");
         },
         false
       );
-
+      // single click
       canvas.addEventListener("click", function (e) {
+        e.preventDefault();
         if (hasInput) return;
         addText(e);
       });
 
-      // var root = this;
+      //draw shapes
+      var drawShapes = function () {
+        ctx.lineWidth = root.props.size;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.strokeStyle = root.props.color;
+
+        if (root.props.tool === "line" && mousedown) {
+          ctx.beginPath();
+          ctx.moveTo(last_mouse2.x, last_mouse2.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+
+        if (root.props.tool === "circle" && mousedown) {
+          ctx.beginPath();
+          let centerX = last_mouse2.x;
+          let centerY = last_mouse2.y;
+          let radius = Math.abs(mouse.x - last_mouse2.x) / 2;
+          ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+          ctx.stroke();
+        }
+
+        if (root.props.tool === "rectangle" && mousedown) {
+          ctx.beginPath();
+          ctx.rect(
+            last_mouse2.x,
+            last_mouse2.y,
+            Math.abs(mouse.x - last_mouse2.x),
+            Math.abs(mouse.y - last_mouse2.y)
+          );
+          ctx.stroke();
+        }
+
+        if (root.props.tool === "star" && mousedown) {
+          ctx.beginPath();
+          let centerX = last_mouse2.x;
+          let centerY = last_mouse2.y;
+          let radius = Math.abs(mouse.x - last_mouse2.x) * 1.25;
+          let N = 5;
+          ctx.moveTo(centerX + radius, centerY);
+          for (var i = 1; i <= N * 2; i++) {
+            if (i % 2 == 0) {
+              var theta = (i * (Math.PI * 2)) / (N * 2);
+              var x = centerX + radius * Math.cos(theta);
+              var y = centerY + radius * Math.sin(theta);
+            } else {
+              var theta = (i * (Math.PI * 2)) / (N * 2);
+              var x = centerX + (radius / 2) * Math.cos(theta);
+              var y = centerY + (radius / 2) * Math.sin(theta);
+            }
+
+            ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.stroke();
+          ctx.fillStyle = ctx.strokeStyle;
+          ctx.fill();
+        }
+
+        socketemit();
+      };
+
       var onPaint = function () {
+        ctx.lineWidth = root.props.size;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.strokeStyle = root.props.color;
+
         if (root.props.tool === "eraser") {
-          // ctx.globalCompositeOperation = "destination-out";
           ctx.strokeStyle = "white";
         }
 
@@ -208,12 +346,12 @@ class Draw extends React.Component {
       };
 
       function socketemit() {
-        // emit canvas data every second
+        // emit canvas data every half second
         if (root.timeout != undefined) clearTimeout(root.timeout);
 
         root.timeout = setTimeout(function () {
           var base64ImageData = canvas.toDataURL("img/png");
-          //root.socket.emit("canvasData", base64ImageData);
+
           root.socket.emit("sendcanvas", {
             image: base64ImageData,
             room: window.location.pathname,
@@ -223,13 +361,12 @@ class Draw extends React.Component {
             "liveDrawingUUID",
             window.location.pathname.slice(6)
           );
-        }, 1000);
+        }, 500);
       }
     }
   }
 
   save(evt) {
-    evt.preventDefault();
     let drawingUUID = window.location.pathname.slice(6);
     let imageDataUrl = canvas.toDataURL("img/png");
     this.props.getDrawing(drawingUUID).then(() => {
@@ -254,21 +391,80 @@ class Draw extends React.Component {
     });
   }
 
+  undo() {
+    const temp = new Image();
+    var canvas = document.querySelector("#canvas");
+    var ctx = canvas.getContext("2d");
+    //make sure the steps array is not going to empty after the pop
+    if (this.steps.length > 1) {
+      this.steps.pop();
+
+      temp.src = this.steps[this.steps.length - 1];
+      temp.onload = function () {
+        ctx.drawImage(temp, 0, 0);
+      };
+      window.localStorage.setItem("liveDrawing", canvas.toDataURL());
+    }
+
+    // emit canvas data every half second
+    if (this.timeout != undefined) clearTimeout(this.timeout);
+
+    var socket = this.socket;
+    this.timeout = setTimeout(function () {
+      var base64ImageData = canvas.toDataURL("img/png");
+      socket.emit("sendcanvas", {
+        image: base64ImageData,
+        room: window.location.pathname,
+      });
+    }, 500);
+  }
+  clear() {
+    var canvas = document.querySelector("#canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    while (this.steps.length > 0) {
+      this.steps.pop();
+    }
+    this.steps.push(canvas.toDataURL());
+    window.localStorage.setItem("liveDrawing", canvas.toDataURL());
+    // emit canvas data every half second
+    if (this.timeout != undefined) clearTimeout(this.timeout);
+
+    var socket = this.socket;
+    this.timeout = setTimeout(function () {
+      var base64ImageData = canvas.toDataURL("img/png");
+      socket.emit("sendcanvas", {
+        image: base64ImageData,
+        room: window.location.pathname,
+      });
+    }, 500);
+  }
   render() {
     return (
       <div id="sketch">
         {this.props.isLoggedIn ? (
           <div className="save-container">
             <button type="button" onClick={this.save.bind(this)}>
-              Save Drawing
+              Save Drawing 🖼
             </button>
           </div>
         ) : null}
+        <br></br>
         <div className="collaboration-link-container">
           <button type="button" onClick={this.getLink.bind(this)}>
             Generate Link 🖇️
           </button>
         </div>
+        <br />
+        <button type="button" onClick={this.undo.bind(this)}>
+          Undo
+        </button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" onClick={this.clear.bind(this)}>
+          Clear Canvas
+        </button>
         <div className="message"></div>
         <canvas
           id="canvas"

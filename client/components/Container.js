@@ -13,49 +13,62 @@ class Container extends React.Component {
   }
 
   changeColor(params) {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       color: params.target.value,
-      tool: "brush",
     });
   }
 
   changeSize(params) {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       size: params.target.value,
     });
   }
 
   erase() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "eraser",
     });
   }
 
   text() {
+    document.querySelector("#txt-btn").classList.add("selected");
     this.setState({
       tool: "text",
     });
   }
+  paint() {
+    document.querySelector("#txt-btn").classList.remove("selected");
+    this.setState({
+      tool: "brush",
+    });
+  }
 
   line() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "line",
     });
   }
 
   rectangle() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "rectangle",
     });
   }
 
   circle() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "circle",
     });
   }
 
   star() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "star",
     });
@@ -66,7 +79,7 @@ class Container extends React.Component {
       <div className="container">
         <div className="tools-section">
           <div className="color-picker-container">
-            Select Brush Color : &nbsp;
+            Color : &nbsp;
             <input
               type="color"
               value={this.state.color}
@@ -75,36 +88,73 @@ class Container extends React.Component {
           </div>
 
           <div className="brushsize-container">
-            Select Brush/Eraser Size : &nbsp;
-            <select
+            Size : &nbsp;
+            <input
+              id="size"
+              type="range"
+              min="1"
+              max="50"
+              step="5"
               value={this.state.size}
               onChange={this.changeSize.bind(this)}
+            ></input>
+          </div>
+
+          <div className="btn-container">
+            <button
+              type="button"
+              className="button-2"
+              autoFocus
+              onClick={this.paint.bind(this)}
             >
-              <option> 5 </option>
-              <option> 10 </option>
-              <option> 15 </option>
-              <option> 20 </option>
-              <option> 25 </option>
-              <option> 30 </option>
-            </select>
-          </div>
-          <div className="shape-container">
-            Select a Shape:
-            <select name="shape" id="shape">
-              <option value="line">Line</option>
-              <option value="rectangle">Rectangle</option>
-              <option value="circle">Circle</option>
-              <option value="star">Star</option>
-            </select>
-          </div>
-          <div className="eraser-container">
-            <button type="button" onClick={this.erase.bind(this)}>
+              Paint
+            </button>
+
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.erase.bind(this)}
+            >
               Eraser
             </button>
-          </div>
-          <div className="text-container">
-            <button type="button" onClick={this.text.bind(this)}>
+
+            <button
+              type="button"
+              className="button-2"
+              id="txt-btn"
+              onClick={this.text.bind(this)}
+            >
               Add Text
+            </button>
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.line.bind(this)}
+            >
+              Line
+            </button>
+
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.circle.bind(this)}
+            >
+              Circle
+            </button>
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.rectangle.bind(this)}
+            >
+              Rectangle
+            </button>
+
+            <button
+              type="button"
+              className="button-2"
+              onClick={this.star.bind(this)}
+            >
+              ⭐
             </button>
           </div>
         </div>
