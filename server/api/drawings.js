@@ -33,7 +33,11 @@ router.get("/:drawingUUID", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     let newUUID = uuid();
-    const drawing = await Drawing.create({ uuid: newUUID });
+    const drawing = await Drawing.create({
+      uuid: newUUID,
+      userId: req.body.userId,
+      group: req.body.group,
+    });
     res.status(201).send(drawing);
   } catch (error) {
     next(error);

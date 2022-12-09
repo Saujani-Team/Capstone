@@ -48,12 +48,15 @@ export const getDrawing = (uuid) => {
   };
 };
 
-export const createDrawing = () => {
+export const createDrawing = (params) => {
   return async (dispatch) => {
     try {
-      const { data: newDrawing } = await axios.post(`/api/drawings`);
+      const { data: newDrawing } = await axios.post(`/api/drawings`, params);
       dispatch(_createDrawing(newDrawing));
-      history.push(`/draw/${newDrawing.uuid}`);
+      if (params) {
+      } else {
+        history.push(`/draw/${newDrawing.uuid}`);
+      }
     } catch (error) {
       console.error(error);
     }
