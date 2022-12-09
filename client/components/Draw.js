@@ -7,9 +7,8 @@ import auth from "../store/auth";
 class Draw extends React.Component {
   timeout;
   ctx;
-  isDrawing = false;
-  // socket = io.connect("https://draw-your-face-off.onrender.com");
-  socket = io.connect("http://localhost:8080");
+  socket = io.connect("https://draw-your-face-off.onrender.com");
+  // socket = io.connect("http://localhost:8080");
 
   //set up something to keep track of drawing steps
   //needed for undo and redo
@@ -137,9 +136,10 @@ class Draw extends React.Component {
     window.addEventListener("resize", resizeCanvas, false);
 
     function resizeCanvas() {
-      let canvas = document.querySelector("#canvas");
-      let ctx = canvas.getContext("2d");
-      if (ctx.getImageData(0, 0, canvas.width, canvas.height)) {
+      //let canvas = document.querySelector("#canvas");
+      if (canvas.getContext("2d")) {
+        let ctx = canvas.getContext("2d");
+        ctx.getImageData(0, 0, canvas.width, canvas.height);
         //store current drawings if there is any
         let temp = ctx.getImageData(0, 0, canvas.width, canvas.height);
         //resize
@@ -439,33 +439,48 @@ class Draw extends React.Component {
   }
   render() {
     return (
-      <div id="sketch">
-        {this.props.isLoggedIn ? (
-          <div className="save-container">
-            <button type="button" onClick={this.save.bind(this)}>
-              Save Drawing 🖼
-            </button>
-          </div>
-        ) : null}
-        <br></br>
-        <div className="collaboration-link-container">
-          <button type="button" onClick={this.getLink.bind(this)}>
+      <div className="tools-section">
+        <div className="btn-container">
+          <button
+            type="button"
+            className="button-2"
+            onClick={this.undo.bind(this)}
+          >
+            Undo
+          </button>
+          <button
+            type="button"
+            className="button-2"
+            onClick={this.clear.bind(this)}
+          >
+            Clear Canvas
+          </button>
+
+          <button
+            type="button"
+            className="button-1"
+            onClick={this.getLink.bind(this)}
+          >
             Generate Link 🖇️
           </button>
+          {this.props.isLoggedIn ? (
+            <button
+              type="button"
+              className="button-1"
+              onClick={this.save.bind(this)}
+            >
+              Save Drawing 🖼
+            </button>
+          ) : null}
         </div>
-        <br />
-        <button type="button" onClick={this.undo.bind(this)}>
-          Undo
-        </button>
-        &nbsp;&nbsp;&nbsp;
-        <button type="button" onClick={this.clear.bind(this)}>
-          Clear Canvas
-        </button>
-        <canvas
-          id="canvas"
-          width={window.innerWidth}
-          height={window.innerHeight}
-        ></canvas>
+
+        <div id="sketch">
+          <canvas
+            id="canvas"
+            width={window.innerWidth}
+            height={window.innerHeight}
+          ></canvas>
+        </div>
       </div>
     );
   }
