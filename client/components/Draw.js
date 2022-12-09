@@ -481,8 +481,8 @@ class Draw extends React.Component {
           ) : null}
         </div>
 
+        <div className="message"></div>
         <div id="sketch">
-          <div className="message"></div>
           <canvas
             id="canvas"
             width={window.innerWidth}
