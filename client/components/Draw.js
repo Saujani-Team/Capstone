@@ -43,22 +43,21 @@ class Draw extends React.Component {
       { room: window.location.pathname },
       //load drawings history
       function (ack) {
+        console.log(ack);
         var canvas = document.querySelector("#canvas");
         var ctx = canvas.getContext("2d");
-        for (let i = 0; i < ack.history.length; i++) {
-          if (ack.history[i].room === window.location.pathname) {
-            var image = new Image();
+        if (ack.history.length > 0) {
+          var image = new Image();
 
-            image.onload = function () {
-              ctx.drawImage(image, 0, 0);
+          image.onload = function () {
+            ctx.drawImage(image, 0, 0);
 
-              while (s.length > 0) {
-                s.pop();
-              }
-              s.push(canvas.toDataURL());
-            };
-            image.src = ack.history[i].image;
-          }
+            while (s.length > 0) {
+              s.pop();
+            }
+            s.push(canvas.toDataURL());
+          };
+          image.src = ack.history[ack.history.length - 1];
         }
       }
     );
@@ -225,7 +224,7 @@ class Draw extends React.Component {
           ctx.beginPath();
           let centerX = last_mouse2.x;
           let centerY = last_mouse2.y;
-          let radius = Math.abs(mouse.x - last_mouse2.x);
+          let radius = Math.abs(mouse.x - last_mouse2.x) / 2;
           ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
           ctx.stroke();
         }

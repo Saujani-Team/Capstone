@@ -16,7 +16,7 @@ const init = async () => {
     }
 
     let connections = [];
-    let history = [];
+    let history = new Map();
     io.on("connection", (socket) => {
       connections.push(socket);
       console.log(`New WS connection...${socket.id}`);
@@ -24,12 +24,25 @@ const init = async () => {
       socket.on("joinroom", function (data, ack) {
         console.log(`${socket.id} joined ${data.room}`);
         socket.join(data.room);
-        ack({ history }); //send drawings history
+        if (history.has(data.room))
+          ack({
+            history: history.get(data.room),
+          });
+        //send drawings history for specific room
+        // might be able to to just sent the last element to save more time
+        else ack({ history: [] });
       });
 
       socket.on("sendcanvas", (data) => {
         //store drawings history
-        history.push(data);
+        let key = data.room;
+        if (history.has(key)) {
+          history.get(key).push(data.image);
+        } else {
+          history.set(key, [data.image]);
+        }
+        console.log("key", key);
+        console.log("history", history.get(key).length);
         //send data to other connections
         connections.map((con) => {
           if (con.id !== socket.id) {
