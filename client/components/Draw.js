@@ -7,8 +7,8 @@ import auth from "../store/auth";
 class Draw extends React.Component {
   timeout;
   ctx;
-  // socket = io.connect("https://draw-your-face-off.onrender.com");
-  socket = io.connect("http://localhost:8080");
+  socket = io.connect("https://draw-your-face-off.onrender.com");
+  // socket = io.connect("http://localhost:8080");
 
   //set up something to keep track of drawing steps
   //needed for undo and redo
@@ -310,11 +310,13 @@ class Draw extends React.Component {
         if (keyCode === 13) {
           drawText(
             this.value,
-            parseInt(this.style.left, 10),
+            parseInt(this.style.left, 10) - canvas.getBoundingClientRect().left,
             parseInt(this.style.top, 10) - canvas.getBoundingClientRect().top
           );
           sketch.removeChild(this);
           hasInput = false;
+
+          root.steps.push(canvas.toDataURL());
         }
       }
 
