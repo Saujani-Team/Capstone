@@ -7,7 +7,6 @@ import auth from "../store/auth";
 class Draw extends React.Component {
   timeout;
   ctx;
-  //isDrawing = false;
   socket = io.connect("https://draw-your-face-off.onrender.com");
   // socket = io.connect("http://localhost:8080");
 
@@ -22,8 +21,6 @@ class Draw extends React.Component {
     this.socket.on("canvasData", function (data) {
       var root = this;
       var interval = setInterval(function () {
-        //if (root.isDrawing) return;
-        //root.isDrawing = true;
         clearInterval(interval);
         var image = new Image();
         var canvas = document.querySelector("#canvas");
@@ -43,7 +40,6 @@ class Draw extends React.Component {
       { room: window.location.pathname },
       //load drawings history
       function (ack) {
-        console.log(ack);
         var canvas = document.querySelector("#canvas");
         var ctx = canvas.getContext("2d");
         if (ack.history.length > 0) {
@@ -104,13 +100,23 @@ class Draw extends React.Component {
         document.querySelector("#canvas").classList.add("rainbow");
       }
     }
+    var canvas = document.querySelector("#canvas");
+    var ctx = canvas.getContext("2d");
+
+    let temp = new Image();
+    temp.src = this.steps[this.steps.length - 1];
+    temp.onload = function () {
+      ctx.drawImage(temp, 0, 0);
+    };
   }
 
   draw() {
     var canvas = document.querySelector("#canvas");
     this.ctx = canvas.getContext("2d");
-    canvas.classList.add("brush"); //default cursor set to paint brush
     var ctx = this.ctx;
+
+    //default cursor set to paint brush
+    canvas.classList.add("brush");
 
     var hasInput = false;
     var inputFont = "14px sans-serif";
@@ -120,8 +126,7 @@ class Draw extends React.Component {
     var sketch_style = getComputedStyle(sketch);
     canvas.width = parseInt(sketch_style.getPropertyValue("width"));
     canvas.height = parseInt(sketch_style.getPropertyValue("height"));
-    var W = canvas.width,
-      H = canvas.height;
+
     // set default background color of white
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -131,16 +136,20 @@ class Draw extends React.Component {
     window.addEventListener("resize", resizeCanvas, false);
 
     function resizeCanvas() {
-      //store current drawings
-      let temp = ctx.getImageData(0, 0, W, H);
-      //resize
-      canvas.width = parseInt(sketch_style.getPropertyValue("width"));
-      canvas.height = parseInt(sketch_style.getPropertyValue("height"));
-      // set default background color of white
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      //put previous drawings back
-      ctx.putImageData(temp, 0, 0);
+      let canvas = document.querySelector("#canvas");
+      let ctx = canvas.getContext("2d");
+      if (ctx.getImageData(0, 0, canvas.width, canvas.height)) {
+        //store current drawings if there is any
+        let temp = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        //resize
+        canvas.width = parseInt(sketch_style.getPropertyValue("width"));
+        canvas.height = parseInt(sketch_style.getPropertyValue("height"));
+        // set default background color of white
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        //put previous drawings back
+        ctx.putImageData(temp, 0, 0);
+      }
 
       ctx.lineWidth = root.props.size;
       ctx.lineJoin = "round";
@@ -213,6 +222,11 @@ class Draw extends React.Component {
 
       //draw shapes
       var drawShapes = function () {
+        ctx.lineWidth = root.props.size;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.strokeStyle = root.props.color;
+
         if (root.props.tool === "line" && mousedown) {
           ctx.beginPath();
           ctx.moveTo(last_mouse2.x, last_mouse2.y);
@@ -270,10 +284,13 @@ class Draw extends React.Component {
       };
 
       var onPaint = function () {
+        ctx.lineWidth = root.props.size;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.strokeStyle = root.props.color;
+
         if (root.props.tool === "eraser") {
           ctx.strokeStyle = "white";
-        } else {
-          ctx.strokeStyle = root.props.color;
         }
 
         if (root.props.tool === "brush" || root.props.tool === "eraser") {
@@ -345,7 +362,6 @@ class Draw extends React.Component {
   }
 
   save(evt) {
-    evt.preventDefault();
     let drawingUUID = window.location.pathname.slice(6);
     let imageDataUrl = canvas.toDataURL("img/png");
     this.props.getDrawing(drawingUUID).then(() => {

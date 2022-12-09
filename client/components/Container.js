@@ -154,7 +154,7 @@ class Container extends React.Component {
               className="button-2"
               onClick={this.star.bind(this)}
             >
-              Star
+              ⭐
             </button>
           </div>
         </div>
