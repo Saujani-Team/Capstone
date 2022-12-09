@@ -33,6 +33,11 @@ const init = async () => {
         else ack({ history: [] });
       });
 
+      socket.on("leaderJoinRoom", function (data) {
+        console.log(`${socket.id} joined ${data.room}`);
+        socket.join(data.room);
+      });
+
       socket.on("sendcanvas", (data) => {
         //store drawings history
         let key = data.room;
@@ -45,9 +50,13 @@ const init = async () => {
         //send data to other connections
         connections.map((con) => {
           if (con.id !== socket.id) {
-            socket.to(data.room).emit("canvasData", data.image);
+            socket.to(data.room).emit("canvasData", data);
           }
         });
+      });
+
+      socket.on("sendMessage", (data) => {
+        socket.to(data.room).emit("receiveMessage", data);
       });
 
       socket.on("disconnect", () => {

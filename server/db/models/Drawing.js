@@ -15,4 +15,8 @@ module.exports = db.define("drawing", {
     type: DataTypes.ENUM("live", "saved", "archived"),
     defaultValue: "live",
   },
+  group: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });

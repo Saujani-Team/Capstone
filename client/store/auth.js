@@ -47,9 +47,7 @@ export const authenticate =
   };
 
 export const logout = () => {
-  window.localStorage.removeItem(TOKEN);
-  window.localStorage.removeItem("liveDrawingUUID");
-  window.localStorage.removeItem("liveDrawing");
+  window.localStorage.clear();
   history.push("/login");
   return {
     type: SET_AUTH,

@@ -31,8 +31,13 @@ class Draw extends React.Component {
           root.isDrawing = false;
           s.push(canvas.toDataURL());
         };
-        image.src = data;
+        image.src = data.image;
       }, 200);
+    });
+
+    this.socket.on("receiveMessage", function (data) {
+      let messageElement = document.querySelector(".message");
+      messageElement.innerHTML = data.message;
     });
 
     this.socket.emit(
@@ -476,6 +481,7 @@ class Draw extends React.Component {
           ) : null}
         </div>
 
+        <div className="message"></div>
         <div id="sketch">
           <canvas
             id="canvas"
