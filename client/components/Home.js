@@ -11,41 +11,17 @@ export const Home = (props) => {
     <div>
       <Carousel className="carousel" variant="dark">
         <Carousel.Item>
-          <img className="d-inline p-2" src="/my-drawing.png" height={300} />
-          <Carousel.Caption>
-            <h3>Drawing #1</h3>
-            <p>Created by: Ilana Bye</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
           <img
             className="d-inline p-2"
-            src="/my-drawing (2).png"
+            src="/my-drawing (9).png"
             height={300}
           />
           <Carousel.Caption>
-            <h3>Drawing #2</h3>
-            <p>Created by: Ms. Lynn's Class</p>
+            <h3>Water Cycle</h3>
+            <p>Created by: Ms. Yondo's Class</p>
           </Carousel.Caption>
         </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className="d-inline p-2"
-            src="/my-drawing (4).png"
-            height={300}
-          />
-          <Carousel.Caption>
-            <h3>Drawing #3</h3>
-            <p>Created by: Jett Bye and his Dad</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img className="d-inline p-2" src="/my-drawing_3.png" height={300} />
-          <Carousel.Caption>
-            <h3>Drawing #4</h3>
-            <p>Created by: Allie Wang and Friends</p>
-          </Carousel.Caption>
-        </Carousel.Item>
+
         <Carousel.Item>
           <img
             className="d-inline p-2"
@@ -53,10 +29,39 @@ export const Home = (props) => {
             height={300}
           />
           <Carousel.Caption>
-            <h3>Drawing #5</h3>
+            <h3>Beach</h3>
             <p>Created by: Ms. Qiu's Class</p>
           </Carousel.Caption>
         </Carousel.Item>
+
+        <Carousel.Item>
+          <img
+            className="d-inline p-2"
+            src="/my-drawing (4).png"
+            height={300}
+          />
+          <Carousel.Caption>
+            <h3>Freestyle</h3>
+            <p>Created by: Jett Bye and his Dad</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
+        <Carousel.Item>
+          <img className="d-inline p-2" src="/my-drawing_3.png" height={300} />
+          <Carousel.Caption>
+            <h3>Dancing on a Volcano</h3>
+            <p>Created by: Allie Wang and Friends</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
+        <Carousel.Item>
+          <img className="d-inline p-2" src="/my-drawing.png" height={300} />
+          <Carousel.Caption>
+            <h3>Draw Your Face</h3>
+            <p>Created by: Ilana Bye</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
         <Carousel.Item>
           <img
             className="d-inline p-2"
@@ -64,8 +69,52 @@ export const Home = (props) => {
             height={300}
           />
           <Carousel.Caption>
-            <h3>Drawing #6</h3>
+            <h3>Happy Family</h3>
             <p>Created by: The Coopster Family</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
+        <Carousel.Item>
+          <img className="d-inline p-2" src="/siyun_image.png" height={300} />
+          <Carousel.Caption>
+            <h3>Hoppy Bunny</h3>
+            <p>Created by: Siyun</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
+        <Carousel.Item>
+          <img
+            className="d-inline p-2"
+            src="/my-drawing (10).png"
+            height={300}
+          />
+          <Carousel.Caption>
+            <h3>Flower</h3>
+            <p>Created by: Science Class</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
+        <Carousel.Item>
+          <img
+            className="d-inline p-2"
+            src="/my-drawing (10).png"
+            height={300}
+          />
+          <Carousel.Caption>
+            <h3>Flower</h3>
+            <p>Created by: Science Class</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
+        <Carousel.Item>
+          <img
+            className="d-inline p-2"
+            src="/my-drawing (8).png"
+            height={300}
+          />
+          <Carousel.Caption>
+            <h3>Abstract Shapes</h3>
+            <p>Created by: Art Club</p>
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
