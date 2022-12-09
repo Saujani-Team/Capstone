@@ -34,10 +34,11 @@ const AuthForm = (props) => {
             />
           </Form.Group>
         </Row>
-
-        <Button as={Col} variant="secondary" type="submit">
-          {displayName}
-        </Button>
+        <Col>
+          <Button variant="secondary" type="submit">
+            {displayName}
+          </Button>
+        </Col>
 
         {error && error.response && <div> {error.response.data} </div>}
       </Form>
@@ -88,10 +89,11 @@ const AuthForm = (props) => {
             </Form.Text>
           </Form.Group>
         </Row>
-
-        <Button as={Col} variant="secondary" type="submit">
-          {displayName}
-        </Button>
+        <Col>
+          <Button variant="secondary" type="submit">
+            {displayName}
+          </Button>
+        </Col>
 
         {error && error.response && <div> {error.response.data} </div>}
       </Form>
