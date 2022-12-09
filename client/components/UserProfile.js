@@ -8,7 +8,6 @@ import { deleteDrawing, createDrawing } from "../store/drawings";
 // const socket = io.connect("https://draw-your-face-off.onrender.com");
 const socket = io.connect("http://localhost:8080");
 let imageData = {};
-let messages = {};
 
 export class UserProfile extends React.Component {
   constructor(props) {
@@ -53,9 +52,6 @@ export class UserProfile extends React.Component {
       imageData[uuid] = data.image;
       console.log("IMAGE>>>>>>>>>>", imageData);
     });
-    // setTimeout(() => {
-    //   this.props.loadUser(this.props.match.params.userId);
-    // }, 3000);
   }
 
   componentDidMount() {
