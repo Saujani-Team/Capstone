@@ -39,9 +39,13 @@ const init = async () => {
         connections.map((con) => {
           if (con.id !== socket.id) {
             socket.to(data.room).emit("canvasData", data);
-            console.log("sending cavas data");
           }
         });
+      });
+
+      socket.on("sendMessage", (data) => {
+        console.log("message data", data);
+        socket.to(data.room).emit("receiveMessage", data);
       });
 
       socket.on("disconnect", () => {

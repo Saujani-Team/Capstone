@@ -31,6 +31,11 @@ class Draw extends React.Component {
       }, 200);
     });
 
+    this.socket.on("receiveMessage", function (data) {
+      let messageElement = document.querySelector(".message");
+      messageElement.innerHTML = data.message;
+    });
+
     this.socket.emit(
       "joinroom",
       { room: window.location.pathname },
@@ -264,6 +269,7 @@ class Draw extends React.Component {
             Generate Link 🖇️
           </button>
         </div>
+        <div className="message"></div>
         <canvas
           id="canvas"
           width={window.innerWidth}

@@ -8,17 +8,37 @@ import { deleteDrawing, createDrawing } from "../store/drawings";
 // const socket = io.connect("https://draw-your-face-off.onrender.com");
 const socket = io.connect("http://localhost:8080");
 let imageData = {};
+let messages = {};
 
 export class UserProfile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { image: "" };
+
+    this.state = {};
     this.joinRoom.bind(this);
     this.getData.bind(this);
-    this.setImage.bind(this);
   }
-  componentDidMount() {
-    this.props.loadUser(this.props.match.params.userId);
+
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    let rooms = [];
+    let message = "";
+
+    if (event.target.name === "allGroups") {
+      rooms = this.props.user.drawings
+        .filter((drawing) => drawing.group)
+        .map((drawing) => `/draw/${drawing.uuid}`);
+      message = this.state.allGroups;
+    }
+    rooms.map((room) => {
+      console.log("message", message);
+      console.log("room", room);
+      socket.emit("sendMessage", { message, room });
+    });
   }
 
   joinRoom(room) {
@@ -27,12 +47,7 @@ export class UserProfile extends React.Component {
     });
   }
 
-  setImage(data) {
-    this.setState({ image: data });
-    console.log("THIS IS STATE in setImage", this.state);
-  }
-
-  getData(uuid) {
+  getData() {
     socket.on("canvasData", function (data) {
       let uuid = data.room.slice(6);
       imageData[uuid] = data.image;
@@ -41,6 +56,10 @@ export class UserProfile extends React.Component {
     // setTimeout(() => {
     //   this.props.loadUser(this.props.match.params.userId);
     // }, 3000);
+  }
+
+  componentDidMount() {
+    this.props.loadUser(this.props.match.params.userId);
   }
 
   render() {
@@ -154,9 +173,21 @@ export class UserProfile extends React.Component {
             >
               Refresh Group Images
             </button>
+            <form name="allGroups" onSubmit={this.handleSubmit.bind(this)}>
+              <input
+                type="text"
+                placeholder="Message all groups"
+                name="allGroups"
+                value={messages.allGroups}
+                onChange={this.handleChange.bind(this)}
+              />
+              <button type="submit" value="Submit">
+                Send Message
+              </button>
+            </form>
             {drawings
               .filter((drawing) => drawing.group)
-              .map((drawing) => {
+              .map((drawing, index) => {
                 let room = `/draw/${drawing.uuid}`;
                 this.joinRoom(room);
                 this.getData(drawing.uuid);
@@ -167,7 +198,7 @@ export class UserProfile extends React.Component {
                       "imageData in return",
                       imageData[drawing.uuid]
                     )}
-
+                    <h4>Group {index + 1}</h4>
                     <img
                       width="300"
                       height="250"
