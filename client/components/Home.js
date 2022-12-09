@@ -11,7 +11,7 @@ export const Home = (props) => {
     <div>
       <Carousel className="carousel" variant="dark">
         <Carousel.Item>
-          <img className="d-inline p-2" src="/my-drawing.png" height={200} />
+          <img className="d-inline p-2" src="/my-drawing.png" height={300} />
           <Carousel.Caption>
             <h3>Drawing #1</h3>
             <p>Created by: Ilana Bye</p>
@@ -21,7 +21,7 @@ export const Home = (props) => {
           <img
             className="d-inline p-2"
             src="/my-drawing (2).png"
-            height={200}
+            height={300}
           />
           <Carousel.Caption>
             <h3>Drawing #2</h3>
@@ -32,40 +32,40 @@ export const Home = (props) => {
           <img
             className="d-inline p-2"
             src="/my-drawing (4).png"
-            height={200}
+            height={300}
           />
           <Carousel.Caption>
             <h3>Drawing #3</h3>
-            <p>Created by: Jett Bye</p>
+            <p>Created by: Jett Bye and his Dad</p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img className="d-inline p-2" src="/my-drawing.png" height={200} />
+          <img className="d-inline p-2" src="/my-drawing_3.png" height={300} />
           <Carousel.Caption>
-            <h3>Drawing #1</h3>
-            <p>Created by: Ilana Bye</p>
+            <h3>Drawing #4</h3>
+            <p>Created by: Allie Wang and Friends</p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
           <img
             className="d-inline p-2"
-            src="/my-drawing (2).png"
-            height={200}
+            src="/my-drawing (6).png"
+            height={300}
           />
           <Carousel.Caption>
-            <h3>Drawing #2</h3>
-            <p>Created by: Ms. Lynn's Class</p>
+            <h3>Drawing #5</h3>
+            <p>Created by: Ms. Qiu's Class</p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
           <img
             className="d-inline p-2"
-            src="/my-drawing (4).png"
-            height={200}
+            src="/my-drawing (7).png"
+            height={300}
           />
           <Carousel.Caption>
-            <h3>Drawing #3</h3>
-            <p>Created by: Jett Bye</p>
+            <h3>Drawing #6</h3>
+            <p>Created by: The Coopster Family</p>
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
