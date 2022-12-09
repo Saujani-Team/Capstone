@@ -13,53 +13,62 @@ class Container extends React.Component {
   }
 
   changeColor(params) {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       color: params.target.value,
     });
   }
 
   changeSize(params) {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       size: params.target.value,
     });
   }
 
   erase() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "eraser",
     });
   }
 
   text() {
+    document.querySelector("#txt-btn").classList.add("selected");
     this.setState({
       tool: "text",
     });
   }
   paint() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "brush",
     });
   }
 
   line() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "line",
     });
   }
 
   rectangle() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "rectangle",
     });
   }
 
   circle() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "circle",
     });
   }
 
   star() {
+    document.querySelector("#txt-btn").classList.remove("selected");
     this.setState({
       tool: "star",
     });
@@ -112,6 +121,7 @@ class Container extends React.Component {
             <button
               type="button"
               className="button-2"
+              id="txt-btn"
               onClick={this.text.bind(this)}
             >
               Add Text
@@ -144,7 +154,7 @@ class Container extends React.Component {
               className="button-2"
               onClick={this.star.bind(this)}
             >
-              Star!
+              Star
             </button>
           </div>
         </div>

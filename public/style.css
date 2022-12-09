@@ -46,6 +46,9 @@ form div {
   -webkit-user-select: none;
   touch-action: manipulation;
 }
+.selected{
+  background-color: greenyellow;
+}
 #sketch {
   height: 100%;
   width: 100%;
