@@ -1,5 +1,8 @@
 body {
   font-family: sans-serif;
+  background-image: linear-gradient(white, #37e6a3, #9837e6, #e637af);
+  background-repeat: no-repeat;
+  height: 140vh;
 }
 
 a {
@@ -51,11 +54,11 @@ form div {
 }
 
 .button-1 {
-  background-color: #EA4C89;
+  background-color: #ea4c89;
   border-radius: 8px;
   border-style: none;
   box-sizing: border-box;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
   display: inline-block;
   font-size: 14px;
@@ -77,7 +80,7 @@ form div {
 
 .button-1:hover,
 .button-1:focus {
-  background-color: #F082AC;
+  background-color: #f082ac;
 }
 #sketch {
   height: 100%;
@@ -109,8 +112,8 @@ form div {
 }
 button {
   display: inline;
-  margin-left: 12px!important; 
-  margin-bottom: 12px!important;
+  margin-left: 12px !important;
+  margin-bottom: 12px !important;
 }
 .tools-section {
   text-align: center;

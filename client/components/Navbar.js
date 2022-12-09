@@ -10,23 +10,33 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => (
         <div>
           {/* The navbar will show these links after you log in */}
           <Link to="/home">
-            <img src={"/DYFO.png"} height={40} />
+            <img src={"/DYFO Gradient.png"} height={45} />
           </Link>
-          <Link to="/draw">Draw</Link>
-          <Link to={`/users/${auth.id}`}>My Profile</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
+          <Link className="black-link" to="/draw">
+            <img src={"/Draw.png"} height={27} />
+          </Link>
+          <Link className="black-link" to={`/users/${auth.id}`}>
+            <img src={"/My Profile.png"} height={34} />
+          </Link>
+          <a className="black-link" href="#" onClick={handleClick}>
+            <img src={"/Logout.png"} height={32} />
           </a>
         </div>
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
           <Link to="/home">
-            <img src={"/DYFO.png"} height={40} />
+            <img src={"/DYFO Gradient.png"} height={45} />
           </Link>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/draw">Draw</Link>
+          <Link to="/login">
+            <img src={"/Login.png"} height={32} />
+          </Link>
+          <Link to="/signup">
+            <img src={"/Sign Up.png"} height={33} />
+          </Link>
+          <Link to="/draw">
+            <img src={"/Draw.png"} height={25} />
+          </Link>
         </div>
       )}
     </nav>
