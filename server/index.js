@@ -41,8 +41,7 @@ const init = async () => {
         } else {
           history.set(key, [data.image]);
         }
-        console.log("key", key);
-        console.log("history", history.get(key).length);
+
         //send data to other connections
         connections.map((con) => {
           if (con.id !== socket.id) {
