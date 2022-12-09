@@ -109,8 +109,8 @@ form div {
 }
 button {
   display: inline;
-  margin-left: 12px;
-  margin-bottom: 12px;
+  margin-left: 12px!important; 
+  margin-bottom: 12px!important;
 }
 .tools-section {
   text-align: center;
