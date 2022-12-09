@@ -37,7 +37,7 @@ class Draw extends React.Component {
 
     this.socket.on("receiveMessage", function (data) {
       let messageElement = document.querySelector(".message");
-      messageElement.innerHTML = data.message;
+      messageElement.innerHTML = `Message from group leader:  ${data.message}`;
     });
 
     this.socket.emit(
@@ -485,7 +485,9 @@ class Draw extends React.Component {
             >
               Save Drawing 🖼
             </button>
-          ) : null}
+          ) : (
+            <div>Signup or Login to save your drawing!</div>
+          )}
         </div>
 
         <div className="message"></div>

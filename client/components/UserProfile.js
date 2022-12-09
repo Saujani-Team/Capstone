@@ -145,7 +145,7 @@ export class UserProfile extends React.Component {
                 </div>
               );
             })}
-          <div className="groups-container">
+          <div className="groups-container mb-5">
             <h4>My Groups</h4>
             <button
               onClick={() => {
@@ -225,7 +225,17 @@ export class UserProfile extends React.Component {
                           });
                       }}
                     >
-                      Copy Link
+                      Copy Room Link
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        this.props.deleteDrawing(drawing).then(() => {
+                          this.props.loadUser(this.props.match.params.userId);
+                        });
+                      }}
+                    >
+                      Delete Group
                     </button>
                   </div>
                 );
