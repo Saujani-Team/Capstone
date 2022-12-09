@@ -1,6 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import { authenticate } from "../store";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 /**
  * COMPONENT
@@ -10,69 +14,89 @@ const AuthForm = (props) => {
 
   if (name === "login") {
     return (
-      <div>
-        <form onSubmit={handleLogin} name="login">
-          <div>
-            <label htmlFor="username">
-              <small>Username</small>
-            </label>
-            <input name="username" type="text" />
-          </div>
-          <div>
-            <label htmlFor="password">
-              <small>Password</small>
-            </label>
-            <input name="password" type="password" />
-          </div>
-          <div>
-            <button type="submit">{displayName}</button>
-          </div>
-          {error && error.response && <div> {error.response.data} </div>}
-        </form>
-      </div>
+      <Form onSubmit={handleLogin} name="login">
+        <Row className="mb-3">
+          <Form.Group as={Col}>
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              name="username"
+              type="text"
+              placeholder="Enter Username"
+            />
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              name="password"
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Group>
+        </Row>
+        <Col>
+          <Button variant="secondary" type="submit">
+            {displayName}
+          </Button>
+        </Col>
+
+        {error && error.response && <div> {error.response.data} </div>}
+      </Form>
     );
   } else {
     return (
-      <div>
-        <form onSubmit={handleSignup} name="signup">
-          <div>
-            <label htmlFor="username">
-              <small>Username</small>
-            </label>
-            <input name="username" type="text" />
-          </div>
-          <div>
-            <label htmlFor="password">
-              <small>Password</small>
-            </label>
-            <input name="password" type="password" />
-          </div>
-          <div>
-            <div>
-              <label>
-                <small>First Name</small>
-              </label>
-              <input name="firstName" type="text" defaultValue="" />
-            </div>
-            <div>
-              <label>
-                <small>Last Name</small>
-              </label>
-              <input name="lastName" type="text" defaultValue="" />
-            </div>
-            <div>
-              <label>
-                <small>Email</small>
-              </label>
-              <input name="email" type="text" defaultValue="" />
-            </div>
-          </div>
-          <div>
-            <button type="submit">{displayName}</button>
-          </div>
-          {error && error.response && <div> {error.response.data} </div>}
-        </form>
-      </div>
+      <Form onSubmit={handleSignup} name="signup">
+        <Row className="mb-3">
+          <Form.Group as={Col}>
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              name="username"
+              type="text"
+              placeholder="Enter Username"
+            />
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              name="password"
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Group>
+        </Row>
+        <Row className="mb-3">
+          <Form.Group as={Col}>
+            <Form.Label>First Name</Form.Label>
+            <Form.Control
+              name="firstName"
+              type="text"
+              placeholder="First Name"
+            />
+          </Form.Group>
+
+          <Form.Group as={Col}>
+            <Form.Label>Last Name</Form.Label>
+            <Form.Control name="lastName" type="text" placeholder="Last Name" />
+          </Form.Group>
+        </Row>
+        <Row className="mb-3">
+          <Form.Group as={Col} controlId="formBasicEmail">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control name="email" type="email" placeholder="Enter email" />
+            <Form.Text className="text-muted">
+              We'll never share your email with anyone else.
+            </Form.Text>
+          </Form.Group>
+        </Row>
+        <Col>
+          <Button variant="secondary" type="submit">
+            {displayName}
+          </Button>
+        </Col>
+
+        {error && error.response && <div> {error.response.data} </div>}
+      </Form>
     );
   }
 };
