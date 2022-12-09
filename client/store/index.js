@@ -6,7 +6,11 @@ import auth from "./auth";
 import drawingsReducer from "./drawings";
 import userReducer from "./user";
 
-const reducer = combineReducers({ auth, user: userReducer, drawing: drawingsReducer  });
+const reducer = combineReducers({
+  auth,
+  user: userReducer,
+  drawing: drawingsReducer,
+});
 
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
