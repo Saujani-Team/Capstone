@@ -1,5 +1,8 @@
 body {
   font-family: sans-serif;
+  background-image: linear-gradient(white, #37e6a3, #9837e6, #e637af);
+  background-repeat: no-repeat;
+  height: 140vh;
 }
 
 a {

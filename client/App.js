@@ -9,7 +9,9 @@ const App = () => {
   return (
     <div>
       <Navbar />
-      <Routes />
+      <div className="routes-background">
+        <Routes />
+      </div>
     </div>
   );
 };
