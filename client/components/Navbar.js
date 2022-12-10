@@ -5,16 +5,19 @@ import { logout } from "../store";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
-  <div>
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">
-            <img src={"/DYFO.png"} height={45} />
-          </Link>
+  <Navbar expand="lg">
+    {isLoggedIn ? (
+      <Container>
+        {/* The navbar will show these links after you log in */}
+        <Navbar.Brand href="/home">
+          <img src={"/DYFO.png"} height={45} />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
           <Link className="black-link" to="/draw">
             <img src={"/Draw.png"} height={27} />
           </Link>
@@ -24,28 +27,32 @@ const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
           <a className="black-link" href="#" onClick={handleClick}>
             <img src={"/Logout.png"} height={32} />
           </a>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/home">
-            <img src={"/DYFO.png"} height={45} />
-          </Link>
-
-          <Link to="/login">
-            <img src={"/Login.png"} height={32} />
-          </Link>
-          <Link to="/signup">
-            <img src={"/Sign Up.png"} height={33} />
-          </Link>
-          <Link to="/draw">
-            <img src={"/Draw.png"} height={25} />
-          </Link>
-        </div>
-      )}
-    </nav>
-    <hr />
-  </div>
+        </Navbar.Collapse>
+      </Container>
+    ) : (
+      <Container>
+        {/* The navbar will show these links before you log in */}
+        <Navbar.Brand href="/home">
+          <img src={"/DYFO.png"} height={45} />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Link to="/login">
+              <img src={"/Login.png"} height={32} />
+            </Link>
+            <Link to="/signup">
+              <img src={"/Sign Up.png"} height={33} />
+            </Link>
+            <Link to="/draw">
+              <img src={"/Draw.png"} height={25} />
+            </Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    )}
+    {/* <hr /> */}
+  </Navbar>
 );
 
 /**

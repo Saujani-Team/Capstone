@@ -1,6 +1,12 @@
 body {
   font-family: sans-serif;
-  background-image: linear-gradient(#aff4d8, #e7d3f9, #c9edf7, #f4a8da);
+  background-image: linear-gradient(
+    to bottom right,
+    #c9edf7,
+    #e7d3f9,
+    #aff4d8,
+    #f4a8da
+  );
   background-repeat: no-repeat;
   height: 140vh;
 }
@@ -15,11 +21,7 @@ label {
 nav {
   width: 100%;
   background-color: white;
-}
-hr {
-  width: 100%;
-  height: 30px;
-  background-color: white;
+  margin-bottom: 10px;
 }
 
 nav a {
@@ -35,6 +37,10 @@ form div {
 .carousel {
   background-color: white;
   width: 100%;
+  border-radius: 8px;
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
 }
 
 .button-2:focus {
@@ -47,7 +53,7 @@ form div {
 .button-2 {
   background-color: rgba(51, 51, 51, 0.05);
   border-radius: 8px;
-  border-width: 0;
+  border-width: 1px;
   color: #333333;
   cursor: pointer;
   display: inline-block;
@@ -71,7 +77,9 @@ form div {
 .button-1 {
   background-color: #ea4c89;
   border-radius: 8px;
-  border-style: none;
+  /* border-style: none; */
+  border-width: 2px;
+
   box-sizing: border-box;
   color: #ffffff;
   cursor: pointer;
@@ -158,6 +166,18 @@ button {
 }
 .home-text {
   text-align: center;
+  margin-top: 20px;
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  width: 100%;
+}
+
+.row {
+  margin: 10px;
 }
 
 .eraser {

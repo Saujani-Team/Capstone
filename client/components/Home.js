@@ -170,8 +170,9 @@ export const Home = (props) => {
             <h3>
               To get started{" "}
               <Link to="/login">
-                <img src={"/Login.png"} height={32} />,
-              </Link>{" "}
+                <img src={"/Login.png"} height={32} />
+              </Link>
+              {", "}
               <Link to="/signup">
                 <img src={"/Sign Up.png"} height={33} />
               </Link>{" "}
