@@ -10,7 +10,7 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => (
         <div>
           {/* The navbar will show these links after you log in */}
           <Link to="/home">
-            <img src={"/DYFO Gradient.png"} height={45} />
+            <img src={"/DYFO.png"} height={45} />
           </Link>
           <Link className="black-link" to="/draw">
             <img src={"/Draw.png"} height={27} />
@@ -26,8 +26,9 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => (
         <div>
           {/* The navbar will show these links before you log in */}
           <Link to="/home">
-            <img src={"/DYFO Gradient.png"} height={45} />
+            <img src={"/DYFO.png"} height={45} />
           </Link>
+
           <Link to="/login">
             <img src={"/Login.png"} height={32} />
           </Link>
@@ -40,7 +41,7 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => (
         </div>
       )}
     </nav>
-    <hr />
+    {/* <hr /> */}
   </div>
 );
 

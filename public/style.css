@@ -1,6 +1,6 @@
 body {
   font-family: sans-serif;
-  background-image: linear-gradient(white, #37e6a3, #9837e6, #e637af);
+  background-image: linear-gradient(#aff4d8, #e7d3f9, #c9edf7, #f4a8da);
   background-repeat: no-repeat;
   height: 140vh;
 }
@@ -11,6 +11,10 @@ a {
 
 label {
   display: block;
+}
+nav {
+  width: 100%;
+  background-color: white;
 }
 
 nav a {
