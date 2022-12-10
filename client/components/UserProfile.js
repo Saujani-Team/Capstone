@@ -5,8 +5,8 @@ import { fetchUser } from "../store/user";
 import { Link } from "react-router-dom";
 import { deleteDrawing, createDrawing } from "../store/drawings";
 
-const socket = io.connect("https://draw-your-face-off.onrender.com");
-// const socket = io.connect("http://localhost:8080");
+// const socket = io.connect("https://draw-your-face-off.onrender.com");
+const socket = io.connect("http://localhost:8080");
 
 export class UserProfile extends React.Component {
   constructor(props) {

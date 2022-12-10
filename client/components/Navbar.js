@@ -2,8 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../store";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 
-const Navbar = ({ handleClick, isLoggedIn, auth }) => (
+const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
   <div>
     <nav>
       {isLoggedIn ? (
@@ -41,7 +44,7 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => (
         </div>
       )}
     </nav>
-    {/* <hr /> */}
+    <hr />
   </div>
 );
 
@@ -63,4 +66,4 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-export default connect(mapState, mapDispatch)(Navbar);
+export default connect(mapState, mapDispatch)(TheNavbar);
