@@ -14,7 +14,7 @@ const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
       <Container>
         {/* The navbar will show these links after you log in */}
         <Navbar.Brand href="/home">
-          <img src={"/DYFO.png"} height={45} />
+          <img src={"/DYFO.png"} height={50} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -33,7 +33,7 @@ const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
       <Container>
         {/* The navbar will show these links before you log in */}
         <Navbar.Brand href="/home">
-          <img src={"/DYFO.png"} height={45} />
+          <img src={"/DYFO.png"} height={50} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

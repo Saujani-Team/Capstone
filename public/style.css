@@ -1,13 +1,12 @@
 body {
   font-family: sans-serif;
   background-image: linear-gradient(
-    to bottom right,
     #c9edf7,
     #e7d3f9,
     #aff4d8,
-    #f4a8da
+    #f4a8da,
+    #c9edf7
   );
-  background-repeat: no-repeat;
   height: 140vh;
 }
 
