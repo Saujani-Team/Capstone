@@ -6,6 +6,10 @@ import { connect } from "react-redux";
 import { fetchUser } from "../store/user";
 import { Link } from "react-router-dom";
 import { deleteDrawing, createDrawing } from "../store/drawings";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 // const socket = io.connect("https://draw-your-face-off.onrender.com");
 const socket = io.connect("http://localhost:8080");
@@ -71,91 +75,138 @@ export class UserProfile extends React.Component {
     return (
       <div className="container">
         <main>
-          <h1>My Profile</h1>
+          <img src="/My Profile.png" />
           {user.length == 0 && (
             <h3 className=" error">User does not exist in the system!</h3>
           )}
           <h2>
-            Name: {firstName} {lastName}
+            <span className="fw-bold">Name: </span>{" "}
+            <span className="fw-light">
+              {firstName} {lastName}
+            </span>
           </h2>
-          <h4>Username: {username}</h4>
+          <h4>
+            {" "}
+            <span className="fw-bold">Username: </span>
+            <span className="fw-light">{username}</span>
+          </h4>
 
-          <h4>Email: {email}</h4>
+          <h4>
+            <span className="fw-bold">Email: </span>
+            <span className="fw-light">{email}</span>
+          </h4>
 
-          <h4 className="mt-5">My Drawings</h4>
-          {drawings
-            .filter((drawing) => drawing.group === false)
-            .map((drawing) => {
-              return (
-                <div key={drawing.id} className="list">
-                  <div key={drawing.id}>
-                    <Link to={`/draw/${drawing.uuid}`}>
-                      <img width="300" height="250" src={drawing.imageUrl} />
-                      <button className="btn btn-light btn-sm" type="button">
-                        <i className="fa-solid fa-pen-to-square"></i>
-                      </button>
-                    </Link>
-                    <button
-                      type="button"
-                      className="btn btn-light btn-sm"
-                      onClick={() => {
-                        let link = document.createElement("a");
-                        link.download = "my-drawing.png";
-                        link.href = drawing.imageUrl;
-                        link.click();
-                      }}
-                    >
-                      <i className="fa-solid fa-download"></i>
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-light btn-sm"
-                      onClick={async () => {
-                        navigator.permissions
-                          .query({ name: "clipboard-write" })
-                          .then(async (result) => {
-                            if (
-                              result.state == "granted" ||
-                              result.state == "prompt"
-                            ) {
-                              try {
-                                const response = await fetch(drawing.imageUrl);
-                                let blob = await response.blob();
-                                blob = blob.slice(0, blob.size, "image/png");
-                                await navigator.clipboard.write([
-                                  new ClipboardItem({
-                                    [blob.type]: blob,
-                                  }),
-                                ]);
-                                window.alert("Image copied to clipboard ✅");
-                              } catch (err) {
-                                console.error(err.name, err.message);
-                              }
-                            }
-                          });
-                      }}
-                    >
-                      <i className="fa-regular fa-copy"></i>
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-light btn-sm"
-                      onClick={() => {
-                        this.props.deleteDrawing(drawing).then(() => {
-                          this.props.loadUser(this.props.match.params.userId);
-                        });
-                      }}
-                    >
-                      <i className="fa-solid fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+          <h2 className="mt-5">My Drawings</h2>
+          <div className="container">
+            <div className="row gx-5 text-center">
+              {drawings
+                .filter((drawing) => drawing.group === false)
+                .map((drawing) => {
+                  return (
+                    <div key={drawing.id} className="col-auto">
+                      <div className="row">
+                        <div className="col">
+                          <img
+                            className="rounded"
+                            width="300"
+                            height="250"
+                            src={drawing.imageUrl}
+                          />
+                        </div>
+                      </div>
+                      <div className="row gx-0">
+                        <div className="col">
+                          <Link to={`/draw/${drawing.uuid}`}>
+                            <button
+                              className="btn btn-light btn-sm mx-0"
+                              type="button"
+                            >
+                              <i className="fa-solid fa-pen-to-square"></i>
+                            </button>
+                          </Link>
+                        </div>
+
+                        <div className="col">
+                          <button
+                            type="button"
+                            className="btn btn-light btn-sm mx-0"
+                            onClick={() => {
+                              let link = document.createElement("a");
+                              link.download = "my-drawing.png";
+                              link.href = drawing.imageUrl;
+                              link.click();
+                            }}
+                          >
+                            <i className="fa-solid fa-download"></i>
+                          </button>
+                        </div>
+                        <div className="col">
+                          <button
+                            type="button"
+                            className="btn btn-light btn-sm mx-0"
+                            onClick={async () => {
+                              navigator.permissions
+                                .query({ name: "clipboard-write" })
+                                .then(async (result) => {
+                                  if (
+                                    result.state == "granted" ||
+                                    result.state == "prompt"
+                                  ) {
+                                    try {
+                                      const response = await fetch(
+                                        drawing.imageUrl
+                                      );
+                                      let blob = await response.blob();
+                                      blob = blob.slice(
+                                        0,
+                                        blob.size,
+                                        "image/png"
+                                      );
+                                      await navigator.clipboard.write([
+                                        new ClipboardItem({
+                                          [blob.type]: blob,
+                                        }),
+                                      ]);
+                                      window.alert(
+                                        "Image copied to clipboard ✅"
+                                      );
+                                    } catch (err) {
+                                      console.error(err.name, err.message);
+                                    }
+                                  }
+                                });
+                            }}
+                          >
+                            <i className="fa-regular fa-copy"></i>
+                          </button>
+                        </div>
+
+                        <div className="col">
+                          <button
+                            type="button"
+                            className="btn btn-light btn-sm mx-0"
+                            onClick={() => {
+                              this.props.deleteDrawing(drawing).then(() => {
+                                this.props.loadUser(
+                                  this.props.match.params.userId
+                                );
+                              });
+                            }}
+                          >
+                            <i className="fa-solid fa-trash"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+
           <div className="groups-container mt-5 mb-5">
-            <h4>My Groups</h4>
+            <h2>My Groups</h2>
             <button
-              className="btn btn-light"
+              className="btn btn-light ms-0"
               onClick={() => {
                 this.props
                   .createGroup({
@@ -169,14 +220,7 @@ export class UserProfile extends React.Component {
             >
               Create New Group
             </button>
-            <button
-              className="btn btn-light"
-              onClick={() => {
-                this.props.loadUser(this.props.match.params.userId);
-              }}
-            >
-              <i className="fa-solid fa-arrows-rotate"></i>
-            </button>
+
             {drawings
               .filter((drawing) => drawing.group)
               .map((drawing, index) => {
@@ -190,34 +234,63 @@ export class UserProfile extends React.Component {
                 return (
                   <div key={drawing.id}>
                     {index === 0 ? (
-                      <form
-                        name="allGroups"
-                        onSubmit={this.handleSubmit.bind(this)}
-                      >
-                        <input
-                          type="text"
-                          placeholder="Message all groups"
+                      <div>
+                        <Form
                           name="allGroups"
-                          value={this.state.allGroups}
-                          onChange={this.handleChange.bind(this)}
-                        />
-                        <button
-                          className="btn btn-light"
-                          type="submit"
-                          value="Submit"
+                          onSubmit={this.handleSubmit.bind(this)}
                         >
-                          <i className="fa-solid fa-paper-plane"></i>
-                        </button>
-                      </form>
+                          <Row className="mb-3">
+                            <Form.Group as={Col} className="ms-0 me-0">
+                              <Form.Control
+                                type="text"
+                                placeholder="Message all groups"
+                                name="allGroups"
+                                value={this.state.allGroups}
+                                onChange={this.handleChange.bind(this)}
+                                className="ms-0 me-0 pe-0"
+                              />
+                            </Form.Group>
+                            <Col className="ms-0 ps-0">
+                              <Button
+                                // className="btn btn-light"
+                                className="ms-0"
+                                variant="light"
+                                type="submit"
+                                value="Submit"
+                              >
+                                <i className="fa-solid fa-paper-plane"></i>
+                              </Button>
+                            </Col>
+                          </Row>
+                        </Form>
+                        <Row>
+                          <Col className="ms-0 col-1">
+                            <button
+                              className="btn btn-light ms-0"
+                              onClick={() => {
+                                this.props.loadUser(
+                                  this.props.match.params.userId
+                                );
+                              }}
+                            >
+                              <i className="fa-solid fa-arrows-rotate"></i>
+                            </button>
+                          </Col>
+                          <Col>
+                            <p>Refresh Group Images</p>
+                          </Col>
+                        </Row>
+                      </div>
                     ) : null}
                     <h4>Group {index + 1}</h4>
                     <img
+                      className="rounded"
                       width="300"
                       height="250"
                       src={JSON.parse(currentImage)}
                     />
                     <button
-                      className="btn btn-secondary"
+                      className="btn btn-light btn-sm"
                       onClick={async () => {
                         navigator.permissions
                           .query({ name: "clipboard-write" })
@@ -239,10 +312,10 @@ export class UserProfile extends React.Component {
                           });
                       }}
                     >
-                      Copy Room Link
+                      <i class="fa-solid fa-link"></i>
                     </button>
                     <button
-                      className="btn btn-secondary"
+                      className="btn btn-light btn-sm"
                       type="button"
                       onClick={() => {
                         this.props.deleteDrawing(drawing).then(() => {
@@ -250,7 +323,7 @@ export class UserProfile extends React.Component {
                         });
                       }}
                     >
-                      Delete Group
+                      <i className="fa-solid fa-trash"></i>
                     </button>
                   </div>
                 );
