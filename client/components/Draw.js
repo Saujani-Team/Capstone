@@ -37,7 +37,7 @@ class Draw extends React.Component {
 
     this.socket.on("receiveMessage", function (data) {
       let messageElement = document.querySelector(".message");
-      messageElement.innerHTML = data.message;
+      messageElement.innerHTML = `Message from group leader:  ${data.message}`;
     });
 
     this.socket.emit(
@@ -372,15 +372,22 @@ class Draw extends React.Component {
   save(evt) {
     let drawingUUID = window.location.pathname.slice(6);
     let imageDataUrl = canvas.toDataURL("img/png");
-    this.props.getDrawing(drawingUUID).then(() => {
-      let currentDrawing = {
-        id: this.props.drawing.id,
-        userId: this.props.auth.id,
-        imageUrl: imageDataUrl,
-        status: "saved",
-      };
-      this.props.updateDrawing(currentDrawing);
-    });
+    this.props
+      .getDrawing(drawingUUID)
+      .then(() => {
+        let currentDrawing = {
+          id: this.props.drawing.id,
+          userId: this.props.auth.id,
+          imageUrl: imageDataUrl,
+          status: "saved",
+        };
+        this.props.updateDrawing(currentDrawing);
+      })
+      .then(() => {
+        window.alert(
+          "Your drawing🎨 was saved successfully! View this and other saved drawings on your Profile page."
+        );
+      });
   }
 
   getLink() {
@@ -468,7 +475,7 @@ class Draw extends React.Component {
             className="button-1"
             onClick={this.getLink.bind(this)}
           >
-            Generate Link 🖇️
+            Generate Link <i class="fa-solid fa-link"></i>
           </button>
           {this.props.isLoggedIn ? (
             <button
@@ -478,7 +485,9 @@ class Draw extends React.Component {
             >
               Save Drawing 🖼
             </button>
-          ) : null}
+          ) : (
+            <div>Signup or Login to save your drawing!</div>
+          )}
         </div>
 
         <div className="message"></div>

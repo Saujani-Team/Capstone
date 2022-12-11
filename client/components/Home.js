@@ -138,8 +138,8 @@ export const Home = (props) => {
           <Row>
             <h3>Invite Others!</h3>
             <p>
-              Click on Draw and Generate Link 🖇️ and send the link to your
-              collaborators.
+              Click on Draw and Generate Link <i class="fa-solid fa-link"></i>{" "}
+              and send the link to your collaborators.
             </p>
           </Row>
           <Row>
