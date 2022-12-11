@@ -33,6 +33,10 @@ form div {
   display: inline-block;
 }
 
+#nav-draw {
+  padding-bottom: 6px;
+}
+
 .carousel {
   background-color: white;
   width: 100%;
