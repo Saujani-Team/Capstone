@@ -263,7 +263,7 @@ export class UserProfile extends React.Component {
                             </Col>
                           </Row>
                         </Form>
-                        <Row>
+                        <Row className="gx-0">
                           <Col className="ms-0 col-1">
                             <button
                               className="btn btn-light ms-0"
@@ -277,18 +277,27 @@ export class UserProfile extends React.Component {
                             </button>
                           </Col>
                           <Col>
-                            <p>Refresh Group Images</p>
+                            <h3>Refresh Group Images</h3>
                           </Col>
                         </Row>
                       </div>
                     ) : null}
                     <h4>Group {index + 1}</h4>
-                    <img
-                      className="rounded"
-                      width="300"
-                      height="250"
-                      src={JSON.parse(currentImage)}
-                    />
+                    {currentImage ? (
+                      <img
+                        className="rounded"
+                        width="300"
+                        height="250"
+                        src={JSON.parse(currentImage)}
+                      />
+                    ) : (
+                      <img
+                        className="rounded"
+                        width="300"
+                        src="/my-drawing.png"
+                      />
+                    )}
+
                     <button
                       className="btn btn-light btn-sm"
                       onClick={async () => {
