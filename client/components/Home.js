@@ -2,13 +2,16 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
 
 export const Home = (props) => {
   const { firstName } = props;
   const { isLoggedIn } = props;
 
   return (
-    <div>
+    <Container>
       <Carousel className="carousel" variant="dark">
         <Carousel.Item>
           <img
@@ -120,47 +123,80 @@ export const Home = (props) => {
       </Carousel>
       {isLoggedIn ? (
         <div className="home-text">
-          <h3>
-            <img src={"/Welcome.png"} height={40} /> {firstName}!
-          </h3>
-          <h2>How to Use Draw Your Face Off!</h2>
-          <p>
-            Click Draw and Start Drawing to open your canvas and start drawing.{" "}
-          </p>
-          <h3>Invite Others!</h3>
-          <p>
-            Click on Draw and Generate Link 🖇️ and send the link to your
-            collaborators.
-          </p>
-          <h3>Save Drawings!</h3>
-          <p>Click Save Drawing to have your drawing saved to your Profile.</p>
-          <h3>My Profile!</h3>
-          <p>
-            On this page, you'll see your information and your saved drawings
-            displayed. You can choose a drawing to edit and continue working.
-            You can download your drawing or copy it to the clipboard to share
-            your drawings with others. If you want to remove a drawing from your
-            profile, you can delete.
-          </p>
+          <Row>
+            <h3>
+              <img src={"/Welcome.png"} height={40} /> {firstName}!
+            </h3>
+          </Row>
+          <Row>
+            <h2>How to Use Draw Your Face Off!</h2>
+            <p>
+              Click Draw and Start Drawing to open your canvas and start
+              drawing.{" "}
+            </p>
+          </Row>
+          <Row>
+            <h3>Invite Others!</h3>
+            <p>
+              Click on Draw and Generate Link 🖇️ and send the link to your
+              collaborators.
+            </p>
+          </Row>
+          <Row>
+            <h3>Save Drawings!</h3>
+            <p>
+              Click Save Drawing to have your drawing saved to your Profile.
+            </p>
+          </Row>
+          <Row>
+            <h3>My Profile!</h3>
+            <p>
+              On this page, you'll see your information and your saved drawings
+              displayed. You can choose a drawing to edit and continue working.
+              You can download your drawing or copy it to the clipboard to share
+              your drawings with others. If you want to remove a drawing from
+              your profile, you can delete.
+            </p>
+          </Row>
         </div>
       ) : (
         <div className="home-text">
-          <img src={"/WelcomeToDYFO.png"} height={40} />
-          <h3>
-            You can get started by <Link to="/login">Logging in,</Link>{" "}
-            <Link to="/signup">Signing Up,</Link> or start{" "}
-            <Link to="/draw">Drawing</Link> as a Guest!
-          </h3>
-          <h2>How to Use Draw Your Face Off!</h2>
-          <p>Click on Draw and Start Drawing to open your canvas. </p>
-          <h3>Invite Others!</h3>
-          <p>
-            Click on Draw and Generate Link 🖇️ and send the link to your
-            collaborators.
-          </p>
+          <Row>
+            <h3>
+              <img src={"/WelcomeToDYFO.png"} height={40} />
+            </h3>
+          </Row>
+          <Row>
+            <h3>
+              To get started{" "}
+              <Link to="/login">
+                <img src={"/Login.png"} height={32} />
+              </Link>
+              {", "}
+              <Link to="/signup">
+                <img src={"/Sign Up.png"} height={33} />
+              </Link>{" "}
+              or click on{" "}
+              <Link to="/draw">
+                <img src={"/Draw.png"} height={25} />
+              </Link>{" "}
+              as a Guest!
+            </h3>
+          </Row>
+          <Row>
+            <h2>How to Use Draw Your Face Off!</h2>
+            <p>Click on Draw and Start Drawing to open your canvas. </p>
+          </Row>
+          <Row>
+            <h3>Invite Others!</h3>
+            <p>
+              Click on Draw and Generate Link 🖇️ and send the link to your
+              collaborators.
+            </p>
+          </Row>
         </div>
       )}
-    </div>
+    </Container>
   );
 };
 
