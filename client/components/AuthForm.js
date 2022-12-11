@@ -14,89 +14,101 @@ const AuthForm = (props) => {
 
   if (name === "login") {
     return (
-      <Form onSubmit={handleLogin} name="login">
-        <Row className="mb-3">
-          <Form.Group as={Col}>
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-              name="username"
-              type="text"
-              placeholder="Enter Username"
-            />
-          </Form.Group>
+      <div>
+        <Form onSubmit={handleLogin} name="login">
+          <Row className="mb-3">
+            <Form.Group as={Col}>
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                name="username"
+                type="text"
+                placeholder="Enter Username"
+              />
+            </Form.Group>
 
-          <Form.Group as={Col} controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              name="password"
-              type="password"
-              placeholder="Password"
-            />
-          </Form.Group>
-        </Row>
-        <Col>
-          <Button variant="secondary" type="submit">
-            {displayName}
-          </Button>
-        </Col>
+            <Form.Group as={Col} controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                name="password"
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Group>
+          </Row>
+          <Col>
+            <Button variant="secondary" type="submit">
+              {displayName}
+            </Button>
+          </Col>
 
-        {error && error.response && <div> {error.response.data} </div>}
-      </Form>
+          {error && error.response && <div> {error.response.data} </div>}
+        </Form>
+      </div>
     );
   } else {
     return (
-      <Form onSubmit={handleSignup} name="signup">
-        <Row className="mb-3">
-          <Form.Group as={Col}>
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-              name="username"
-              type="text"
-              placeholder="Enter Username"
-            />
-          </Form.Group>
+      <div>
+        <Form onSubmit={handleSignup} name="signup">
+          <Row className="mb-3">
+            <Form.Group as={Col}>
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                name="username"
+                type="text"
+                placeholder="Enter Username"
+              />
+            </Form.Group>
 
-          <Form.Group as={Col} controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              name="password"
-              type="password"
-              placeholder="Password"
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col}>
-            <Form.Label>First Name</Form.Label>
-            <Form.Control
-              name="firstName"
-              type="text"
-              placeholder="First Name"
-            />
-          </Form.Group>
+            <Form.Group as={Col} controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                name="password"
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col}>
+              <Form.Label>First Name</Form.Label>
+              <Form.Control
+                name="firstName"
+                type="text"
+                placeholder="First Name"
+              />
+            </Form.Group>
 
-          <Form.Group as={Col}>
-            <Form.Label>Last Name</Form.Label>
-            <Form.Control name="lastName" type="text" placeholder="Last Name" />
-          </Form.Group>
-        </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control name="email" type="email" placeholder="Enter email" />
-            <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text>
-          </Form.Group>
-        </Row>
-        <Col>
-          <Button variant="secondary" type="submit">
-            {displayName}
-          </Button>
-        </Col>
+            <Form.Group as={Col}>
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                name="lastName"
+                type="text"
+                placeholder="Last Name"
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                name="email"
+                type="email"
+                placeholder="Enter email"
+              />
+              <Form.Text className="text-muted">
+                We'll never share your email with anyone else.
+              </Form.Text>
+            </Form.Group>
+          </Row>
+          <Col>
+            <Button variant="secondary" type="submit">
+              {displayName}
+            </Button>
+          </Col>
 
-        {error && error.response && <div> {error.response.data} </div>}
-      </Form>
+          {error && error.response && <div> {error.response.data} </div>}
+        </Form>
+      </div>
     );
   }
 };
