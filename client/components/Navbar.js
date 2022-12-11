@@ -25,7 +25,7 @@ const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
             <img src={"/My Profile.png"} height={34} />
           </Link>
           <a className="black-link" href="#" onClick={handleClick}>
-            <img src={"/Logout.png"} height={32} />
+            <img src={"/Logout.png"} height={34} />
           </a>
         </Navbar.Collapse>
       </Container>
