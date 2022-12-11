@@ -7,8 +7,8 @@ import auth from "../store/auth";
 class Draw extends React.Component {
   timeout;
   ctx;
-  socket = io.connect("https://draw-your-face-off.onrender.com");
-  // socket = io.connect("http://localhost:8080");
+  // socket = io.connect("https://draw-your-face-off.onrender.com");
+  socket = io.connect("http://localhost:8080");
 
   //set up something to keep track of drawing steps
   //needed for undo and redo

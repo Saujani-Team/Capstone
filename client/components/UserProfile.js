@@ -1,12 +1,14 @@
 import React from "react";
 import io from "socket.io-client";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { fapaperplane } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { fetchUser } from "../store/user";
 import { Link } from "react-router-dom";
 import { deleteDrawing, createDrawing } from "../store/drawings";
 
-const socket = io.connect("https://draw-your-face-off.onrender.com");
-// const socket = io.connect("http://localhost:8080");
+// const socket = io.connect("https://draw-your-face-off.onrender.com");
+const socket = io.connect("http://localhost:8080");
 
 export class UserProfile extends React.Component {
   constructor(props) {
@@ -80,7 +82,7 @@ export class UserProfile extends React.Component {
 
           <h4>Email: {email}</h4>
 
-          <h4>My Drawings</h4>
+          <h4 className="mt-5">My Drawings</h4>
           {drawings
             .filter((drawing) => drawing.group === false)
             .map((drawing) => {
@@ -89,10 +91,13 @@ export class UserProfile extends React.Component {
                   <div key={drawing.id}>
                     <Link to={`/draw/${drawing.uuid}`}>
                       <img width="300" height="250" src={drawing.imageUrl} />
-                      <button type="button">Edit</button>
+                      <button className="btn btn-light btn-sm" type="button">
+                        <i className="fa-solid fa-pen-to-square"></i>
+                      </button>
                     </Link>
                     <button
                       type="button"
+                      className="btn btn-light btn-sm"
                       onClick={() => {
                         let link = document.createElement("a");
                         link.download = "my-drawing.png";
@@ -100,10 +105,11 @@ export class UserProfile extends React.Component {
                         link.click();
                       }}
                     >
-                      Download
+                      <i className="fa-solid fa-download"></i>
                     </button>
                     <button
                       type="button"
+                      className="btn btn-light btn-sm"
                       onClick={async () => {
                         navigator.permissions
                           .query({ name: "clipboard-write" })
@@ -129,25 +135,27 @@ export class UserProfile extends React.Component {
                           });
                       }}
                     >
-                      Copy
+                      <i className="fa-regular fa-copy"></i>
                     </button>
                     <button
                       type="button"
+                      className="btn btn-light btn-sm"
                       onClick={() => {
                         this.props.deleteDrawing(drawing).then(() => {
                           this.props.loadUser(this.props.match.params.userId);
                         });
                       }}
                     >
-                      Delete
+                      <i className="fa-solid fa-trash"></i>
                     </button>
                   </div>
                 </div>
               );
             })}
-          <div className="groups-container mb-5">
+          <div className="groups-container mt-5 mb-5">
             <h4>My Groups</h4>
             <button
+              className="btn btn-light"
               onClick={() => {
                 this.props
                   .createGroup({
@@ -162,11 +170,12 @@ export class UserProfile extends React.Component {
               Create New Group
             </button>
             <button
+              className="btn btn-light"
               onClick={() => {
                 this.props.loadUser(this.props.match.params.userId);
               }}
             >
-              Refresh Group Images
+              <i className="fa-solid fa-arrows-rotate"></i>
             </button>
             {drawings
               .filter((drawing) => drawing.group)
@@ -192,8 +201,12 @@ export class UserProfile extends React.Component {
                           value={this.state.allGroups}
                           onChange={this.handleChange.bind(this)}
                         />
-                        <button type="submit" value="Submit">
-                          Send Message
+                        <button
+                          className="btn btn-light"
+                          type="submit"
+                          value="Submit"
+                        >
+                          <i className="fa-solid fa-paper-plane"></i>
                         </button>
                       </form>
                     ) : null}
@@ -204,6 +217,7 @@ export class UserProfile extends React.Component {
                       src={JSON.parse(currentImage)}
                     />
                     <button
+                      className="btn btn-secondary"
                       onClick={async () => {
                         navigator.permissions
                           .query({ name: "clipboard-write" })
@@ -228,6 +242,7 @@ export class UserProfile extends React.Component {
                       Copy Room Link
                     </button>
                     <button
+                      className="btn btn-secondary"
                       type="button"
                       onClick={() => {
                         this.props.deleteDrawing(drawing).then(() => {
