@@ -475,7 +475,7 @@ class Draw extends React.Component {
             className="button-1"
             onClick={this.getLink.bind(this)}
           >
-            Generate Link 🖇️
+            Generate Link <i class="fa-solid fa-link"></i>
           </button>
           {this.props.isLoggedIn ? (
             <button
