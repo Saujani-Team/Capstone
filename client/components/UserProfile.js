@@ -75,7 +75,7 @@ export class UserProfile extends React.Component {
     return (
       <div className="container">
         <main>
-          <img src="/My Profile.png" />
+          <img src="/My Profile.png" height="60" />
           {user.length == 0 && (
             <h3 className=" error">User does not exist in the system!</h3>
           )}
@@ -96,7 +96,9 @@ export class UserProfile extends React.Component {
             <span className="fw-light">{email}</span>
           </h4>
 
-          <h2 className="mt-5">My Drawings</h2>
+          <h2 className="mt-5">
+            <img src="/My Drawings.png" height="50" />
+          </h2>
           <div className="container">
             <div className="row gx-5 text-center">
               {drawings
@@ -204,7 +206,9 @@ export class UserProfile extends React.Component {
           </div>
 
           <div className="groups-container mt-5 mb-5">
-            <h2>My Groups</h2>
+            <h2>
+              <img src="/My Groups.png" height="50" />
+            </h2>
             <button
               className="btn btn-light ms-0"
               onClick={() => {
