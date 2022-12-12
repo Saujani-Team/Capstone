@@ -16,10 +16,10 @@ const AuthForm = (props) => {
     return (
       <div>
         <Form onSubmit={handleLogin} name="login">
-          <div className="container text-center">
+          <div className="container ms-5">
             <div className="row mb-0">
               <div className="col mb-0">
-                <Form.Group>
+                <Form.Group className="ms-0">
                   <Form.Label>Username</Form.Label>
                   <Form.Control
                     name="username"
@@ -27,25 +27,25 @@ const AuthForm = (props) => {
                     placeholder="Enter Username"
                   />
                 </Form.Group>
-                <div className="row mb-0">
-                  <div className="col mb-0">
-                    <Form.Group controlId="formBasicPassword">
-                      <Form.Label>Password</Form.Label>
-                      <Form.Control
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                      />
-                    </Form.Group>
-                  </div>
-                </div>
-                <div className="row mt-4">
-                  <div className="col">
-                    <Button className="ms-0" variant="light" type="submit">
-                      {displayName}
-                    </Button>
-                  </div>
-                </div>
+              </div>
+            </div>
+            <div className="row mb-0">
+              <div className="col mb-0">
+                <Form.Group className="ms-0">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                  />
+                </Form.Group>
+              </div>
+            </div>
+            <div className="row mt-4">
+              <div className="col">
+                <Button className="ms-0" variant="light" type="submit">
+                  {displayName}
+                </Button>
               </div>
             </div>
           </div>
@@ -58,10 +58,10 @@ const AuthForm = (props) => {
     return (
       <div>
         <Form onSubmit={handleSignup} name="signup">
-          <div className="container text-center">
+          <div className="container ms-5">
             <div className="row mb-3">
               <div className="col">
-                <Form.Group>
+                <Form.Group className="ms-0">
                   <Form.Label>Username</Form.Label>
                   <Form.Control
                     name="username"
@@ -70,7 +70,7 @@ const AuthForm = (props) => {
                   />
                 </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group controlId="formBasicPassword" className="ms-0">
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     name="password"
@@ -82,7 +82,7 @@ const AuthForm = (props) => {
             </div>
             <div className="row mb-3">
               <div className="col">
-                <Form.Group>
+                <Form.Group className="ms-0">
                   <Form.Label>First Name</Form.Label>
                   <Form.Control
                     name="firstName"
@@ -91,7 +91,7 @@ const AuthForm = (props) => {
                   />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className="ms-0">
                   <Form.Label>Last Name</Form.Label>
                   <Form.Control
                     name="lastName"
@@ -103,7 +103,11 @@ const AuthForm = (props) => {
             </div>
             <div className="row mb-3">
               <div className="col">
-                <Form.Group as={Col} controlId="formBasicEmail">
+                <Form.Group
+                  as={Col}
+                  controlId="formBasicEmail"
+                  className="ms-0"
+                >
                   <Form.Label>Email address</Form.Label>
                   <Form.Control
                     name="email"
@@ -118,7 +122,7 @@ const AuthForm = (props) => {
             </div>
             <div className="row mb-3">
               <div className="col">
-                <Button variant="light" type="submit">
+                <Button className="ms-0" variant="light" type="submit">
                   {displayName}
                 </Button>
               </div>
