@@ -11,30 +11,32 @@ class HowTo extends React.Component {
           <h3>
             <img src={"/How to DYFO.png"} height={30} />
           </h3>
-
-          <img src={"/Invite Others.png"} height={20} />
-
+          <br></br>
+          {/* <img src={"/Invite Others.png"} height={20} /> to collaborate. */}
           <p>
-            Click Generate Link 🖇️ and share the link to your collaborators.
-            <div>
+            Click Generate Link 🖇️ and invites others to collaborate!
+            <br></br>
+            <a>
               <img src={"/Draw Page Tools.png"} height={100} width={500} />
-            </div>
+            </a>
           </p>
           <p>
             From <img src={"/My Profile.png"} height={20} /> you can view your
-            information, saved drawings, and groups. Easily edit, download,
-            copy, or delete any drawing.
-            <div>
+            information, saved drawings, and create groups. Easily edit,
+            download, copy, or delete any drawing.
+            <br></br>
+            <a>
               <img src={"/My Profile Page.png"} height={250} width={400} />
-            </div>
+            </a>
           </p>
           <p>
             Leaders can create groups! Share the link and allow for participants
             to collaborate together. Monitor progress of all groups instandly by
             clicking Refresh Group Images.
-            <div>
+            <br></br>
+            <a>
               <img src={"/My Groups Display.png"} height={180} width={300} />
-            </div>
+            </a>
           </p>
 
           {/* </Row> */}

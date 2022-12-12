@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
-  <Navbar>
+  <Navbar expand="xl">
     {isLoggedIn ? (
       <Container>
         {/* The navbar will show these links after you log in */}
