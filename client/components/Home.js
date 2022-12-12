@@ -129,7 +129,7 @@ export const Home = (props) => {
             </h3>
           </Row>
           <Row>
-            <h2>How to Use Draw Your Face Off!</h2>
+            <h2>How to DYFO!</h2>
             <p>
               Click Draw and Start Drawing to open your canvas and start
               drawing.{" "}
@@ -138,8 +138,9 @@ export const Home = (props) => {
           <Row>
             <h3>Invite Others!</h3>
             <p>
-              Click on Draw and Generate Link <i class="fa-solid fa-link"></i>{" "}
-              and send the link to your collaborators.
+              Click on Draw and Generate Link{" "}
+              <i className="fa-solid fa-link"></i> and send the link to your
+              collaborators.
             </p>
           </Row>
           <Row>
@@ -180,11 +181,11 @@ export const Home = (props) => {
               <Link to="/draw">
                 <img src={"/Draw.png"} height={25} />
               </Link>{" "}
-              as a Guest!
+              to continue as a Guest!
             </h3>
           </Row>
           <Row>
-            <h2>How to Use Draw Your Face Off!</h2>
+            <h2>How to DYFO!</h2>
             <p>Click on Draw and Start Drawing to open your canvas. </p>
           </Row>
           <Row>

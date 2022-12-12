@@ -7,7 +7,7 @@ body {
     #f4a8da,
     #c9edf7
   );
-  height: 140vh;
+  height: 150vh;
 }
 
 a {
@@ -19,7 +19,7 @@ label {
 }
 nav {
   width: 100%;
-  background-color: white;
+  /* background-color: white; */
   margin-bottom: 10px;
 }
 
@@ -39,7 +39,8 @@ form div {
 
 .carousel {
   background-color: white;
-  width: 100%;
+  width: 70%;
+  margin: auto;
   border-radius: 8px;
   border-color: black;
   border-width: 2px;
