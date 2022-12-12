@@ -36,7 +36,7 @@ const AuthForm = (props) => {
             </Form.Group>
           </Row>
           <Col>
-            <Button variant="secondary" type="submit">
+            <Button variant="light" type="submit">
               {displayName}
             </Button>
           </Col>
@@ -101,7 +101,7 @@ const AuthForm = (props) => {
             </Form.Group>
           </Row>
           <Col>
-            <Button variant="secondary" type="submit">
+            <Button variant="light" type="submit">
               {displayName}
             </Button>
           </Col>

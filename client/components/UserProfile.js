@@ -325,7 +325,7 @@ export class UserProfile extends React.Component {
                           });
                       }}
                     >
-                      <i class="fa-solid fa-link"></i>
+                      <i className="fa-solid fa-link"></i>
                     </button>
                     <button
                       className="btn btn-light btn-sm"

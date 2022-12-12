@@ -12,6 +12,56 @@ export const Home = (props) => {
 
   return (
     <Container>
+      {isLoggedIn ? (
+        <div className="home-text">
+          <Row>
+            <h3>
+              <img className="font-welcome" src={"/Welcome.png"} height={35} />{" "}
+              {firstName}!
+            </h3>
+          </Row>
+          <h5>
+            To get started, click on{" "}
+            <Link to="/draw">
+              <img className="font-draw" src={"/Draw.png"} height={20} />
+            </Link>{" "}
+            visit,{" "}
+            <Link to="/users/:userId">
+              <img src={"/My Profile.png"} height={20} />
+            </Link>{" "}
+            or check out the{" "}
+            <Link to="/howto">
+              <img className="font-howto" src={"/How To.png"} height={20} />
+            </Link>{" "}
+            page.
+          </h5>
+        </div>
+      ) : (
+        <div className="home-text">
+          <Row>
+            <h3>
+              <img src={"/WelcomeToDYFO.png"} height={35} />
+            </h3>
+          </Row>
+          <Row>
+            <h5>
+              To get started{" "}
+              <Link to="/login">
+                <img src={"/Login.png"} height={22} />
+              </Link>
+              {", "}
+              <Link to="/signup">
+                <img src={"/Sign Up.png"} height={23} />
+              </Link>{" "}
+              or click on{" "}
+              <Link to="/draw">
+                <img className="font-draw" src={"/Draw.png"} height={23} />
+              </Link>{" "}
+              to continue as a Guest!
+            </h5>
+          </Row>
+        </div>
+      )}
       <Carousel className="carousel" variant="dark">
         <Carousel.Item>
           <img
@@ -100,12 +150,12 @@ export const Home = (props) => {
         <Carousel.Item>
           <img
             className="d-inline p-2"
-            src="/my-drawing (10).png"
+            src="/my-drawing (11).png"
             height={300}
           />
           <Carousel.Caption>
-            <h3>Flower</h3>
-            <p>Created by: Science Class</p>
+            <h3>Balloons</h3>
+            <p>Created by: Ms. Lynn's Class</p>
           </Carousel.Caption>
         </Carousel.Item>
 
@@ -121,81 +171,6 @@ export const Home = (props) => {
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
-      {isLoggedIn ? (
-        <div className="home-text">
-          <Row>
-            <h3>
-              <img src={"/Welcome.png"} height={40} /> {firstName}!
-            </h3>
-          </Row>
-          <Row>
-            <h2>How to Use Draw Your Face Off!</h2>
-            <p>
-              Click Draw and Start Drawing to open your canvas and start
-              drawing.{" "}
-            </p>
-          </Row>
-          <Row>
-            <h3>Invite Others!</h3>
-            <p>
-              Click on Draw and Generate Link <i class="fa-solid fa-link"></i>{" "}
-              and send the link to your collaborators.
-            </p>
-          </Row>
-          <Row>
-            <h3>Save Drawings!</h3>
-            <p>
-              Click Save Drawing to have your drawing saved to your Profile.
-            </p>
-          </Row>
-          <Row>
-            <h3>My Profile!</h3>
-            <p>
-              On this page, you'll see your information and your saved drawings
-              displayed. You can choose a drawing to edit and continue working.
-              You can download your drawing or copy it to the clipboard to share
-              your drawings with others. If you want to remove a drawing from
-              your profile, you can delete.
-            </p>
-          </Row>
-        </div>
-      ) : (
-        <div className="home-text">
-          <Row>
-            <h3>
-              <img src={"/WelcomeToDYFO.png"} height={40} />
-            </h3>
-          </Row>
-          <Row>
-            <h3>
-              To get started{" "}
-              <Link to="/login">
-                <img src={"/Login.png"} height={32} />
-              </Link>
-              {", "}
-              <Link to="/signup">
-                <img src={"/Sign Up.png"} height={33} />
-              </Link>{" "}
-              or click on{" "}
-              <Link to="/draw">
-                <img src={"/Draw.png"} height={25} />
-              </Link>{" "}
-              as a Guest!
-            </h3>
-          </Row>
-          <Row>
-            <h2>How to Use Draw Your Face Off!</h2>
-            <p>Click on Draw and Start Drawing to open your canvas. </p>
-          </Row>
-          <Row>
-            <h3>Invite Others!</h3>
-            <p>
-              Click on Draw and Generate Link 🖇️ and send the link to your
-              collaborators.
-            </p>
-          </Row>
-        </div>
-      )}
     </Container>
   );
 };
