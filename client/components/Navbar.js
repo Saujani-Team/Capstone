@@ -14,21 +14,21 @@ const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
       <Container>
         {/* The navbar will show these links after you log in */}
         <Navbar.Brand id="DYFO-logo" href="/home">
-          <img src={"/DYFO Gradient3.png"} height={60} />
+          <img src={"/DYFO Gradient3.png"} height={55} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav.Link className="black-link" href="/draw">
-            <img id="nav-draw" src={"/Draw.png"} height={32} />
+            <img className="font-draw" src={"/Draw.png"} height={23} />
           </Nav.Link>
           <Nav.Link className="black-link" href={`/users/${auth.id}`}>
-            <img src={"/My Profile.png"} height={34} />
+            <img src={"/My Profile.png"} height={24} />
           </Nav.Link>
           <Nav.Link className="black-link" href={`/howto`}>
-            <img id="nav-howto" src={"/How To.png"} height={32} />
+            <img className="font-howto" src={"/How To.png"} height={22} />
           </Nav.Link>
           <Nav.Link className="black-link" href="#" onClick={handleClick}>
-            <img src={"/Logout.png"} height={34} />
+            <img src={"/Logout.png"} height={24} />
           </Nav.Link>
         </Navbar.Collapse>
       </Container>

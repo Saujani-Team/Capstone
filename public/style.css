@@ -17,11 +17,9 @@ a {
 label {
   display: block;
 }
-nav {
+.navbar {
   width: 100%;
-  /* background-color: white; */
   margin-bottom: 10px;
-  margin: auto;
 }
 
 nav a {
@@ -34,11 +32,11 @@ form div {
   display: inline-block;
 }
 
-#nav-draw {
-  padding-bottom: 6px;
+.font-draw {
+  padding-bottom: 5px;
 }
-#nav-howto {
-  padding-bottom: 6px;
+.font-howto {
+  padding-bottom: 5px;
 }
 
 .carousel {
