@@ -21,6 +21,7 @@ nav {
   width: 100%;
   /* background-color: white; */
   margin-bottom: 10px;
+  margin: auto;
 }
 
 nav a {
@@ -34,6 +35,9 @@ form div {
 }
 
 #nav-draw {
+  padding-bottom: 6px;
+}
+#nav-howto {
   padding-bottom: 6px;
 }
 
@@ -170,14 +174,16 @@ button {
 }
 .home-text {
   text-align: center;
-  margin-top: 20px;
+  margin-bottom: 20px;
   background-color: white;
-  padding: 40px;
+  padding: 20px;
   border-radius: 8px;
   border-color: black;
   border-width: 2px;
   border-style: solid;
   width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .row {

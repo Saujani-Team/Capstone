@@ -12,6 +12,97 @@ export const Home = (props) => {
 
   return (
     <Container>
+      {isLoggedIn ? (
+        <div className="home-text">
+          <Row>
+            <h3>
+              <img src={"/Welcome.png"} height={40} /> {firstName}!
+            </h3>
+          </Row>
+          <h3>
+            To get started, click on{" "}
+            <Link to="/draw">
+              <img src={"/Draw.png"} height={25} />
+            </Link>{" "}
+            visit,{" "}
+            <Link to="/users/:userId">
+              <img src={"/My Profile.png"} height={30} />
+            </Link>{" "}
+            or check out the{" "}
+            <Link to="/howto">
+              <img src={"/How To.png"} height={25} />
+            </Link>{" "}
+            page.
+          </h3>
+          {/* <Row>
+            <h2>How to DYFO!</h2>
+            <p>
+              Click Draw and Start Drawing to open your canvas and start
+              drawing.{" "}
+            </p>
+          </Row>
+          <Row>
+            <h3>Invite Others!</h3>
+            <p>
+              Click on Draw and Generate Link{" "}
+              <i className="fa-solid fa-link"></i> and send the link to your
+              collaborators.
+            </p>
+          </Row>
+          <Row>
+            <h3>Save Drawings!</h3>
+            <p>
+              Click Save Drawing to have your drawing saved to your Profile.
+            </p>
+          </Row>
+          <Row>
+            <h3>My Profile!</h3>
+            <p>
+              On this page, you'll see your information and your saved drawings
+              displayed. You can choose a drawing to edit and continue working.
+              You can download your drawing or copy it to the clipboard to share
+              your drawings with others. If you want to remove a drawing from
+              your profile, you can delete.
+            </p>
+          </Row> */}
+        </div>
+      ) : (
+        <div className="home-text">
+          <Row>
+            <h3>
+              <img src={"/WelcomeToDYFO.png"} height={40} />
+            </h3>
+          </Row>
+          <Row>
+            <h3>
+              To get started{" "}
+              <Link to="/login">
+                <img src={"/Login.png"} height={32} />
+              </Link>
+              {", "}
+              <Link to="/signup">
+                <img src={"/Sign Up.png"} height={33} />
+              </Link>{" "}
+              or click on{" "}
+              <Link to="/draw">
+                <img src={"/Draw.png"} height={25} />
+              </Link>{" "}
+              to continue as a Guest!
+            </h3>
+          </Row>
+          {/* <Row>
+            <h2>How to DYFO!</h2>
+            <p>Click on Draw and Start Drawing to open your canvas. </p>
+          </Row>
+          <Row>
+            <h3>Invite Others!</h3>
+            <p>
+              Click on Draw and Generate Link 🖇️ and send the link to your
+              collaborators.
+            </p>
+          </Row> */}
+        </div>
+      )}
       <Carousel className="carousel" variant="dark">
         <Carousel.Item>
           <img
@@ -121,82 +212,6 @@ export const Home = (props) => {
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
-      {isLoggedIn ? (
-        <div className="home-text">
-          <Row>
-            <h3>
-              <img src={"/Welcome.png"} height={40} /> {firstName}!
-            </h3>
-          </Row>
-          <Row>
-            <h2>How to DYFO!</h2>
-            <p>
-              Click Draw and Start Drawing to open your canvas and start
-              drawing.{" "}
-            </p>
-          </Row>
-          <Row>
-            <h3>Invite Others!</h3>
-            <p>
-              Click on Draw and Generate Link{" "}
-              <i className="fa-solid fa-link"></i> and send the link to your
-              collaborators.
-            </p>
-          </Row>
-          <Row>
-            <h3>Save Drawings!</h3>
-            <p>
-              Click Save Drawing to have your drawing saved to your Profile.
-            </p>
-          </Row>
-          <Row>
-            <h3>My Profile!</h3>
-            <p>
-              On this page, you'll see your information and your saved drawings
-              displayed. You can choose a drawing to edit and continue working.
-              You can download your drawing or copy it to the clipboard to share
-              your drawings with others. If you want to remove a drawing from
-              your profile, you can delete.
-            </p>
-          </Row>
-        </div>
-      ) : (
-        <div className="home-text">
-          <Row>
-            <h3>
-              <img src={"/WelcomeToDYFO.png"} height={40} />
-            </h3>
-          </Row>
-          <Row>
-            <h3>
-              To get started{" "}
-              <Link to="/login">
-                <img src={"/Login.png"} height={32} />
-              </Link>
-              {", "}
-              <Link to="/signup">
-                <img src={"/Sign Up.png"} height={33} />
-              </Link>{" "}
-              or click on{" "}
-              <Link to="/draw">
-                <img src={"/Draw.png"} height={25} />
-              </Link>{" "}
-              to continue as a Guest!
-            </h3>
-          </Row>
-          <Row>
-            <h2>How to DYFO!</h2>
-            <p>Click on Draw and Start Drawing to open your canvas. </p>
-          </Row>
-          <Row>
-            <h3>Invite Others!</h3>
-            <p>
-              Click on Draw and Generate Link 🖇️ and send the link to your
-              collaborators.
-            </p>
-          </Row>
-        </div>
-      )}
     </Container>
   );
 };

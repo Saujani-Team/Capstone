@@ -24,6 +24,9 @@ const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
           <Nav.Link className="black-link" href={`/users/${auth.id}`}>
             <img src={"/My Profile.png"} height={34} />
           </Nav.Link>
+          <Nav.Link className="black-link" href={`/howto`}>
+            <img id="nav-howto" src={"/How To.png"} height={32} />
+          </Nav.Link>
           <Nav.Link className="black-link" href="#" onClick={handleClick}>
             <img src={"/Logout.png"} height={34} />
           </Nav.Link>
@@ -38,13 +41,16 @@ const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav.Link href="/login">
-            <img src={"/Login.png"} height={33} />
+            <img src={"/Login.png"} height={34} />
           </Nav.Link>
           <Nav.Link href="/signup">
             <img src={"/Sign Up.png"} height={33} />
           </Nav.Link>
           <Nav.Link href="/draw">
             <img id="nav-draw" src={"/Draw.png"} height={31} />
+          </Nav.Link>
+          <Nav.Link className="black-link" href={`/howto`}>
+            <img id="nav-howto" src={"/How To.png"} height={32} />
           </Nav.Link>
         </Navbar.Collapse>
       </Container>

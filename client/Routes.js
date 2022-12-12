@@ -8,6 +8,7 @@ import Draw from "./components/Draw";
 import UserProfile from "./components/UserProfile";
 import Container from "./components/Container";
 import CreateDrawing from "./components/CreateDrawing";
+import HowTo from "./components/HowTo";
 
 /**
  * COMPONENT
@@ -28,6 +29,7 @@ class Routes extends Component {
             <Route exact path="/users/:userId" component={UserProfile} />
             <Route exact path="/draw" component={CreateDrawing} />
             <Route path="/draw/:drawingId" component={Container} />
+            <Route path="/howto" component={HowTo} />
             <Redirect to="/home" />
           </Switch>
         ) : (
@@ -36,6 +38,7 @@ class Routes extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
+            <Route path="/howto" component={HowTo} />
             <Route exact path="/draw" component={CreateDrawing} />
             <Route path="/draw/:drawingId" component={Container} />
           </Switch>
