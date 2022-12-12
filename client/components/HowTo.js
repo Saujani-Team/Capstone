@@ -14,7 +14,8 @@ class HowTo extends React.Component {
           <br></br>
           {/* <img src={"/Invite Others.png"} height={20} /> to collaborate. */}
           <p>
-            Click Generate Link 🖇️ and invites others to collaborate!
+            Click Generate Link <i className="fa-solid fa-link"></i> and invites
+            others to collaborate!
             <br></br>
             <a>
               <img src={"/Draw Page Tools.png"} height={100} width={500} />

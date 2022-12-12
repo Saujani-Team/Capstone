@@ -150,12 +150,12 @@ export const Home = (props) => {
         <Carousel.Item>
           <img
             className="d-inline p-2"
-            src="/my-drawing (10).png"
+            src="/my-drawing (11).png"
             height={300}
           />
           <Carousel.Caption>
-            <h3>Flower</h3>
-            <p>Created by: Science Class</p>
+            <h3>Balloons</h3>
+            <p>Created by: Ms. Lynn's Class</p>
           </Carousel.Caption>
         </Carousel.Item>
 

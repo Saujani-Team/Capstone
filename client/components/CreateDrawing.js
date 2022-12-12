@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { createDrawing } from "../store/drawings";
 import Button from "react-bootstrap/Button";
+import Nav from "react-bootstrap/Nav";
 
 class CreateDrawing extends React.Component {
   handleClick() {
@@ -14,17 +15,20 @@ class CreateDrawing extends React.Component {
     let uuid = window.localStorage.getItem("liveDrawingUUID");
     return (
       <div>
-        <Button variant="secondary" onClick={this.handleClick.bind(this)}>
+        <Button variant="light" onClick={this.handleClick.bind(this)}>
           Start Drawing ✏️
         </Button>
         {liveDrawing ? (
           <div>
-            <Link to={`/draw/${uuid}`} className="continue-drawing-container">
-              <Button variant="secondary" className="drawing-btn">
+            <Nav.Link
+              href={`/draw/${uuid}`}
+              className="continue-drawing-container"
+            >
+              <Button variant="light" className="drawing-btn">
                 Continue Drawing 👉
               </Button>
               <img width="300" height="250" src={liveDrawing} />
-            </Link>
+            </Nav.Link>
           </div>
         ) : null}
       </div>
