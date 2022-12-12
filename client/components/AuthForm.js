@@ -16,30 +16,39 @@ const AuthForm = (props) => {
     return (
       <div>
         <Form onSubmit={handleLogin} name="login">
-          <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                name="username"
-                type="text"
-                placeholder="Enter Username"
-              />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                name="password"
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Group>
-          </Row>
-          <Col>
-            <Button variant="light" type="submit">
-              {displayName}
-            </Button>
-          </Col>
+          <div className="container text-center">
+            <div className="row mb-0">
+              <div className="col mb-0">
+                <Form.Group>
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    name="username"
+                    type="text"
+                    placeholder="Enter Username"
+                  />
+                </Form.Group>
+                <div className="row mb-0">
+                  <div className="col mb-0">
+                    <Form.Group controlId="formBasicPassword">
+                      <Form.Label>Password</Form.Label>
+                      <Form.Control
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                      />
+                    </Form.Group>
+                  </div>
+                </div>
+                <div className="row mt-4">
+                  <div className="col">
+                    <Button className="ms-0" variant="light" type="submit">
+                      {displayName}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {error && error.response && <div> {error.response.data} </div>}
         </Form>
@@ -49,62 +58,72 @@ const AuthForm = (props) => {
     return (
       <div>
         <Form onSubmit={handleSignup} name="signup">
-          <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                name="username"
-                type="text"
-                placeholder="Enter Username"
-              />
-            </Form.Group>
+          <div className="container text-center">
+            <div className="row mb-3">
+              <div className="col">
+                <Form.Group>
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    name="username"
+                    type="text"
+                    placeholder="Enter Username"
+                  />
+                </Form.Group>
 
-            <Form.Group as={Col} controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                name="password"
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label>First Name</Form.Label>
-              <Form.Control
-                name="firstName"
-                type="text"
-                placeholder="First Name"
-              />
-            </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                  />
+                </Form.Group>
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col">
+                <Form.Group>
+                  <Form.Label>First Name</Form.Label>
+                  <Form.Control
+                    name="firstName"
+                    type="text"
+                    placeholder="First Name"
+                  />
+                </Form.Group>
 
-            <Form.Group as={Col}>
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control
-                name="lastName"
-                type="text"
-                placeholder="Last Name"
-              />
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
-            <Form.Group as={Col} controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                name="email"
-                type="email"
-                placeholder="Enter email"
-              />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
-          </Row>
-          <Col>
-            <Button variant="light" type="submit">
-              {displayName}
-            </Button>
-          </Col>
+                <Form.Group>
+                  <Form.Label>Last Name</Form.Label>
+                  <Form.Control
+                    name="lastName"
+                    type="text"
+                    placeholder="Last Name"
+                  />
+                </Form.Group>
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col">
+                <Form.Group as={Col} controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    name="email"
+                    type="email"
+                    placeholder="Enter email"
+                  />
+                  <Form.Text className="text-muted">
+                    We'll never share your email with anyone else.
+                  </Form.Text>
+                </Form.Group>
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col">
+                <Button variant="light" type="submit">
+                  {displayName}
+                </Button>
+              </div>
+            </div>
+          </div>
 
           {error && error.response && <div> {error.response.data} </div>}
         </Form>
