@@ -2,6 +2,7 @@ import React from "react";
 import io from "socket.io-client";
 import { connect } from "react-redux";
 import { getDrawing, updateDrawing } from "../store/drawings";
+import { Link } from "react-router-dom";
 import auth from "../store/auth";
 
 class Draw extends React.Component {
@@ -486,7 +487,16 @@ class Draw extends React.Component {
               Save Drawing 🖼
             </button>
           ) : (
-            <div>Signup or Login to save your drawing!</div>
+            <div>
+              <Link to="/signup">
+                <img src={"/Sign Up.png"} height={23} />
+              </Link>{" "}
+              or{" "}
+              <Link to="/login">
+                <img src={"/Login.png"} height={22} />
+              </Link>{" "}
+              to save your drawing!
+            </div>
           )}
         </div>
 
