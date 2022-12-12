@@ -17,10 +17,10 @@ a {
 label {
   display: block;
 }
-.navbar {
+/* .navbar {
   width: 100%;
   margin-bottom: 10px;
-}
+} */
 
 nav a {
   display: inline-block;
@@ -39,9 +39,13 @@ form div {
   padding-bottom: 5px;
 }
 
+.font-welcome {
+  padding-bottom: 5px;
+}
+
 .carousel {
   background-color: white;
-  width: 70%;
+  width: 80%;
   margin: auto;
   border-radius: 8px;
   border-color: black;
@@ -171,7 +175,7 @@ button {
   text-align: center;
 }
 .home-text {
-  text-align: center;
+  /* text-align: center; */
   margin-bottom: 20px;
   background-color: white;
   padding: 20px;

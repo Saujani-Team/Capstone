@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
-  <Navbar expand="lg">
+  <Navbar>
     {isLoggedIn ? (
       <Container>
         {/* The navbar will show these links after you log in */}
@@ -41,16 +41,16 @@ const TheNavbar = ({ handleClick, isLoggedIn, auth }) => (
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav.Link href="/login">
-            <img src={"/Login.png"} height={34} />
+            <img src={"/Login.png"} height={24} />
           </Nav.Link>
           <Nav.Link href="/signup">
-            <img src={"/Sign Up.png"} height={33} />
+            <img src={"/Sign Up.png"} height={23} />
           </Nav.Link>
           <Nav.Link href="/draw">
-            <img id="nav-draw" src={"/Draw.png"} height={31} />
+            <img className="font-draw" src={"/Draw.png"} height={23} />
           </Nav.Link>
           <Nav.Link className="black-link" href={`/howto`}>
-            <img id="nav-howto" src={"/How To.png"} height={32} />
+            <img className="font-howto" src={"/How To.png"} height={22} />
           </Nav.Link>
         </Navbar.Collapse>
       </Container>

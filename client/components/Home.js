@@ -16,7 +16,8 @@ export const Home = (props) => {
         <div className="home-text">
           <Row>
             <h3>
-              <img src={"/Welcome.png"} height={40} /> {firstName}!
+              <img className="font-welcome" src={"/Welcome.png"} height={35} />{" "}
+              {firstName}!
             </h3>
           </Row>
           <h5>
@@ -39,25 +40,25 @@ export const Home = (props) => {
         <div className="home-text">
           <Row>
             <h3>
-              <img src={"/WelcomeToDYFO.png"} height={40} />
+              <img src={"/WelcomeToDYFO.png"} height={35} />
             </h3>
           </Row>
           <Row>
-            <h3>
+            <h5>
               To get started{" "}
               <Link to="/login">
-                <img src={"/Login.png"} height={32} />
+                <img src={"/Login.png"} height={22} />
               </Link>
               {", "}
               <Link to="/signup">
-                <img src={"/Sign Up.png"} height={33} />
+                <img src={"/Sign Up.png"} height={23} />
               </Link>{" "}
               or click on{" "}
               <Link to="/draw">
-                <img src={"/Draw.png"} height={25} />
+                <img className="font-draw" src={"/Draw.png"} height={23} />
               </Link>{" "}
               to continue as a Guest!
-            </h3>
+            </h5>
           </Row>
         </div>
       )}

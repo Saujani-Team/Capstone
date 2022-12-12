@@ -1,4 +1,5 @@
 import React from "react";
+import Navbar from "react-bootstrap/Navbar";
 
 const Footer = () => (
   <footer className="page-footer font-small blue pt-4">
