@@ -31,7 +31,7 @@ class HowTo extends React.Component {
           </p>
           <p>
             Leaders can create groups! Share the link and allow for participants
-            to collaborate together. Monitor progress of all groups instandly by
+            to collaborate together. Monitor progress of all groups instantly by
             clicking Refresh Group Images.
             <br></br>
             <a>
