@@ -35,6 +35,7 @@ export const Home = (props) => {
             </Link>{" "}
             page.
           </h5>
+          <h5>Save and download as many drawings as you want for free!</h5>
         </div>
       ) : (
         <div className="home-text">
@@ -58,6 +59,15 @@ export const Home = (props) => {
                 <img className="font-draw" src={"/Draw.png"} height={23} />
               </Link>{" "}
               to continue as a Guest!
+            </h5>
+          </Row>
+          <Row>
+            <h5>
+              When you{" "}
+              <Link to="/signup">
+                <img src={"/Sign Up.png"} height={23} />
+              </Link>
+              , you can save and download as many drawings as you want for free!
             </h5>
           </Row>
         </div>
